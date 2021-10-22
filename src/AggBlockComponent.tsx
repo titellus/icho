@@ -1,46 +1,6 @@
 import React from "react";
 import { SelectedFilters, SingleList } from "@appbaseio/reactivesearch";
-
-// let defaultQuery = function (value: any, props: any) {
-//   var query = null;
-//   if (props.selectAllLabel && props.selectAllLabel === value) {
-//     if (props.showMissing) {
-//       query = { match_all: {} };
-//     }
-//     query = {
-//       exists: {
-//         field: props.dataField
-//       }
-//     };
-//   } else if (value) {
-//     type termType = {
-//       [key: string]: any
-//     }
-//     let _term: termType = {}
-//     query = {
-//       term: (_term[props.dataField] = value, _term)
-//     };
-//     if (props.showMissing && props.missingLabel === value) {
-//       query = {
-//         bool: {
-//           must_not: {
-//             exists: { field: props.dataField }
-//           }
-//         }
-//       };
-//     }
-//   }
-//   console.log(query);
-//   if (query && props.nestedField) {
-//     return {
-//       nested: {
-//         path: props.nestedField,
-//         query: query
-//       }
-//     };
-//   }
-//   return query;
-// };
+import { Badge, Button, Card, Col, Row, Stack } from "react-bootstrap";
 
 class AggBlockComponent extends React.Component<{
   setQuery: any;
@@ -73,7 +33,8 @@ class AggBlockComponent extends React.Component<{
 
   render() {
     const { dataField, dataSubField, aggregations } = this.props;
-    let items = [];
+    let items = [],
+      average = 0;
     if (
       aggregations &&
       aggregations[dataField] &&
@@ -84,43 +45,53 @@ class AggBlockComponent extends React.Component<{
         count: o.doc_count,
         sub: o[dataSubField],
       }));
+      average =
+        items.reduce((sum: number, o: any, _: number) => {
+          return sum + o.count;
+        }, 0) / items.length;
     }
     const selectedItem = items.find(
       (item: any) => item.value === this.props.value
     );
     return (
       <React.Fragment>
-        <div className="flex">
+        <Row>
           {items.map((item: any) => (
-            <div className="flex-grow" key={item.value}>
-              <h4
-                className={this.props.value === item.value ? "active" : ""}
-                onClick={() => this.handleChange(item.value)}
+            <Col
+              key={item.value}
+              md={item.count < average ? 2 : item.count === average ? 3 : 4}
+            >
+              <Card
+                bg={this.props.value === item.value ? "primary" : "secondary"}
+                text={this.props.value === item.value ? "dark" : "light"}
+                className="mb-1 text-white"
               >
-                {item.value}
-              </h4>
-              <ul>
-                {item.sub &&
-                  item.sub.buckets.map((item: any) => (
-                    <li key={item.key}>
-                      {item.key} ({item.doc_count})
-                    </li>
-                  ))}
-              </ul>
-            </div>
+                {/*<Card.Img src="holder.js/100px270" alt="Card image" />*/}
+                {/*<Card.ImgOverlay>*/}
+                <Card.Header
+                  className={
+                    "text-wrap " +
+                    (this.props.value === item.value ? "strong" : "")
+                  }
+                  onClick={() => this.handleChange(item.value)}
+                >
+                  <strong className={"fs-3"}>{item.count} </strong>
+                  {item.value}
+                </Card.Header>
+                <Card.Text>
+                  {item.sub &&
+                    item.sub.buckets.map((item: any) => (
+                      <Badge key={item.key} className="text-wrap">
+                        {item.key} ({item.doc_count})
+                      </Badge>
+                    ))}
+                </Card.Text>
+                {/*</Card.ImgOverlay>*/}
+              </Card>
+            </Col>
           ))}
-        </div>
-        {selectedItem && (
-          <p>
-            <i>
-              {selectedItem.count} {selectedItem.value} records found
-            </i>
-          </p>
-        )}
-
-        <SelectedFilters onClear={() => this.handleChange(null)} />
-
-        <button onClick={() => this.more()}>More</button>
+        </Row>
+        <Button onClick={() => this.more()}>More</Button>
       </React.Fragment>
     );
   }
