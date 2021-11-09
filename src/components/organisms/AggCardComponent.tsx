@@ -1,8 +1,8 @@
 import React from "react";
-import { SelectedFilters, SingleList } from "@appbaseio/reactivesearch";
-import { Badge, Button, Card, Col, Row, Stack } from "react-bootstrap";
+import { SingleList } from "@appbaseio/reactivesearch";
+import { Button, Label, Statistic } from "semantic-ui-react";
 
-class AggBlockComponent extends React.Component<{
+class AggCardComponent extends React.Component<{
   setQuery: any;
   dataField: any;
   dataSubField?: any;
@@ -55,46 +55,36 @@ class AggBlockComponent extends React.Component<{
     );
     return (
       <React.Fragment>
-        <Row>
+        <Statistic.Group>
           {items.map((item: any) => (
-            <Col
+            <Statistic
               key={item.value}
+              onClick={() => this.handleChange(item.value)}
               md={item.count < average ? 2 : item.count === average ? 3 : 4}
             >
-              <Card
+              <Statistic.Value
                 bg={this.props.value === item.value ? "primary" : "secondary"}
-                text={this.props.value === item.value ? "dark" : "light"}
-                className="mb-1 text-white"
               >
-                {/*<Card.Img src="holder.js/100px270" alt="Card image" />*/}
-                {/*<Card.ImgOverlay>*/}
-                <Card.Header
-                  className={
-                    "text-wrap " +
-                    (this.props.value === item.value ? "strong" : "")
-                  }
-                  onClick={() => this.handleChange(item.value)}
-                >
-                  <strong className={"fs-3"}>{item.count} </strong>
-                  {item.value}
-                </Card.Header>
-                <Card.Text>
-                  {item.sub &&
-                    item.sub.buckets.map((item: any) => (
-                      <Badge key={item.key} className="text-wrap">
-                        {item.key} ({item.doc_count})
-                      </Badge>
-                    ))}
-                </Card.Text>
-                {/*</Card.ImgOverlay>*/}
-              </Card>
-            </Col>
+                {item.count}
+              </Statistic.Value>
+              <Statistic.Label>{item.value}</Statistic.Label>
+
+              {/*<FontAwesomeIcon icon={faCoffee}/>*/}
+              {item.sub &&
+                item.sub.buckets.map((item: any) => (
+                  <Label key={item.key}>
+                    {item.doc_count}
+                    <Label.Detail>{item.key}</Label.Detail>
+                  </Label>
+                ))}
+              {/*</Card.ImgOverlay>*/}
+            </Statistic>
           ))}
-        </Row>
+        </Statistic.Group>
         <Button onClick={() => this.more()}>More</Button>
       </React.Fragment>
     );
   }
 }
 
-export default AggBlockComponent;
+export default AggCardComponent;
