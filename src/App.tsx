@@ -15,6 +15,7 @@ import AggCardComponent from "./components/organisms/AggCardComponent";
 import { DefaultQuery } from "./models/DefaultQuery";
 import { DefaultSource } from "./models/DefaultSource";
 import AggListItemComponent from "./components/organisms/AggListItemComponent";
+import AggDataTableLoaderComponent from "./components/organisms/AggDynamicTableComponent";
 
 function App() {
   return (
@@ -138,7 +139,7 @@ function App() {
 
               <ReactiveList
                 componentId="results"
-                size={100}
+                size={1}
                 pagination={false}
                 showResultStats={false}
                 defaultQuery={() => {
@@ -193,6 +194,35 @@ function App() {
                         </Item>
                       ))}
                     </Item.Group>
+                  );
+                }}
+              />
+              <ReactiveList
+                componentId="publisherMenu2"
+                size={100}
+                pagination={false}
+                showResultStats={false}
+                defaultQuery={() => {
+                  return DefaultQuery.IS_RECORD;
+                }}
+                includeFields={DefaultSource.FOR_SEARCH}
+                dataField={"resourceTitleObject.default"}
+                react={{
+                  and: [
+                    "searchbox",
+                    "resourceTypeMenu",
+                    "DynamicRangeSensor",
+                    "publisherMenu",
+                    "bigBlocks",
+                  ],
+                }}
+                render={({ loading, error, data }) => {
+                  return (
+                    <AggDataTableLoaderComponent
+                      loading={loading}
+                      error={error}
+                      data={data}
+                    ></AggDataTableLoaderComponent>
                   );
                 }}
               />
