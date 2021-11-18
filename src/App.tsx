@@ -16,7 +16,7 @@ import { DefaultQuery } from "./models/DefaultQuery";
 import { DefaultSource } from "./models/DefaultSource";
 import AggListItemComponent from "./components/organisms/AggListItemComponent";
 import axios from "axios";
-import {GroupsApi} from "geonetwork-openapi";
+import {GroupsApi} from "./libs/geonetwork-openapi/src";
 
 export const axiosInstance = axios.create();
 const commonParams = [undefined, undefined, axiosInstance];
@@ -24,8 +24,8 @@ const commonParams = [undefined, undefined, axiosInstance];
 
 
 function App() {
-  new GroupsApi().getGroups(true).then((data) => {
-    console.log(data);
+  new GroupsApi().getGroups(true).then((r) => {
+    console.log(r.data);
   })
 
   return (

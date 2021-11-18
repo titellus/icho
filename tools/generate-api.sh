@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 libName=$1
-libRootPath="libs/$libName/src"
-specPath="libs/$libName/src"
+libRootPath="src/libs/$libName/src"
+specPath="src/libs/$libName/src"
 specFile=$specPath/spec.yaml
 
 rm -rf "$libRootPath"
@@ -15,7 +15,8 @@ curl -o "$specFile" -H 'Accept: text/yaml,*/*' http://localhost:8080/geonetwork/
   -i "$specFile" \
   -g typescript-axios \
   -o "$libRootPath" \
-  -c tools/openapi-codegen-config.json \
-  --skip-validate-spec \
+  --skip-validate-spec
+#  -c tools/openapi-codegen-config.json \
+
 
 ./node_modules/prettier/bin-prettier.js  --write "$libRootPath/**/*.ts"
