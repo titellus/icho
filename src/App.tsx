@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import logo from "./logo.svg";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -16,8 +16,14 @@ import { DefaultQuery } from "./models/DefaultQuery";
 import { DefaultSource } from "./models/DefaultSource";
 import AggListItemComponent from "./components/organisms/AggListItemComponent";
 import AggDataTableLoaderComponent from "./components/organisms/AggDynamicTableComponent";
+import AggDataTableSortESLoaderComponent from "./components/organisms/AggDynamicTableSortOptionsComponent";
+import { SortOption, sortOptions } from "./components/organisms/SortSelectorComponent";
 
 function App() {
+  const [sort, setSort] = useState<SortOption>(sortOptions[0]);
+  function handleChange(newValue:any) {
+    setSort(newValue);
+  }
   return (
     <ReactiveBase
       app="gn-records"
@@ -199,7 +205,7 @@ function App() {
               />
               <ReactiveList
                 componentId="publisherMenu2"
-                size={100}
+                size={2}
                 pagination={false}
                 showResultStats={false}
                 defaultQuery={() => {
@@ -223,6 +229,39 @@ function App() {
                       error={error}
                       data={data}
                     ></AggDataTableLoaderComponent>
+                  );
+                }}
+              />
+              <br/>
+              <ReactiveList
+                componentId="sortTableES"
+                size={5}
+                pagination={false}
+                showResultStats={false}
+                defaultQuery={() => ({
+                  sort: [{ [sort.dataField]: { order: sort.sortBy } }],
+                  query: { match: { isTemplate: "n" } }
+                })}
+                includeFields={DefaultSource.FOR_SEARCH}
+                dataField={"resourceTitleObject.default"}
+                react={{
+                  and: [
+                    "searchbox",
+                    "resourceTypeMenu",
+                    "DynamicRangeSensor",
+                    "publisherMenu",
+                    "bigBlocks",
+                  ],
+                }}
+                render={({ loading, error, data }) => {
+                  return (
+                    <AggDataTableSortESLoaderComponent
+                      loading={loading}
+                      error={error}
+                      data={data}
+                      handleChangeSortReactiveList={handleChange}
+                      selected={sort}
+                    ></AggDataTableSortESLoaderComponent>
                   );
                 }}
               />
