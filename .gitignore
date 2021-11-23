@@ -1,7 +1,7 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
 /dist
-webcomponents/**/dist
 /tmp
 /out-tsc
 
@@ -16,7 +16,6 @@ webcomponents/**/dist
 *.launch
 .settings/
 *.sublime-workspace
-*.iml
 
 # IDE - VSCode
 .vscode/*
@@ -24,7 +23,6 @@ webcomponents/**/dist
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
 # misc
 /.sass-cache

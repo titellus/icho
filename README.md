@@ -1,68 +1,64 @@
-# DataHub
+# Catalogue
 
-Is built on top of:
+This project was generated using [Nx](https://nx.dev).
 
-- https://docs.appbase.io/docs/reactivesearch/v3/overview/components/
-- https://react.semantic-ui.com/
+## Adding capabilities to your workspace
 
-```
-npx create-react-app datahub --template typescript --use-npm
-npm start
-npm run build
-npm install @appbaseio/reactivesearch
-npm install semantic-ui-react semantic-ui-css
-npx prettier --write .
-```
+Nx supports many plugins which add capabilities for developing different types of applications and different tools.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  
+## Generate an application
 
-## Available Scripts
+Run `nx g @nrwl/react:app webcomponents` to generate an application.
 
-In the project directory, you can run:
+## Generate a library
 
-### `npm start`
+Run `nx g @nrwl/react:lib ui/search` to generate a library.
 
-Runs the app in the development mode (the GeoNetwork API is used to communicate with ElasticSearch.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> You can also use any of the plugins above to generate libraries as well.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Libraries are shareable across libraries and applications. They can be imported from `@catalogue/mylib`.
 
-### `npm run start-es`
+## Development server
 
-Runs the app in the development mode with direct connection to Elasticsearch.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Run `nx serve catalogue` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Code scaffolding
 
-### `npm test`
+Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Build
 
-### `npm run build`
+Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running unit tests
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Run `nx affected:test` to execute the unit tests affected by a change.
 
-### `npm run eject`
+## Running end-to-end tests
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Understand your workspace
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 
-## Learn More
+## Further help
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Visit the [Nx Documentation](https://nx.dev) to learn more.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ☁ Nx Cloud
+
+### Distributed Computation Caching & Distributed Task Execution
+
+<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+
+Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+
+Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+
+Visit [Nx Cloud](https://nx.app/) to learn more.

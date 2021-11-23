@@ -1,0 +1,23 @@
+{
+  "root": "libs/ui/search",
+  "sourceRoot": "libs/ui/search/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/search/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/search"],
+      "options": {
+        "jestConfig": "libs/ui/search/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

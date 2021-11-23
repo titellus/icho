@@ -1,8 +1,0 @@
-{
-  "supportES6": true,
-  "withSeparateModelsAndApi": true,
-  "modelPackage": ".geonetwork-openapi.model",
-  "apiPackage": ".geonetwork-openapi.service",
-  "npmName": "geonetwork-openapi",
-  "npmVersion": "4.0.6"
-}

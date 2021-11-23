@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "projects": {
+    "api-geonetwork": "libs/api/geonetwork",
+    "catalogue": "apps/catalogue",
+    "catalogue-e2e": "apps/catalogue-e2e",
+    "ui-search": "libs/ui/search",
+    "webcomponents": "apps/webcomponents",
+    "webcomponents-e2e": "apps/webcomponents-e2e"
+  }
+}
