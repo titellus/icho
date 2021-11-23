@@ -1,18 +1,18 @@
 {
   "/essearch": {
-    "target": "http://localhost:9200/",
+    "target": "http://localhost:9200",
     "pathRewrite": {
       "^/search": ""
     },
     "logLevel": "debug"
   },
-  "/search": {
-    "target": "http://localhost:8080",
+  "/geonetwork": {
+    "target": "http://localhost:8080/geonetwork/",
+    "pathRewrite": {
+      "^/geonetwork": ""
+    },
     "secure": false,
     "changeOrigin": true,
-    "pathRewrite": {
-      "^/search/gn-records/": "/geonetwork/srv/api/search/records/"
-    },
     "logLevel": "debug"
   }
 }

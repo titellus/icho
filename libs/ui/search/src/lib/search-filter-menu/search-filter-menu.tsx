@@ -1,9 +1,9 @@
-import './cat-search-filter-menu.module.scss';
+import './search-filter-menu.module.scss';
 
 /* eslint-disable-next-line */
 export interface CatSearchFilterMenuProps {}
 
-export function CatSearchFilterMenu(props: CatSearchFilterMenuProps) {
+export function SearchFilterMenu(props: CatSearchFilterMenuProps) {
   return (
     <div>
       <h1>Welcome to CatSearchFilterMenu!</h1>
@@ -11,4 +11,4 @@ export function CatSearchFilterMenu(props: CatSearchFilterMenuProps) {
   );
 }
 
-export default CatSearchFilterMenu;
+export default SearchFilterMenu;

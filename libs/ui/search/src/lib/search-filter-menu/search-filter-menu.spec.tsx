@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import CatSearchFilterMenu from './cat-search-filter-menu';
+import SearchFilterMenu from './search-filter-menu';
 
 describe('CatSearchFilterMenu', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<CatSearchFilterMenu />);
+    const { baseElement } = render(<SearchFilterMenu />);
     expect(baseElement).toBeTruthy();
   });
 });

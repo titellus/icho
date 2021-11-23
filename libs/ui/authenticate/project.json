@@ -1,0 +1,23 @@
+{
+  "root": "libs/ui/authenticate",
+  "sourceRoot": "libs/ui/authenticate/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/authenticate/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/authenticate"],
+      "options": {
+        "jestConfig": "libs/ui/authenticate/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

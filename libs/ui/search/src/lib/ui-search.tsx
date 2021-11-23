@@ -14,16 +14,17 @@ import AggCardComponent from "./AggCardComponent";
 import PropTypes from "prop-types";
 import "semantic-ui-css/semantic.min.css";
 import { DefaultQuery, DefaultSource } from "@catalogue/utils/shared";
+import { GroupsApi } from "@catalogue/api/geonetwork";
 
 export function UiSearch({ filter= '' }) {
-  // new GroupsApi().getGroups(true).then((r) => {
-  //   console.log(r.data);
-  // });
+  new GroupsApi().getGroups(true).then((r) => {
+    console.log(r.data);
+  });
   return (
 
     <ReactiveBase
-      app="gn-records"
-      url="http://localhost:4200/search"
+      app="records"
+      url="http://localhost:4200/geonetwork/srv/api/search/"
       enableAppbase={false}
     >
 
@@ -143,7 +144,7 @@ export function UiSearch({ filter= '' }) {
 
               <ReactiveList
                 componentId="results"
-                size={100}
+                size={1}
                 pagination={false}
                 showResultStats={false}
                 defaultQuery={() => {
