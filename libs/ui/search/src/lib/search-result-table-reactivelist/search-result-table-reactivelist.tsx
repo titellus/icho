@@ -2,7 +2,7 @@ import './search-result-table-reactivelist.module.scss';
 import {Container} from "semantic-ui-react";
 import {SortOption, sortOptions} from "../search-result-table-sort/search-result-table-sort";
 import {ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {DefaultSource} from "../DefaultSource";
+import { DefaultSource } from "@catalogue/utils/shared";
 import React, {useState} from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
 
