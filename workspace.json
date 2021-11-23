@@ -5,6 +5,7 @@
     "catalogue": "apps/catalogue",
     "catalogue-e2e": "apps/catalogue-e2e",
     "ui-search": "libs/ui/search",
+    "utils-shared": "libs/utils/shared",
     "webcomponents": "apps/webcomponents",
     "webcomponents-e2e": "apps/webcomponents-e2e"
   }

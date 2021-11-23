@@ -8,14 +8,12 @@ import {
   SelectedFilters,
   SingleList
 } from "@appbaseio/reactivesearch";
-import { GroupsApi } from "@catalogue/api/geonetwork";
-import { DefaultQuery } from "./DefaultQuery";
 import React from "react";
 import AggListItemComponent from "./AggListItemComponent";
 import AggCardComponent from "./AggCardComponent";
-import { DefaultSource } from "./DefaultSource";
 import PropTypes from "prop-types";
 import "semantic-ui-css/semantic.min.css";
+import { DefaultQuery, DefaultSource } from "@catalogue/utils/shared";
 
 export function UiSearch({ filter= '' }) {
   // new GroupsApi().getGroups(true).then((r) => {
