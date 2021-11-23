@@ -25,7 +25,11 @@ Run `nx serve catalogue` for a dev server. Navigate to http://localhost:4200/. T
 
 ## Code scaffolding
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+```
+cd libs/ui/search/
+nx g @nrwl/react:component cat-search-filter-menu --export
+```
+to generate a new component.
 
 ## Build
 
