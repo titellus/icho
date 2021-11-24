@@ -6,6 +6,8 @@
     "catalogue-e2e": "apps/catalogue-e2e",
     "ui-authenticate": "libs/ui/authenticate",
     "ui-contribute": "libs/ui/contribute",
+    "catalogue-table": "apps/catalogue-table",
+    "catalogue-table-e2e": "apps/catalogue-table-e2e",
     "ui-search": "libs/ui/search",
     "utils-shared": "libs/utils/shared",
     "webcomponents": "apps/webcomponents",

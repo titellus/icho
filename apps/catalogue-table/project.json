@@ -1,0 +1,73 @@
+{
+  "root": "apps/catalogue-table",
+  "sourceRoot": "apps/catalogue-table/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/catalogue-table",
+        "index": "apps/catalogue-table/src/index.html",
+        "baseHref": "/",
+        "main": "apps/catalogue-table/src/main.tsx",
+        "polyfills": "apps/catalogue-table/src/polyfills.ts",
+        "tsConfig": "apps/catalogue-table/tsconfig.app.json",
+        "assets": [
+          "apps/catalogue-table/src/favicon.ico",
+          "apps/catalogue-table/src/assets"
+        ],
+        "styles": ["apps/catalogue-table/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/catalogue-table/src/environments/environment.ts",
+              "with": "apps/catalogue-table/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "catalogue-table:build",
+        "hmr": true,
+        "proxyConfig": "proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "catalogue-table:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/catalogue-table/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/catalogue-table"],
+      "options": {
+        "jestConfig": "apps/catalogue-table/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
