@@ -1,5 +1,5 @@
 {
-  "/search": {
+  "/essearch": {
     "target": "http://localhost:9200",
     "pathRewrite": {
       "^/search": ""
