@@ -30,23 +30,17 @@ export function UiSearch({ filter= '' }) {
 
 
       <Container>
-        <Sticky>
-          <Menu secondary>
-            <Menu.Item href="#home">Browse</Menu.Item>
-            {filter}
-            <DataSearch
-              componentId="searchbox"
-              defaultQuery={() => {
-                return DefaultQuery.IS_RECORD;
-              }}
-              dataField={["resourceTitleObject.default"]}
-              placeholder="Search for datasets and maps..."
-            />
+        {filter}
+        <DataSearch
+          componentId="searchbox"
+          defaultQuery={() => {
+            return DefaultQuery.IS_RECORD;
+          }}
+          dataField={["resourceTitleObject.default"]}
+          placeholder="Search for datasets and maps..."
+        />
 
-            <SelectedFilters />
-          </Menu>
-        </Sticky>
-
+        <SelectedFilters />
         <Grid>
           <Grid.Row>
             <Grid.Column width={4}>
