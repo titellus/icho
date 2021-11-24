@@ -1,35 +1,44 @@
 import "semantic-ui-css/semantic.min.css";
-import styles from "./app.module.scss";
-import { UiSearch } from "@catalogue/ui/search";
 import { AuthProvider } from "@catalogue/utils/shared";
 import { Link, Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Container, Icon, Menu } from "semantic-ui-react";
+import { FooterPanel, SidebarMenu } from "@catalogue/ui/nav";
+import { AuthenticateMenu } from "@catalogue/ui/authenticate";
 
 export function App() {
+  const [sidebarVisible, setSitebarVisible] = useState(false);
+
   return (
     <AuthProvider>
-      <div className={styles.app}>
-        <header className="flex">
-          <h1>Welcome to catalogue!</h1>
+      <Container fluid style={{ height: "100vh" }}>
+        <SidebarMenu visible={sidebarVisible} setVisible={setSitebarVisible}>
+          <Menu borderless stackable>
+            <Container>
+              <Menu.Item as={Button}
+                         toggle icon
+                         active={sidebarVisible}
+                         color={"grey"}
+                         onClick={() => setSitebarVisible(!sidebarVisible)}>
+                <Icon name="bars" />
+              </Menu.Item>
 
-          <nav
-            style={{
-              borderBottom: "solid 1px",
-              paddingBottom: "1rem"
-            }}
-          >
-            <Link to="/home">Home</Link> |{" "}
-            <Link to="/search">Search</Link> |{" "}
-            <Link to="/search?filter=PICC">PICC</Link> |{" "}
-            <Link to="/authenticate">Sign in</Link>
-          </nav>
-        </header>
-        <main>
-          <Outlet />
-        </main>
-      </div>
+              <Menu.Item as={Link} to='/search'>
+                Search
+              </Menu.Item>
+
+              <AuthenticateMenu/>
+            </Container>
+          </Menu>
+
+          <main>
+            <Outlet />
+          </main>
+
+          <FooterPanel />
+        </SidebarMenu>
+      </Container>
     </AuthProvider>
-
-
   );
 }
 
