@@ -44,10 +44,6 @@ export function UiSearch({ filter= '' }) {
             />
 
             <SelectedFilters />
-
-            <Menu.Menu position="right">
-              <Menu.Item name="Sign out"></Menu.Item>
-            </Menu.Menu>
           </Menu>
         </Sticky>
 

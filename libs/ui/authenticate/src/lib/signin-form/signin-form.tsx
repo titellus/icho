@@ -12,26 +12,32 @@ export function SigninForm(props: SigninFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  function isValid() {
+    return username !== '' && password !== '';
+  }
+
   if (loading) {
-    //You can see the component implementation at the repository
     return <div>Loading</div>;
   }
 
-
   return (
-    <div>
+    <div id='signin'>
       {authData?.username
-        ? <div>You are {authData.username} <Button label="Sign Out" onClick={signOut} /></div>
+        ? <div>You are {authData.username}<br/>
+          <Button label="Sign Out" onClick={signOut} /></div>
         : <div>
             Username: <input type='text'
+                             id='username'
                              value={username}
                              onChange={(e) => setUsername(e.target.value)}/><br/>
             Password: <input type='password'
+                             id='password'
                              value={password}
                              onChange={(e) => setPassword(e.target.value)}/><br/>
-          <Button label="Sign In" onClick={() => signIn(username, password)} /></div>}
+          <Button disabled={!isValid()}
+                  onClick={() => signIn(username, password)}>Sign In</Button></div>}
     </div>
   );
-}
+};
 
 export default SigninForm;
