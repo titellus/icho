@@ -1,8 +1,9 @@
 import './search-result-table.module.scss';
-import { Table } from 'semantic-ui-react'
+import {Button, Icon, Table} from 'semantic-ui-react'
 import {Dispatch, SetStateAction, useState} from "react";
 import  SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
 import React from 'react';
+import {CSVDownload, CSVLink} from 'react-csv';
 
 interface Props {
   loading: any;
@@ -50,17 +51,12 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
   }
    return data > 0 ? null : (
      <div>
-       {newData && <Table sortable celled fixed>
+
+       {typeof newData === "object" && <div>
+         <CSVLink data={newData}><Button icon><Icon name='download' /></Button></CSVLink>
+         <Table>
          <Table.Header>
            <Table.Row>
-{/*             {data.map((field: any) => (
-               <Table.HeaderCell>
-                 {field}
-                 <SearchResultTableSort onChange={handleChange} selectedSortSelector={sortSelector}
-                                              field={field}/>
-               </Table.HeaderCell>
-             ))}*/}
-
              {Object.keys(newData[0]).map((keyname, i) => (
                <Table.HeaderCell key={i}>
                  {dataFieldsName[i]}
@@ -72,22 +68,22 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
            </Table.Row>
          </Table.Header>
          <Table.Body>
-           {newData.map((dataItem: any) => (
-           <Table.Row>
-             {Object.keys(dataItem).map((keyname, i) => (
-               <Table.Cell key={i}>
+           {newData.map((dataItem: any,i:number) => (
+           <Table.Row key={i}>
+             {Object.keys(dataItem).map((keyname, j) => (
+               <Table.Cell key={j}>
                  {(dataItem[keyname] instanceof Object ? dataItem[keyname]?.default : '')}
                  {(typeof dataItem[keyname] === "string" && (keyname != "uuid" && keyname != "metadataIdentifier" && keyname != "_id") ? dataItem[keyname] : '')}
                  {(typeof dataItem[keyname] === "string" && (keyname === "uuid" || keyname === "metadataIdentifier" || keyname === "_id") ? <a href={mtdRoot +'/'+ dataItem[keyname]}>{dataItem[keyname]}</a>  : '')}
-                 {(Array.isArray(dataItem[keyname]) ? <TableCellArray array={dataItem[keyname]}></TableCellArray> : '')}
+                 {(Array.isArray(dataItem[keyname]) ? <TableCellArray array={dataItem[keyname]} /> : '')}
                </Table.Cell>
              ))}
            </Table.Row>
            ))}
          </Table.Body>
-       </Table>
+       </Table></div>
        }
-    </div>
+     </div>
   )
 }
 
