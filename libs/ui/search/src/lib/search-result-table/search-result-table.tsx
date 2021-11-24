@@ -93,8 +93,8 @@ const TableCellArray = (props: any) => {
       {props.array.map((tag:any, index:any) => (
         <React.Fragment key={index}>
           {(tag?.default ? <span>{tag?.default}<br/></span> : '')}
-          {(tag?.protocol === "ESRI:REST" && tag?.function === "browsing" ? <span><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
-          {(tag?.protocol === "WWW:LINK" && tag?.function === "information" ? <span><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
+          {(tag?.protocol === "ESRI:REST" && tag?.function === "browsing" ? <span><Icon name='linkify' /><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
+          {(tag?.protocol === "WWW:LINK" && tag?.function === "information" ? <span><Icon name='linkify' /><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
         </React.Fragment>
       ))}
     </React.Fragment>
