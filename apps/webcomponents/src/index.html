@@ -8,5 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <!-- <catalogue-search filter='+resourceType:dataset'></catalogue-search>-->
+    <h2>INSPIRE valid records</h2>
+    <catalogue-results-table size="2"
+                             filter="+valid_inspire:1 +tag.default:&quot;Reporting INSPIRE&quot;"
+                             columns="resourceTitleObject,resourceAltTitleObject,tag"></catalogue-results-table>
+
+    <h2>More about PICC</h2>
+    <catalogue-results-table size="2"
+                             filter="+any.\*:PICC"
+                             columns="resourceTitleObject,resourceAltTitleObject"></catalogue-results-table>
   </body>
 </html>
