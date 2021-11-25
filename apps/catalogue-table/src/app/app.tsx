@@ -11,8 +11,8 @@ export function App() {
           index="gn-records"
           filter={"+tag.default:\"Reporting INSPIRE\""}
           mtdRoot="https://metawal.wallonie.be/geonetwork/srv/api/records"
-          dataFields={['metadataIdentifier', 'mainLanguage','resourceTitleObject','resourceAltTitleObject','tag','link']}
-          dataFieldsName={['Id', 'i18n', 'Titre','Nom abrégé','Mots-clés','liens']}
+          dataFields={['resourceTitleObject','rating', 'valid', 'mainLanguage', 'overview','resourceType','resourceAltTitleObject','tag','link']}
+          dataFieldsName={[ 'Titre', 'Rating', 'Valide', 'i18n', '','','Nom abrégé','Mots-clés','liens']}
           resultNumber={3} />
       </main>
     </div>

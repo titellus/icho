@@ -1,5 +1,5 @@
 import './search-result-table.module.scss';
-import {Button, Icon, Table} from 'semantic-ui-react'
+import {Button, Image, Header, Icon, Rating, Table, Label} from 'semantic-ui-react'
 import {Dispatch, SetStateAction, useState} from "react";
 import  SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
 import React from 'react';
@@ -40,6 +40,7 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
     newData=[]
     for (let element in data){
       let newElement:any={};
+      newElement['_id']=data[element]['_id']
       for (let key of dataFields){
         if(data[element][key])
           newElement[key] = data[element][key];
@@ -54,10 +55,10 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
 
        {typeof newData === "object" && <div>
          <CSVLink data={newData}><Button icon><Icon name='download' /></Button></CSVLink>
-         <Table>
+         <Table color="blue">
          <Table.Header>
            <Table.Row>
-             {Object.keys(newData[0]).map((keyname, i) => (
+             {Object.keys(newData[0]).slice(1).map((keyname, i) => (
                <Table.HeaderCell key={i}>
                  {dataFieldsName[i]}
                  {(typeof(newData[0][keyname]) === "string" ? <SearchResultTableSort onChange={handleChange} selectedSortSelector={sortSelector}
@@ -70,12 +71,11 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
          <Table.Body>
            {newData.map((dataItem: any,i:number) => (
            <Table.Row key={i}>
-             {Object.keys(dataItem).map((keyname, j) => (
+             {Object.keys(dataItem).slice(1).map((keyname, j) => (
                <Table.Cell key={j}>
-                 {(dataItem[keyname] instanceof Object ? dataItem[keyname]?.default : '')}
-                 {(typeof dataItem[keyname] === "string" && (keyname != "uuid" && keyname != "metadataIdentifier" && keyname != "_id") ? dataItem[keyname] : '')}
-                 {(typeof dataItem[keyname] === "string" && (keyname === "uuid" || keyname === "metadataIdentifier" || keyname === "_id") ? <a href={mtdRoot +'/'+ dataItem[keyname]}>{dataItem[keyname]}</a>  : '')}
-                 {(Array.isArray(dataItem[keyname]) ? <TableCellArray array={dataItem[keyname]} /> : '')}
+                 {(dataItem[keyname] instanceof Object ? <TableCellObject objectValue={dataItem[keyname]} objectKeyname={keyname} data={dataItem}  mtdRoot={mtdRoot}/> : '')}
+                 {(Array.isArray(dataItem[keyname]) ? <TableCellArray arrayValue={dataItem[keyname]} arrayKeyname={keyname} /> : '')}
+                 {(typeof dataItem[keyname] === "string" ? <TableCellString stringValue={dataItem[keyname]} stringKeyname={keyname} mtdRoot={mtdRoot}/> : '')}
                </Table.Cell>
              ))}
            </Table.Row>
@@ -87,18 +87,103 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
   )
 }
 
+const TableCellObject = (props: any) => {
+  if(props.objectKeyname ==="resourceTitleObject" && props.data["resourceType"] && props.data["overview"]){
+    return (
+      <Header as='h4' image>
+        <Image src={props.data["overview"][0].url} rounded size='tiny' />
+        <Header.Content>
+          <a href={props.mtdRoot +'/'+ props.data["_id"]}>{props.objectValue.default}</a>
+          <Header.Subheader>
+            <Label as='a' color='red' ribbon >
+              {props.data["resourceType"][0]}
+            </Label>
+          </Header.Subheader>
+        </Header.Content>
+      </Header>
+    )
+  }
+  else if(props.objectKeyname ==="resourceTitleObject" && props.data["resourceType"]){
+    return (
+      <Header as='h4'>
+        <Header.Content>
+          <a href={props.mtdRoot +'/'+ props.data["_id"]}>{props.objectValue.default}</a>
+          <Header.Subheader>{props.data["resourceType"][0]}</Header.Subheader>
+        </Header.Content>
+      </Header>
+    )
+  }
+  else if(props.objectKeyname ==="resourceTitleObject" && props.data["overview"]) {
+    return (
+      <Header as='h4' image>
+        <Image src={props.data["overview"][0].url} rounded size='mini'/>
+        <Header.Content>
+          <a href={props.mtdRoot +'/'+ props.data["_id"]}>{props.objectValue.default}</a>
+        </Header.Content>
+      </Header>
+    )
+  }
+  else if (props.objectValue.default) {
+    return (
+      <React.Fragment>
+        <span>{props.objectValue.default}</span>
+      </React.Fragment>
+    )
+  } else {
+    return null
+  }
+}
+
 const TableCellArray = (props: any) => {
-  return !props.array ? null : (
+  return !props.arrayValue ? null : (
     <React.Fragment>
-      {props.array.map((tag:any, index:any) => (
+      {props.arrayValue.map((value:any, index:any) => (
         <React.Fragment key={index}>
-          {(tag?.default ? <span>{tag?.default}<br/></span> : '')}
-          {(tag?.protocol === "ESRI:REST" && tag?.function === "browsing" ? <span><Icon name='linkify' /><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
-          {(tag?.protocol === "WWW:LINK" && tag?.function === "information" ? <span><Icon name='linkify' /><a href={tag?.url}>{tag?.name}</a><br/></span> : '')}
+          {(value?.default  && props.arrayKeyname === "tag"? <span><Label color='blue'> uu {value?.default} </Label>  </span> : <span>{value?.default} <br/></span>)}
+          {(value?.protocol === "ESRI:REST" && value?.function === "browsing" ? <span><Icon name='map' /><a href={value?.url}>{value?.name}</a><br/></span> : '')}
+          {(value?.protocol === "WWW:LINK" && value?.function === "information" ? <span><Icon name='info' /><a href={value?.url}>{value?.name}</a><br/></span> : '')}
         </React.Fragment>
       ))}
     </React.Fragment>
   )
+}
+
+const TableCellString = (props: any) => {
+  if (props.stringKeyname === "uuid" || props.stringKeyname === "metadataIdentifier" || props.stringKeyname === "_id") {
+    return (
+      <React.Fragment>
+        <a href={props.mtdRoot +'/'+ props.stringValue}>{props.stringValue}</a>
+      </React.Fragment>
+    )
+  }
+  else if (props.stringKeyname === "rating") {
+    return (
+      <React.Fragment>
+        <Rating icon='star' defaultRating={props.stringValue} maxRating={5} disabled/>
+      </React.Fragment>
+    )
+  }
+  else if (props.stringKeyname === "valid") {
+    return (
+      <React.Fragment>
+        {(props.stringValue === "1" ? <Icon name='checkmark' color='green' size='large' /> : props.stringValue === "-1" ? <Icon name='close' color='red' size='large' /> : <Icon name='minus' color='grey' size='large' /> )}
+      </React.Fragment>
+    )
+  }
+  else if (props.stringValue === "true"|| props.stringValue === "false" ) {
+    return (
+      <React.Fragment>
+        {(props.stringValue === "true" ? <Icon name='checkmark' color='green' size='large' /> : <Icon name='close' color='red' size='large' />)}
+      </React.Fragment>
+    )
+  }
+  else {
+    return (
+      <React.Fragment>
+        <span>{props.stringValue}</span>
+      </React.Fragment>
+    )
+  }
 }
 
 export default SearchResultTable;
