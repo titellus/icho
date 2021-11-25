@@ -1,6 +1,6 @@
-import React from "react";
-import { SingleList } from "@appbaseio/reactivesearch";
-import { Button, Label, Statistic } from "semantic-ui-react";
+import React from 'react';
+import { SingleList } from '@appbaseio/reactivesearch';
+import { Button, Label, Statistic } from 'semantic-ui-react';
 
 class AggCardComponent extends React.Component<{
   setQuery: any;
@@ -15,7 +15,7 @@ class AggCardComponent extends React.Component<{
     if (item) {
       // @ts-ignore
       const query = SingleList.defaultQuery(item, {
-        queryFormat: "or",
+        queryFormat: 'or',
         dataField,
       });
       setQuery({
@@ -63,7 +63,7 @@ class AggCardComponent extends React.Component<{
               md={item.count < average ? 2 : item.count === average ? 3 : 4}
             >
               <Statistic.Value
-                bg={this.props.value === item.value ? "primary" : "secondary"}
+                bg={this.props.value === item.value ? 'primary' : 'secondary'}
               >
                 {item.count}
               </Statistic.Value>

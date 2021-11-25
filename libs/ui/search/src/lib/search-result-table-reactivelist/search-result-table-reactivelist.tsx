@@ -1,11 +1,15 @@
 import './search-result-table-reactivelist.module.scss';
-import {Container} from "semantic-ui-react";
-import {SortOption, sortOptions} from "../search-result-table-sort/search-result-table-sort";
-import {DataSearch, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {DefaultQuery, DefaultSource} from "@catalogue/utils/shared";
-import React, {Dispatch, SetStateAction, useState} from "react";
-import SearchResultTable from "../search-result-table/search-result-table";
-import PropTypes from "prop-types";
+import {
+  SortOption,
+  sortOptions,
+} from '../search-result-table-sort/search-result-table-sort';
+import {
+  DataSearch,
+  ReactiveBase,
+  ReactiveList,
+} from '@appbaseio/reactivesearch';
+import React, { useState } from 'react';
+import SearchResultTable from '../search-result-table/search-result-table';
 
 /* eslint-disable-next-line */
 export interface ResultTableProps {}
@@ -20,67 +24,77 @@ interface Props {
   resultNumber: number;
 }
 
-export function SearchResultTableReactivelist({url, index, filter, mtdRoot, dataFields,dataFieldsName, resultNumber }: Props) {
-  let default_query:any;
+export function SearchResultTableReactivelist({
+  url,
+  index,
+  filter,
+  mtdRoot,
+  dataFields,
+  dataFieldsName,
+  resultNumber,
+}: Props) {
+  let default_query: any;
   if (filter) {
     default_query = {
-      query_string:
-        {query: filter}
-    }
+      query_string: { query: filter },
+    };
   }
 
   const [sort, setSort] = useState<SortOption>(sortOptions[0]);
-  function handleChange(newValue:any) {
+
+  function handleChange(newValue: any) {
     setSort(newValue);
   }
+
   return (
     <ReactiveBase
-      app="gn-records"
-      url="http://localhost:4200/search"
+      app="records"
+      url="http://localhost:4200/geonetwork/srv/api/search/"
       enableAppbase={false}
     >
       <DataSearch
-          componentId="searchbox"
-          dataField={[]}
-          showClear={true}
-          placeholder="Search ..."
-          defaultQuery={() => ({
-            sort: [{ [sort.dataField]: { order: sort.sortBy } }],
-            //query: { match: { isTemplate: "n" } }
-            query: default_query
-          })}
-        />
-      <br/>
+        componentId="searchbox"
+        dataField={[]}
+        showClear={true}
+        placeholder="Search ..."
+        defaultQuery={() => ({
+          sort: [{ [sort.dataField]: { order: sort.sortBy } }],
+          //query: { match: { isTemplate: "n" } }
+          query: default_query,
+        })}
+      />
+      <br />
 
-        <ReactiveList
-          componentId="sortTableES"
-          size={resultNumber}
-          pagination={false}
-          showResultStats={true}
-          defaultQuery={() => ({
-            sort: [{ [sort.dataField]: { order: sort.sortBy } }],
-            //query: { match: { isTemplate: "n" } }
-            query: default_query
-          })}
-          includeFields={dataFields}
-          dataField={"_id"}
-          react={{
-            and: [
-              "searchbox"
-            ]
-          }}
-          render={({ loading, error, data }) => {
-            return (
-              <SearchResultTable loading={loading}
-                             error={error}
-                             mtdRoot={mtdRoot}
-                             dataFields = {dataFields}
-                             data={data}
-                             dataFieldsName = {dataFieldsName}
-                             handleChangeSortReactiveList={handleChange} selected={sort}/>
-            );
-          }}
-        />
+      <ReactiveList
+        componentId="sortTableES"
+        size={resultNumber}
+        pagination={false}
+        showResultStats={true}
+        defaultQuery={() => ({
+          sort: [{ [sort.dataField]: { order: sort.sortBy } }],
+          //query: { match: { isTemplate: "n" } }
+          query: default_query,
+        })}
+        includeFields={dataFields}
+        dataField={'_id'}
+        react={{
+          and: ['searchbox'],
+        }}
+        render={({ loading, error, data }) => {
+          return (
+            <SearchResultTable
+              loading={loading}
+              error={error}
+              mtdRoot={mtdRoot}
+              dataFields={dataFields}
+              data={data}
+              dataFieldsName={dataFieldsName}
+              handleChangeSortReactiveList={handleChange}
+              selected={sort}
+            />
+          );
+        }}
+      />
     </ReactiveBase>
   );
 }

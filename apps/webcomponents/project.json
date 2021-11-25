@@ -14,9 +14,7 @@
         "main": "apps/webcomponents/src/main.tsx",
         "polyfills": "apps/webcomponents/src/polyfills.ts",
         "tsConfig": "apps/webcomponents/tsconfig.app.json",
-        "assets": [
-          "apps/webcomponents/src/assets"
-        ],
+        "assets": ["apps/webcomponents/src/assets"],
         "styles": ["apps/webcomponents/src/styles.scss"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"

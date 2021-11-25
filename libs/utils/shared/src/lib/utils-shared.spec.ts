@@ -1,4 +1,3 @@
-import UtilsShared from "./utils-shared";
+import UtilsShared from './utils-shared';
 
-describe("UtilsShared", () => {
-});
+describe('UtilsShared', () => {});

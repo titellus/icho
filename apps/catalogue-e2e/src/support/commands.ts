@@ -19,8 +19,8 @@ declare namespace Cypress {
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {
   console.log('Login with: ', email, password);
-  email != '' && cy.get("input#username").clear().type(email);
-  password != '' && cy.get("input#password").clear().type(password);
+  email != '' && cy.get('input#username').clear().type(email);
+  password != '' && cy.get('input#password').clear().type(password);
   if (email != '' && password != '') {
     cy.get('#signin button').click();
   }

@@ -2,7 +2,7 @@ import { getGreeting } from '../support/app.po';
 
 describe('catalogue', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/');
   });
 
   it('should display welcome message', () => {

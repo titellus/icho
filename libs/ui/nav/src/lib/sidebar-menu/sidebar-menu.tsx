@@ -1,13 +1,13 @@
-import "./sidebar-menu.module.scss";
-import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import React from "react";
+import './sidebar-menu.module.scss';
+import { Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import React from 'react';
 
 /* eslint-disable-next-line */
 export interface SidebarMenuProps {
-  visible: boolean,
-  setVisible: (visible: boolean) => void,
-  children: React.ReactNode
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
+  children: React.ReactNode;
 }
 
 export function SidebarMenu(props: SidebarMenuProps) {
@@ -40,11 +40,7 @@ export function SidebarMenu(props: SidebarMenuProps) {
             Themes
           </Menu.Header>
           <Menu.Menu>
-            <Menu.Item
-              name="WISE"
-              as={Link}
-              to="/search?filter=WISE"
-            />
+            <Menu.Item name="WISE" as={Link} to="/search?filter=WISE" />
             <Menu.Item
               name="Inondations"
               as={Link}
@@ -64,18 +60,12 @@ export function SidebarMenu(props: SidebarMenuProps) {
             My stuff
           </Menu.Header>
           <Menu.Menu>
-            <Menu.Item
-              name="Preferences"
-              as={Link}
-              to="/authenticate"
-            />
+            <Menu.Item name="Preferences" as={Link} to="/authenticate" />
           </Menu.Menu>
         </Menu.Item>
       </Sidebar>
 
-      <Sidebar.Pusher dimmed={props.visible}>
-        {props.children}
-      </Sidebar.Pusher>
+      <Sidebar.Pusher dimmed={props.visible}>{props.children}</Sidebar.Pusher>
     </Sidebar.Pushable>
   );
 }

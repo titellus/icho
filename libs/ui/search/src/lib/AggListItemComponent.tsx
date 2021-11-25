@@ -1,6 +1,5 @@
-import React from "react";
-import { SingleList } from "@appbaseio/reactivesearch";
-import { Button, Label, List, Statistic } from "semantic-ui-react";
+import React from 'react';
+import { Label, List } from 'semantic-ui-react';
 
 class AggListItemComponent extends React.Component<{
   loading: boolean;
@@ -32,13 +31,13 @@ class AggListItemComponent extends React.Component<{
             key={item.key}
             onClick={() => this.props.handleChange(item.key)}
             labelPosition="right"
-            style={{ maxWidth: "100%" }}
+            style={{ maxWidth: '100%' }}
           >
             <Label
               as="a"
               color="teal"
               active={item.key === this.props.value}
-              className={"single line"}
+              className={'single line'}
               title={item.key}
             >
               {item.key}

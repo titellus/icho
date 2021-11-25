@@ -1,34 +1,31 @@
-import "./ui-search.module.scss";
-import { Container, Grid, Item, Label, Menu, Sticky } from "semantic-ui-react";
+import './ui-search.module.scss';
+import { Container, Grid, Item, Label } from 'semantic-ui-react';
 import {
   DataSearch,
   ReactiveBase,
   ReactiveComponent,
   ReactiveList,
   SelectedFilters,
-  SingleList
-} from "@appbaseio/reactivesearch";
-import React from "react";
-import AggListItemComponent from "./AggListItemComponent";
-import AggCardComponent from "./AggCardComponent";
-import PropTypes from "prop-types";
-import "semantic-ui-css/semantic.min.css";
-import { DefaultQuery, DefaultSource } from "@catalogue/utils/shared";
-import { GroupsApi } from "@catalogue/api/geonetwork";
+  SingleList,
+} from '@appbaseio/reactivesearch';
+import React from 'react';
+import AggListItemComponent from './AggListItemComponent';
+import AggCardComponent from './AggCardComponent';
+import PropTypes from 'prop-types';
+import 'semantic-ui-css/semantic.min.css';
+import { DefaultQuery, DefaultSource } from '@catalogue/utils/shared';
+import { GroupsApi } from '@catalogue/api/geonetwork';
 
-export function UiSearch({ filter= '' }) {
+export function UiSearch({ filter = '' }) {
   new GroupsApi().getGroups(true).then((r) => {
     console.log(r.data);
   });
   return (
-
     <ReactiveBase
       app="records"
       url="http://localhost:4200/geonetwork/srv/api/search/"
       enableAppbase={false}
     >
-
-
       <Container>
         {filter}
         <DataSearch
@@ -36,7 +33,7 @@ export function UiSearch({ filter= '' }) {
           defaultQuery={() => {
             return DefaultQuery.IS_RECORD;
           }}
-          dataField={["resourceTitleObject.default"]}
+          dataField={['resourceTitleObject.default']}
           placeholder="Search for datasets and maps..."
         />
 
@@ -97,28 +94,28 @@ export function UiSearch({ filter= '' }) {
                 componentId="bigBlocks"
                 showFilter
                 react={{
-                  and: ["resourceTypeMenu", "publisherMenu"]
+                  and: ['resourceTypeMenu', 'publisherMenu'],
                 }}
                 defaultQuery={() => ({
                   aggs: {
-                    "th_Themes_geoportail_wallon_hierarchy.default": {
+                    'th_Themes_geoportail_wallon_hierarchy.default': {
                       terms: {
-                        field: "th_Themes_geoportail_wallon_hierarchy.default",
+                        field: 'th_Themes_geoportail_wallon_hierarchy.default',
                         order: {
-                          _count: "desc"
+                          _count: 'desc',
                         },
-                        size: 5
+                        size: 5,
                       },
                       aggs: {
                         format: {
                           terms: {
-                            field: "format"
-                          }
-                        }
-                      }
-                    }
+                            field: 'format',
+                          },
+                        },
+                      },
+                    },
                   },
-                  size: 0
+                  size: 0,
                 })}
                 render={(data) => {
                   return (
@@ -141,15 +138,15 @@ export function UiSearch({ filter= '' }) {
                   return DefaultQuery.IS_RECORD;
                 }}
                 includeFields={DefaultSource.FOR_SEARCH}
-                dataField={"resourceTitleObject.default"}
+                dataField={'resourceTitleObject.default'}
                 react={{
                   and: [
-                    "searchbox",
-                    "resourceTypeMenu",
-                    "DynamicRangeSensor",
-                    "publisherMenu",
-                    "bigBlocks"
-                  ]
+                    'searchbox',
+                    'resourceTypeMenu',
+                    'DynamicRangeSensor',
+                    'publisherMenu',
+                    'bigBlocks',
+                  ],
                 }}
                 render={({ loading, error, data }) => {
                   if (loading) {
@@ -158,7 +155,7 @@ export function UiSearch({ filter= '' }) {
                   if (error) {
                     return (
                       <div>
-                        Something went wrong! Error details{" "}
+                        Something went wrong! Error details{' '}
                         {JSON.stringify(error)}
                       </div>
                     );
@@ -172,7 +169,7 @@ export function UiSearch({ filter= '' }) {
                             src={
                               res.overview && res.overview.length > 0
                                 ? res.overview[0].url
-                                : "https://react.semantic-ui.com/images/wireframe/image.png"
+                                : 'https://react.semantic-ui.com/images/wireframe/image.png'
                             }
                           ></Item.Image>
                           <Item.Content>
@@ -225,10 +222,10 @@ export function UiSearch({ filter= '' }) {
       </Container>
     </ReactiveBase>
   );
-};
+}
 
 UiSearch.propTypes = {
-  filter: PropTypes.string
+  filter: PropTypes.string,
 };
 
 export default UiSearch;

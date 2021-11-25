@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
-import { AuthData, authService } from "../services/authService";
+import { AuthData, authService } from '../services/authService';
 
 type AuthContextData = {
   authData?: AuthData;
@@ -42,10 +42,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const signIn = async (username: string, password: string) => {
     setLoading(true);
 
-    const _authData = await authService.signIn(
-      username,
-      password
-    );
+    const _authData = await authService.signIn(username, password);
 
     setAuthData(_authData);
     setLoading(false);
@@ -68,7 +65,7 @@ const AuthProvider: React.FC = ({ children }) => {
 function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

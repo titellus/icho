@@ -1,16 +1,15 @@
-import "./authenticate-menu.module.scss";
-import { Label, Menu } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import React from "react";
-import { useAuth } from "@catalogue/utils/shared";
+import './authenticate-menu.module.scss';
+import { Label, Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import React from 'react';
+import { useAuth } from '@catalogue/utils/shared';
 
 /* eslint-disable-next-line */
-export interface AuthenticateMenuProps {
-}
+export interface AuthenticateMenuProps {}
 
 export function AuthenticateMenu(props: AuthenticateMenuProps) {
   const { authData, loading, signIn, signOut } = useAuth();
-  let isLoggedIn = authData?.username !== undefined;
+  const isLoggedIn = authData?.username !== undefined;
 
   if (isLoggedIn) {
     return (
@@ -32,7 +31,8 @@ export function AuthenticateMenu(props: AuthenticateMenuProps) {
         <Menu.Item as={Link} to="/authenticate">
           Sign up
         </Menu.Item>
-      </Menu.Menu>);
+      </Menu.Menu>
+    );
   }
 }
 

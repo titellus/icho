@@ -1,13 +1,14 @@
 import './search-result-table-sort.module.scss';
-import {Button, Icon} from 'semantic-ui-react';
-import React from "react";
+import { Button, Icon } from 'semantic-ui-react';
+import React from 'react';
 
 /* eslint-disable-next-line */
 export interface SortProps {}
+
 export interface SortOption {
   label: string;
   dataField: string;
-  sortBy: "asc" | "desc";
+  sortBy: 'asc' | 'desc';
 }
 
 interface Props {
@@ -18,33 +19,37 @@ interface Props {
 
 export const sortOptions: SortOption[] = [
   {
-    label:"desc",
-    dataField: "uuid",
-    sortBy: "desc"
+    label: 'desc',
+    dataField: 'uuid',
+    sortBy: 'desc',
   },
   {
-    label:"asc",
-    dataField: "uuid",
-    sortBy: "asc"
-  }
+    label: 'asc',
+    dataField: 'uuid',
+    sortBy: 'asc',
+  },
 ];
-export function SearchResultTableSort({ onChange, selectedSortSelector, field }: Props) {
+
+export function SearchResultTableSort({
+  onChange,
+  selectedSortSelector,
+  field,
+}: Props) {
   const handleChange = (field: string) => (event: any) => {
-    if (selectedSortSelector.sortBy === "asc") {
+    if (selectedSortSelector.sortBy === 'asc') {
       sortOptions[0].dataField = field;
       onChange(sortOptions[0]);
-    }
-    else {
+    } else {
       sortOptions[1].dataField = field;
       onChange(sortOptions[1]);
     }
   };
   return (
     <Button basic circular icon onClick={handleChange(field)}>
-      {selectedSortSelector.sortBy === "asc" ? (
-        <Icon name='sort up' />
-      ):(
-        <Icon name='sort down' />
+      {selectedSortSelector.sortBy === 'asc' ? (
+        <Icon name="sort up" />
+      ) : (
+        <Icon name="sort down" />
       )}
     </Button>
   );

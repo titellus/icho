@@ -1,6 +1,3 @@
-
-export class UtilsShared {
-
-}
+export class UtilsShared {}
 
 export default UtilsShared;
