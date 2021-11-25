@@ -139,7 +139,7 @@ const TableCellArray = (props: any) => {
     <React.Fragment>
       {props.arrayValue.map((value:any, index:any) => (
         <React.Fragment key={index}>
-          {(value?.default  && props.arrayKeyname === "tag"? <span><Label color='blue'> uu {value?.default} </Label>  </span> : <span>{value?.default} <br/></span>)}
+          {(value?.default  && props.arrayKeyname === "tag"? <span><Label color='blue'>  {value?.default} </Label>  </span> : <span>{value?.default} <br/></span>)}
           {(value?.protocol === "ESRI:REST" && value?.function === "browsing" ? <span><Icon name='map' /><a href={value?.url}>{value?.name}</a><br/></span> : '')}
           {(value?.protocol === "WWW:LINK" && value?.function === "information" ? <span><Icon name='info' /><a href={value?.url}>{value?.name}</a><br/></span> : '')}
         </React.Fragment>
