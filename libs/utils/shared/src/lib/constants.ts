@@ -1,5 +1,3 @@
-export const DEFAULT_UI_CONFIG = {};
-
 export class DefaultQuery {
   static IS_RECORD: { query: { match: { isTemplate: 'n' } } };
   static IS_RECORD_OR_TEMPLATE = {
