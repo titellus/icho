@@ -1,4 +1,4 @@
-import './search-result-table.module.scss';
+import styles from './search-result-table.module.scss';
 import {Button, Image, Header, Icon, Rating, Table, Label} from 'semantic-ui-react'
 import {Dispatch, SetStateAction, useState} from "react";
 import  SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
@@ -52,7 +52,6 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
   }
    return data > 0 ? null : (
      <div>
-
        {typeof newData === "object" && <div>
          <CSVLink data={newData}><Button icon><Icon name='download' /></Button></CSVLink>
          <Table color="blue">
@@ -73,7 +72,7 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
            <Table.Row key={i}>
              {Object.keys(dataItem).slice(1).map((keyname, j) => (
                <Table.Cell key={j}>
-                 {(dataItem[keyname] instanceof Object ? <TableCellObject objectValue={dataItem[keyname]} objectKeyname={keyname} data={dataItem}  mtdRoot={mtdRoot}/> : '')}
+                 {(dataItem[keyname] instanceof Object ? <TableCellObject objectValue={dataItem[keyname]} objectKeyname={keyname} data={dataItem}  mtdRoot={mtdRoot} styles={styles}/> : '')}
                  {(Array.isArray(dataItem[keyname]) ? <TableCellArray arrayValue={dataItem[keyname]} arrayKeyname={keyname} /> : '')}
                  {(typeof dataItem[keyname] === "string" ? <TableCellString stringValue={dataItem[keyname]} stringKeyname={keyname} mtdRoot={mtdRoot}/> : '')}
                </Table.Cell>
@@ -90,17 +89,19 @@ export function SearchResultTable({ loading, error, data, dataFields, mtdRoot, d
 const TableCellObject = (props: any) => {
   if(props.objectKeyname ==="resourceTitleObject" && props.data["resourceType"] && props.data["overview"]){
     return (
+      <React.Fragment>
+      <Label as='a' color='red' ribbon >
+        {props.data["resourceType"][0]}
+      </Label>
       <Header as='h4' image>
-        <Image src={props.data["overview"][0].url} rounded size='tiny' />
+        <img src={props.data["overview"][0].url} className={props.styles.image} />
         <Header.Content>
           <a href={props.mtdRoot +'/'+ props.data["_id"]}>{props.objectValue.default}</a>
           <Header.Subheader>
-            <Label as='a' color='red' ribbon >
-              {props.data["resourceType"][0]}
-            </Label>
           </Header.Subheader>
         </Header.Content>
       </Header>
+      </React.Fragment>
     )
   }
   else if(props.objectKeyname ==="resourceTitleObject" && props.data["resourceType"]){
