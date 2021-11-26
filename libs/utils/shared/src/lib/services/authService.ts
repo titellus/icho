@@ -23,14 +23,18 @@ const signIn = (username: string, password: string): Promise<AuthData> => {
   };
 
   return new Promise((resolve) => {
-    new MeApi().getMe({ auth: auth }).then(
-      function (userDetailsResponse) {
-        resolve(userDetailsResponse.data);
-      },
-      function () {
-        resolve(undefined);
-      }
-    );
+    new MeApi()
+      .getMe({
+        auth: auth,
+      })
+      .then(
+        function (userDetailsResponse) {
+          resolve(userDetailsResponse.data);
+        },
+        function () {
+          resolve(undefined);
+        }
+      );
   });
 };
 

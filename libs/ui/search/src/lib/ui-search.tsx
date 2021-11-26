@@ -1,22 +1,58 @@
-import './ui-search.module.scss';
-import { Container, Grid, Item, Label } from 'semantic-ui-react';
+import "./ui-search.module.scss";
+import { Container, Grid, Item, Label } from "semantic-ui-react";
 import {
-  DataSearch,
+  DataSearch, DynamicRangeSlider,
+  MultiList,
   ReactiveBase,
   ReactiveComponent,
   ReactiveList,
   SelectedFilters,
-  SingleList,
-} from '@appbaseio/reactivesearch';
-import React from 'react';
-import AggListItemComponent from './AggListItemComponent';
-import AggCardComponent from './AggCardComponent';
-import PropTypes from 'prop-types';
-import 'semantic-ui-css/semantic.min.css';
-import { DefaultQuery, DefaultSource } from '@catalogue/utils/shared';
-import { GroupsApi } from '@catalogue/api/geonetwork';
+  SingleList
+} from "@appbaseio/reactivesearch";
+import React from "react";
+import AggCardComponent from "./AggCardComponent";
+import PropTypes from "prop-types";
+import "semantic-ui-css/semantic.min.css";
+import { DefaultQuery, DefaultSource } from "@catalogue/utils/shared";
+import { GroupsApi } from "@catalogue/api/geonetwork";
+import { DEFAULT_UI_CONFIG } from "../../../../utils/shared/src/lib/ui-config";
 
-export function UiSearch({ filter = '' }) {
+interface AggregationPanelProps {
+  aggregations: any
+}
+
+interface AggregationComponentTypes { [key: string]: React.ComponentClass<any> };
+const aggregationComponentTypes: AggregationComponentTypes = {
+  "SingleList": SingleList,
+  "MultiList": MultiList,
+  "DynamicRangeSlider": DynamicRangeSlider
+};
+
+function AggregationPanel({ aggregations }: AggregationPanelProps) {
+  console.log(aggregations);
+  const defaultConfig = {
+    componentId: 'resourceType',
+    dataField: 'resourceType',
+    title: 'Type',
+    showSearch: false
+  };
+  let items = Object.keys(aggregations).map((key: any) => {
+    return React.createElement(
+      aggregationComponentTypes[aggregations[key].meta?.type || 'SingleList'],
+      {
+        componentId: key,
+        dataField: key,
+        ...aggregations[key].meta?.props
+      });
+  });
+  return (
+    <>
+      {items}
+    </>
+  );
+}
+
+export function UiSearch({ filter = "" }) {
   new GroupsApi().getGroups(true).then((r) => {
     console.log(r.data);
   });
@@ -33,7 +69,7 @@ export function UiSearch({ filter = '' }) {
           defaultQuery={() => {
             return DefaultQuery.IS_RECORD;
           }}
-          dataField={['resourceTitleObject.default']}
+          dataField={["resourceTitleObject.default"]}
           placeholder="Search for datasets and maps..."
         />
 
@@ -41,81 +77,35 @@ export function UiSearch({ filter = '' }) {
         <Grid>
           <Grid.Row>
             <Grid.Column width={4}>
-              <SingleList
-                componentId="resourceTypeMenu"
-                dataField="resourceType"
-                title="Resource types"
-                selectAllLabel="All"
-                defaultQuery={() => {
-                  return DefaultQuery.IS_RECORD;
-                }}
-                showSearch={false}
-                showRadio={false}
-                showFilter={false}
-                render={({ loading, error, data, value, handleChange }) => {
-                  return (
-                    <AggListItemComponent
-                      loading={loading}
-                      error={error}
-                      data={data}
-                      value={value}
-                      handleChange={handleChange}
-                    ></AggListItemComponent>
-                  );
-                }}
-              />
-              <SingleList
-                componentId="publisherMenu"
-                dataField="OrgForResource"
-                title="Publisher"
-                selectAllLabel="All"
-                showSearch={true}
-                showRadio={false}
-                showFilter={false}
-                render={({ loading, error, data, value, handleChange }) => {
-                  return (
-                    <AggListItemComponent
-                      loading={loading}
-                      error={error}
-                      data={data}
-                      value={value}
-                      handleChange={handleChange}
-                    ></AggListItemComponent>
-                  );
-                }}
-              />
-
-              {/*<DynamicRangeSlider componentId="DynamicRangeSensor"
-                                  includeNullValues={false}
-                                  dataField="creationYearForResource" />*/}
+              <AggregationPanel aggregations={DEFAULT_UI_CONFIG.search.aggregation} />
             </Grid.Column>
             <Grid.Column width={12}>
               <ReactiveComponent
                 componentId="bigBlocks"
                 showFilter
                 react={{
-                  and: ['resourceTypeMenu', 'publisherMenu'],
+                  and: [Object.keys(DEFAULT_UI_CONFIG.search.aggregation)]
                 }}
                 defaultQuery={() => ({
                   aggs: {
-                    'th_Themes_geoportail_wallon_hierarchy.default': {
+                    "th_Themes_geoportail_wallon_hierarchy.default": {
                       terms: {
-                        field: 'th_Themes_geoportail_wallon_hierarchy.default',
+                        field: "th_Themes_geoportail_wallon_hierarchy.default",
                         order: {
-                          _count: 'desc',
+                          _count: "desc"
                         },
-                        size: 5,
+                        size: 5
                       },
                       aggs: {
                         format: {
                           terms: {
-                            field: 'format',
-                          },
-                        },
-                      },
-                    },
+                            field: "format"
+                          }
+                        }
+                      }
+                    }
                   },
-                  size: 0,
+                  size: 0
                 })}
                 render={(data) => {
                   return (
@@ -131,22 +121,19 @@ export function UiSearch({ filter = '' }) {
 
               <ReactiveList
                 componentId="results"
-                size={1}
+                size={DEFAULT_UI_CONFIG.search.size}
                 pagination={false}
                 showResultStats={false}
                 defaultQuery={() => {
                   return DefaultQuery.IS_RECORD;
                 }}
                 includeFields={DefaultSource.FOR_SEARCH}
-                dataField={'resourceTitleObject.default'}
+                dataField={"resourceTitleObject.default"}
                 react={{
                   and: [
-                    'searchbox',
-                    'resourceTypeMenu',
-                    'DynamicRangeSensor',
-                    'publisherMenu',
-                    'bigBlocks',
-                  ],
+                    "searchbox",
+                    "bigBlocks",
+                    ...Object.keys(DEFAULT_UI_CONFIG.search.aggregation)]
                 }}
                 render={({ loading, error, data }) => {
                   if (loading) {
@@ -155,7 +142,7 @@ export function UiSearch({ filter = '' }) {
                   if (error) {
                     return (
                       <div>
-                        Something went wrong! Error details{' '}
+                        Something went wrong! Error details{" "}
                         {JSON.stringify(error)}
                       </div>
                     );
@@ -169,7 +156,7 @@ export function UiSearch({ filter = '' }) {
                             src={
                               res.overview && res.overview.length > 0
                                 ? res.overview[0].url
-                                : 'https://react.semantic-ui.com/images/wireframe/image.png'
+                                : "https://react.semantic-ui.com/images/wireframe/image.png"
                             }
                           ></Item.Image>
                           <Item.Content>
@@ -225,7 +212,7 @@ export function UiSearch({ filter = '' }) {
 }
 
 UiSearch.propTypes = {
-  filter: PropTypes.string,
+  filter: PropTypes.string
 };
 
 export default UiSearch;
