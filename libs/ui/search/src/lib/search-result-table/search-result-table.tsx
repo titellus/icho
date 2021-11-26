@@ -14,6 +14,9 @@ import SearchResultTableSort, {
 } from '../search-result-table-sort/search-result-table-sort';
 import React from 'react';
 import { CSVDownload, CSVLink } from 'react-csv';
+import {SearchResultTableCellObject} from "../search-result-table-cell-object/search-result-table-cell-object";
+import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
+import SearchResultTableCellString from "../search-result-table-cell-string/search-result-table-cell-string";
 
 interface Props {
   loading: boolean;
@@ -95,14 +98,14 @@ export function SearchResultTable({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {newData.map((dataItem: Record<string,unknown>, i: number) => (
+              {newData.map((dataItem: any, i: number) => (
                 <Table.Row key={i}>
                   {Object.keys(dataItem)
                     .slice(1)
                     .map((keyname, j) => (
                       <Table.Cell key={j}>
                         {dataItem[keyname] instanceof Object ? (
-                          <TableCellObject
+                          <SearchResultTableCellObject
                             objectValue={dataItem[keyname]}
                             objectKeyname={keyname}
                             data={dataItem}
@@ -113,7 +116,7 @@ export function SearchResultTable({
                           ''
                         )}
                         {Array.isArray(dataItem[keyname]) ? (
-                          <TableCellArray
+                          <SearchResultTableCellArray
                             arrayValue={dataItem[keyname]}
                             arrayKeyname={keyname}
                           />
@@ -121,7 +124,7 @@ export function SearchResultTable({
                           ''
                         )}
                         {typeof dataItem[keyname] === 'string' ? (
-                          <TableCellString
+                          <SearchResultTableCellString
                             stringValue={dataItem[keyname]}
                             stringKeyname={keyname}
                             mtdRoot={mtdRoot}
@@ -140,151 +143,5 @@ export function SearchResultTable({
     </div>
   );
 }
-
-const TableCellObject = (props: any) => {
-  if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['resourceType'] &&
-    props.data['overview']
-  ) {
-    return (
-      <React.Fragment>
-        <Label as="a" color="red" ribbon>
-          {props.data['resourceType'][0]}
-        </Label>
-        <Header as="h4" image>
-          <img alt=''
-            src={props.data['overview'][0].url}
-            className={props.styles.image}
-          />
-          <Header.Content>
-            <a href={props.mtdRoot + '/' + props.data['_id']}>
-              {props.objectValue.default}
-            </a>
-            <Header.Subheader></Header.Subheader>
-          </Header.Content>
-        </Header>
-      </React.Fragment>
-    );
-  } else if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['resourceType']
-  ) {
-    return (
-      <Header as="h4">
-        <Header.Content>
-          <a href={props.mtdRoot + '/' + props.data['_id']}>
-            {props.objectValue.default}
-          </a>
-          <Header.Subheader>{props.data['resourceType'][0]}</Header.Subheader>
-        </Header.Content>
-      </Header>
-    );
-  } else if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['overview']
-  ) {
-    return (
-      <Header as="h4" image>
-        <Image src={props.data['overview'][0].url} rounded size="mini" />
-        <Header.Content>
-          <a href={props.mtdRoot + '/' + props.data['_id']}>
-            {props.objectValue.default}
-          </a>
-        </Header.Content>
-      </Header>
-    );
-  } else if (props.objectValue.default) {
-    return (
-        <span>{props.objectValue.default}</span>
-    );
-  } else {
-    return null;
-  }
-};
-
-const TableCellArray = (props: any) => {
-  return !props.arrayValue ? null : (
-    <React.Fragment>
-      {props.arrayValue.map((value: any, index: number) => (
-        <React.Fragment key={index}>
-          {value?.default && props.arrayKeyname === 'tag' ? (
-            <span>
-              <Label color="blue"> {value?.default} </Label>{' '}
-            </span>
-          ) : (
-            <span>
-              {value?.default} <br />
-            </span>
-          )}
-          {value?.protocol === 'ESRI:REST' && value?.function === 'browsing' ? (
-            <span>
-              <Icon name="map" />
-              <a href={value?.url}>{value?.name}</a>
-              <br />
-            </span>
-          ) : (
-            ''
-          )}
-          {value?.protocol === 'WWW:LINK' &&
-          value?.function === 'information' ? (
-            <span>
-              <Icon name="info" />
-              <a href={value?.url}>{value?.name}</a>
-              <br />
-            </span>
-          ) : (
-            ''
-          )}
-        </React.Fragment>
-      ))}
-    </React.Fragment>
-  );
-};
-
-const TableCellString = (props: any) => {
-  if (
-    props.stringKeyname === 'uuid' ||
-    props.stringKeyname === 'metadataIdentifier' ||
-    props.stringKeyname === '_id'
-  ) {
-    return (
-        <a href={props.mtdRoot + '/' + props.stringValue}>
-          {props.stringValue}
-        </a>
-    );
-  } else if (props.stringKeyname === 'rating') {
-    return (
-        <Rating
-          icon="star"
-          defaultRating={props.stringValue}
-          maxRating={5}
-          disabled
-        />
-    );
-  } else if (props.stringKeyname === 'valid') {
-    return (
-        props.stringValue === '1' ? (
-          <Icon name="checkmark" color="green" size="large" />
-        ) : props.stringValue === '-1' ? (
-          <Icon name="close" color="red" size="large" />
-        ) : (
-          <Icon name="minus" color="grey" size="large" />
-        )
-          );
-  } else if (props.stringValue === 'true' || props.stringValue === 'false') {
-    return (
-        props.stringValue === 'true' ? (
-          <Icon name="checkmark" color="green" size="large" />
-        ) : (
-          <Icon name="close" color="red" size="large" />
-        )
-    );
-  } else {
-    return (
-        <span>{props.stringValue}</span>
-    );
-  }
-};
 
 export default SearchResultTable;
