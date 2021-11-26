@@ -35,7 +35,7 @@ export function SearchResultTableSort({
   selectedSortSelector,
   field,
 }: Props) {
-  const handleChange = (field: string) => (event: any) => {
+  const handleChange = (field: string) => () => {
     if (selectedSortSelector.sortBy === 'asc') {
       sortOptions[0].dataField = field;
       onChange(sortOptions[0]);

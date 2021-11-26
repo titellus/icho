@@ -33,7 +33,7 @@ export function SearchResultTableReactivelist({
   dataFieldsName,
   resultNumber,
 }: Props) {
-  let default_query: any;
+  let default_query: Record<string,unknown>;
   if (filter) {
     default_query = {
       query_string: { query: filter },

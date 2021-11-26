@@ -16,14 +16,14 @@ import React from 'react';
 import { CSVDownload, CSVLink } from 'react-csv';
 
 interface Props {
-  loading: any;
-  error: any;
-  data: any;
+  loading: boolean;
+  error: Record<string,unknown>;
+  data: Array<Record<string,unknown>>;
   mtdRoot: string;
   dataFields: Array<string>;
   dataFieldsName: Array<string>;
   handleChangeSortReactiveList: Dispatch<SetStateAction<SortOption>>;
-  selected: any;
+  selected: SortOption;
 }
 
 /* eslint-disable-next-line */
@@ -39,9 +39,9 @@ export function SearchResultTable({
   handleChangeSortReactiveList,
   selected,
 }: Props) {
-  let newData: any;
+  const newData: Array<Record<string,unknown>> =[];
   const [sortSelector, setSortSelector] = useState<SortOption>(selected);
-  function handleChange(newValue: any) {
+  function handleChange(newValue: SortOption) {
     setSortSelector(newValue);
     handleChangeSortReactiveList(newValue);
   }
@@ -54,18 +54,17 @@ export function SearchResultTable({
     );
   }
   if (data.length > 0) {
-    newData = [];
-    for (let element in data) {
-      let newElement: any = {};
+    for (const element in data) {
+      const newElement: Record<string,unknown> = {};
       newElement['_id'] = data[element]['_id'];
-      for (let key of dataFields) {
+      for (const key of dataFields) {
         if (data[element][key]) newElement[key] = data[element][key];
         else newElement[key] = '';
       }
       newData.push(newElement);
     }
   }
-  return data > 0 ? null : (
+  return data.length === 0 ? null : (
     <div>
       {typeof newData === 'object' && (
         <div>
@@ -96,7 +95,7 @@ export function SearchResultTable({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {newData.map((dataItem: any, i: number) => (
+              {newData.map((dataItem: Record<string,unknown>, i: number) => (
                 <Table.Row key={i}>
                   {Object.keys(dataItem)
                     .slice(1)
@@ -154,7 +153,7 @@ const TableCellObject = (props: any) => {
           {props.data['resourceType'][0]}
         </Label>
         <Header as="h4" image>
-          <img
+          <img alt=''
             src={props.data['overview'][0].url}
             className={props.styles.image}
           />
@@ -197,9 +196,7 @@ const TableCellObject = (props: any) => {
     );
   } else if (props.objectValue.default) {
     return (
-      <React.Fragment>
         <span>{props.objectValue.default}</span>
-      </React.Fragment>
     );
   } else {
     return null;
@@ -209,7 +206,7 @@ const TableCellObject = (props: any) => {
 const TableCellArray = (props: any) => {
   return !props.arrayValue ? null : (
     <React.Fragment>
-      {props.arrayValue.map((value: any, index: any) => (
+      {props.arrayValue.map((value: any, index: number) => (
         <React.Fragment key={index}>
           {value?.default && props.arrayKeyname === 'tag' ? (
             <span>
@@ -252,50 +249,40 @@ const TableCellString = (props: any) => {
     props.stringKeyname === '_id'
   ) {
     return (
-      <React.Fragment>
         <a href={props.mtdRoot + '/' + props.stringValue}>
           {props.stringValue}
         </a>
-      </React.Fragment>
     );
   } else if (props.stringKeyname === 'rating') {
     return (
-      <React.Fragment>
         <Rating
           icon="star"
           defaultRating={props.stringValue}
           maxRating={5}
           disabled
         />
-      </React.Fragment>
     );
   } else if (props.stringKeyname === 'valid') {
     return (
-      <React.Fragment>
-        {props.stringValue === '1' ? (
+        props.stringValue === '1' ? (
           <Icon name="checkmark" color="green" size="large" />
         ) : props.stringValue === '-1' ? (
           <Icon name="close" color="red" size="large" />
         ) : (
           <Icon name="minus" color="grey" size="large" />
-        )}
-      </React.Fragment>
-    );
+        )
+          );
   } else if (props.stringValue === 'true' || props.stringValue === 'false') {
     return (
-      <React.Fragment>
-        {props.stringValue === 'true' ? (
+        props.stringValue === 'true' ? (
           <Icon name="checkmark" color="green" size="large" />
         ) : (
           <Icon name="close" color="red" size="large" />
-        )}
-      </React.Fragment>
+        )
     );
   } else {
     return (
-      <React.Fragment>
         <span>{props.stringValue}</span>
-      </React.Fragment>
     );
   }
 };
