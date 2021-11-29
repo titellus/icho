@@ -12,7 +12,7 @@ export interface SortOption {
 }
 
 interface Props {
-  onChange: any;
+  onChange: (newValue: SortOption)=> void;
   selectedSortSelector: SortOption;
   field: string;
 }

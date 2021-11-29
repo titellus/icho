@@ -42,7 +42,8 @@ export function SearchResultTableReactivelist({
 
   const [sort, setSort] = useState<SortOption>(sortOptions[0]);
 
-  function handleChange(newValue: any) {
+  function handleChange(newValue: SortOption) {
+    console.log(newValue)
     setSort(newValue);
   }
 

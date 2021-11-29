@@ -25,7 +25,7 @@ interface Props {
   mtdRoot: string;
   dataFields: Array<string>;
   dataFieldsName: Array<string>;
-  handleChangeSortReactiveList: Dispatch<SetStateAction<SortOption>>;
+  handleChangeSortReactiveList: (newValue: SortOption)=> void;
   selected: SortOption;
 }
 
