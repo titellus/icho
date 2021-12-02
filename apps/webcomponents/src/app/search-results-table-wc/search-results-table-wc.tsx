@@ -7,9 +7,10 @@ export function SearchResultsTableWc({
   filter = '',
   columns = 'resourceTitleObject',
 }) {
+  const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
     <SearchResultTableReactivelist
-      url="http://localhost:4200/geonetwork/srv/api/search/"
+      url={api + '/srv/api/search/'}
       index="gn-records"
       filter={filter}
       mtdRoot="https://metawal.wallonie.be/geonetwork/srv/api/records"
@@ -18,7 +19,7 @@ export function SearchResultsTableWc({
       resultNumber={parseInt(size)}
     />
   );
-}
+};
 
 SearchResultsTableWc.propTypes = {
   size: PropTypes.string,

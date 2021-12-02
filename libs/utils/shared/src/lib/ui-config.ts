@@ -1,7 +1,7 @@
 export const DEFAULT_UI_CONFIG = {
   search: {
     size: 10,
-    aggregation: {
+    aggregations: {
       resourceType: {},
       "tag.default": {},
       OrgForResource: {

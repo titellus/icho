@@ -37,6 +37,12 @@ to generate a new component.
 Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use
 the `--prod` flag for a production build.
 
+For custom public path, update `.env` properties and then use:
+```shell
+nx serve --baseHref=/browsing/
+```
+
+
 Analyze bundle:
 
 ```

@@ -47,10 +47,11 @@ export function SearchResultTableReactivelist({
     setSort(newValue);
   }
 
+  const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
     <ReactiveBase
       app="records"
-      url="http://localhost:4200/geonetwork/srv/api/search/"
+      url={api + '/srv/api/search/'}
       enableAppbase={false}
     >
       <DataSearch

@@ -17,7 +17,7 @@ export function AuthenticateMenu(props: AuthenticateMenuProps) {
         <Menu.Item as={Label}>
           <strong>{authData?.username}</strong>
         </Menu.Item>
-        <Menu.Item as={Link} to="/authenticate">
+        <Menu.Item as={Link} to="authenticate">
           Sign out
         </Menu.Item>
       </Menu.Menu>
@@ -25,10 +25,10 @@ export function AuthenticateMenu(props: AuthenticateMenuProps) {
   } else {
     return (
       <Menu.Menu position="right">
-        <Menu.Item as={Link} to="/authenticate">
+        <Menu.Item as={Link} to="authenticate">
           Sign in
         </Menu.Item>
-        <Menu.Item as={Link} to="/authenticate">
+        <Menu.Item as={Link} to="authenticate">
           Sign up
         </Menu.Item>
       </Menu.Menu>

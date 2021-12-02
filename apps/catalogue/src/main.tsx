@@ -11,7 +11,7 @@ ReactDOM.render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
+        <Route path={process.env.NX_BASE_URL} element={<App />}>
           <Route path="home" element={<Home />} />
           <Route path="search" element={<Browse />} />
           <Route path="authenticate" element={<Authenticate />} />

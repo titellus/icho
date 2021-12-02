@@ -26,7 +26,7 @@ export function App() {
                 <Icon name="bars" />
               </Menu.Item>
 
-              <Menu.Item as={Link} to="/search">
+              <Menu.Item as={Link} to="search">
                 Search
               </Menu.Item>
 

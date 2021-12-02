@@ -30,7 +30,7 @@ export function SidebarMenu(props: SidebarMenuProps) {
             <Menu.Item
               name="Latest datasets"
               as={Link}
-              to="/search?sortBy=date"
+              to="search?sortBy=date"
             />
           </Menu.Menu>
         </Menu.Item>
@@ -40,11 +40,11 @@ export function SidebarMenu(props: SidebarMenuProps) {
             Themes
           </Menu.Header>
           <Menu.Menu>
-            <Menu.Item name="WISE" as={Link} to="/search?filter=WISE" />
+            <Menu.Item name="WISE" as={Link} to="search?filter=WISE" />
             <Menu.Item
               name="Inondations"
               as={Link}
-              to="/search?filter=Inondations"
+              to="search?filter=Inondations"
             />
           </Menu.Menu>
         </Menu.Item>
@@ -60,7 +60,7 @@ export function SidebarMenu(props: SidebarMenuProps) {
             My stuff
           </Menu.Header>
           <Menu.Menu>
-            <Menu.Item name="Preferences" as={Link} to="/authenticate" />
+            <Menu.Item name="Preferences" as={Link} to="authenticate" />
           </Menu.Menu>
         </Menu.Item>
       </Sidebar>
