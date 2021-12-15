@@ -26,7 +26,10 @@ export const DEFAULT_UI_CONFIG = {
         meta: {
           type: 'RangeSlider',
           props: {
+            title: "Year",
             dataField:"creationYearForResource",
+            includeNullValues: true,
+            tooltipTrigger: "always",
             range: {
               start: 1970,
               end: 2021

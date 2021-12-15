@@ -96,7 +96,8 @@ export function UiSearch({ filter = "" }) {
               <Grid.Column width={12}>
                 <SingleList dataField={'resourceType'}
                             componentId={'resourceTypeToggle'}
-                            render={({ loading, error, data, handleChange }) => {
+                            showSearch={false}
+                            render={({ loading, error, data, value, handleChange }) => {
                               if (loading) {
                                 return <div>Fetching Results.</div>;
                               }
@@ -108,6 +109,8 @@ export function UiSearch({ filter = "" }) {
                                   {data.map((item: any) => (
                                     <Button key={item.key}
                                             value={item.key}
+                                            toggle
+                                            active={item.key === value}
                                             onClick={handleChange}>
                                       {item.key} ({item.doc_count})
                                     </Button>
