@@ -1,14 +1,14 @@
 import "./ui-search.module.scss";
-import { Container, Grid, Item, Label, Ref, Sticky } from "semantic-ui-react";
+import { Button, Container, Grid, Item, Label, Ref, Sticky, Tab, TabPane } from "semantic-ui-react";
 import {
   DataSearch,
-  DynamicRangeSlider,
-  MultiList,
+  DynamicRangeSlider, MultiDataList,
+  MultiList, RangeSlider,
   ReactiveBase,
   ReactiveComponent,
   ReactiveList,
-  SelectedFilters,
-  SingleList
+  SelectedFilters, SingleDropdownList,
+  SingleList, TagCloud, ToggleButton
 } from "@appbaseio/reactivesearch";
 import React, { createRef } from "react";
 import AggCardComponent from "./AggCardComponent";
@@ -28,7 +28,12 @@ interface AggregationComponentTypes {
 const aggregationComponentTypes: AggregationComponentTypes = {
   "SingleList": SingleList,
   "MultiList": MultiList,
-  "DynamicRangeSlider": DynamicRangeSlider
+  "SingleDropdownList": SingleDropdownList,
+  "MultiDataList": MultiDataList,
+  "ToggleButton": ToggleButton,
+  "TagCloud": TagCloud,
+  "DynamicRangeSlider": DynamicRangeSlider,
+  "RangeSlider": RangeSlider
 };
 
 function AggregationPanel({ aggregations }: AggregationPanelProps) {
@@ -89,7 +94,28 @@ export function UiSearch({ filter = "" }) {
                 <AggregationPanel aggregations={DEFAULT_UI_CONFIG.search.aggregations} />
               </Grid.Column>
               <Grid.Column width={12}>
-                <ReactiveComponent
+                <SingleList dataField={'resourceType'}
+                            componentId={'resourceTypeToggle'}
+                            render={({ loading, error, data, handleChange }) => {
+                              if (loading) {
+                                return <div>Fetching Results.</div>;
+                              }
+                              if (error) {
+                                return <div>Something went wrong! Error details {JSON.stringify(error)}</div>;
+                              }
+                              return (
+                                <Button.Group widths={data.map.length}>
+                                  {data.map((item: any) => (
+                                    <Button key={item.key}
+                                            value={item.key}
+                                            onClick={handleChange}>
+                                      {item.key} ({item.doc_count})
+                                    </Button>
+                                  ))}
+                                </Button.Group>
+                              );
+                            }}/>
+               {/* <ReactiveComponent
                   componentId="bigBlocks"
                   showFilter
                   react={{
@@ -126,7 +152,7 @@ export function UiSearch({ filter = "" }) {
                       />
                     );
                   }}
-                />
+                />*/}
 
                 <ReactiveList
                   componentId="results"
@@ -142,6 +168,7 @@ export function UiSearch({ filter = "" }) {
                     and: [
                       "searchbox",
                       "bigBlocks",
+                      "resourceTypeToggle",
                       ...Object.keys(DEFAULT_UI_CONFIG.search.aggregations)]
                   }}
                   render={({ loading, error, data }) => {
