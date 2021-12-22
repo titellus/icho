@@ -1,0 +1,73 @@
+{
+  "root": "apps/mw-catalogue-table",
+  "sourceRoot": "apps/mw-catalogue-table/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/mw-catalogue-table",
+        "index": "apps/mw-catalogue-table/src/index.html",
+        "baseHref": "/",
+        "main": "apps/mw-catalogue-table/src/main.tsx",
+        "polyfills": "apps/mw-catalogue-table/src/polyfills.ts",
+        "tsConfig": "apps/mw-catalogue-table/tsconfig.app.json",
+        "assets": [
+          "apps/mw-catalogue-table/src/favicon.ico",
+          "apps/mw-catalogue-table/src/assets"
+        ],
+        "styles": ["apps/mw-catalogue-table/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/mw-catalogue-table/src/environments/environment.ts",
+              "with": "apps/mw-catalogue-table/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "mw-catalogue-table:build",
+        "hmr": true,
+        "proxyConfig": "proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "mw-catalogue-table:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/mw-catalogue-table/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/mw-catalogue-table"],
+      "options": {
+        "jestConfig": "apps/mw-catalogue-table/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
