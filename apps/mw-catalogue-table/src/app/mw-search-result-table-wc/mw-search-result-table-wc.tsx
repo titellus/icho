@@ -1,5 +1,5 @@
 import React from "react";
-import './mw-search-result-table-wc.module.scss';
+import styles from './mw-search-result-table-wc.module.scss';
 import { SearchResultTableReactivelist } from '@catalogue/ui/search';
 import PropTypes from "prop-types";
 
@@ -10,7 +10,7 @@ export function MwSearchResultTableWc({size = '1',
 }) {
   const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
-    <div className="mw-search-result-table-wc">
+    <div className={styles.searchAndResult}>
       <SearchResultTableReactivelist
         url={api + '/srv/api/search/'}
         index="gn-records"

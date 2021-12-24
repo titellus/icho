@@ -7,14 +7,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet"  href="style.scss" />
   </head>
   <body>
-  <body>
+  <body class="app">
   <!-- <catalogue-search filter='+resourceType:dataset'></catalogue-search>-->
   <h2>Metadata records</h2>
   <mw-catalogue-results-table
-    columns='resourceTitleObject,rating,valid,mainLanguage,overview,resourceType,resourceAltTitleObject,tag,link'
-    columnNames='Titre,Rating,Valide,i18n,,,Nom abrégé,Mots-clés,liens'
+    columns='resourceTitleObject,overview,resourceType,resourceAltTitleObject,custodianOrgForResource,link'
+    columnnames='Titre,,,Nom abrégé,Gestionnaire,liens'
     filter='+tag.default:"Reporting INSPIRE"'
     size="2"
   ></mw-catalogue-results-table>
