@@ -48,8 +48,17 @@ export function MetadataLinksFamily({id, types}: Props) {
                                 {item[0] === "services" ? (
                                   <Icon name='file' />
                                 ):('')}
+                                {item[0] === "parent" ? (
+                                  <Icon name='sitemap' />
+                                ):('')}
+                                {item[0] === "siblings" ? (
+                                  <Icon name='sign-out' />
+                                ):('')}
                                 {item[0] === "onlines" &&  parameters.protocol === "WWW:LINK"? (
                                   <Icon name='linkify' />
+                                ):('')}
+                                {item[0] === "onlines" &&  (parameters.protocol === "OGC:WMS" || parameters.protocol === "ESRI:REST")? (
+                                  <Icon name='globe' />
                                 ):('')}
                                 {item[0] === "onlines" &&  parameters.protocol === null ? (
                                   <Icon name='question circle' />
