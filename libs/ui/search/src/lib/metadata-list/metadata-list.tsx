@@ -11,6 +11,9 @@ interface Props {
   field: string;
 }
 export function MetadataList({title, value, field}: Props) {
+  if (value === '') {
+    return null;
+  }
   return (
     <List>
       <List.Item>
