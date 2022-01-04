@@ -17,6 +17,7 @@ import "semantic-ui-css/semantic.min.css";
 import { DefaultQuery, DefaultSource } from "@catalogue/utils/shared";
 import { GroupsApi } from "@catalogue/api/geonetwork";
 import { DEFAULT_UI_CONFIG } from "../../../../utils/shared/src/lib/ui-config";
+import {Link} from "react-router-dom";
 
 interface AggregationPanelProps {
   aggregations: any
@@ -160,7 +161,7 @@ export function UiSearch({ filter = "" }) {
                 <ReactiveList
                   componentId="results"
                   size={DEFAULT_UI_CONFIG.search.size}
-                  pagination={false}
+                  pagination={true}
                   showResultStats={false}
                   defaultQuery={() => {
                     return DefaultQuery.IS_RECORD;
@@ -199,7 +200,7 @@ export function UiSearch({ filter = "" }) {
                               }
                             ></Item.Image>
                             <Item.Content>
-                              <Item.Header as="a">
+                              <Item.Header as={Link} to={'/metadata/' + res._id}>
                                 {res.resourceTitleObject?.default}
                               </Item.Header>
                               {/*<Item.Meta>{res.resourceAbstractObject?.default}</Item.Meta>*/}
