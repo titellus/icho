@@ -171,22 +171,9 @@ export function MetadataResult({uuid}: Props) {
                             </Card>
                           ))}
                         </Card.Group>
-                        <List>
-                          <List.Item>
-                            <List.Content>
-                              <List.Header>ResourceContact</List.Header>
-                              {res.metadataIdentifier}
-                            </List.Content>
-                          </List.Item>
-                        </List>
-                        <List>
-                          <List.Item>
-                            <List.Content>
-                              <List.Header>ResourceContact</List.Header>
-                              {res.mainLanguage}
-                            </List.Content>
-                          </List.Item>
-                        </List>
+                        <MetadataUniqueElementList title='MetadataIdentifier' value={res.metadataIdentifier || ''}/>
+                        <MetadataUniqueElementList title='MainLanguage' value={res.mainLanguage || ''}/>
+                        <MetadataUniqueElementList title='dateStamp' value={res.dateStamp || ''}/>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
