@@ -1,10 +1,7 @@
 import styles from './metadata-links-family.module.scss';
 import React from "react";
-import axios from "axios";
 import {Message, List, Icon} from 'semantic-ui-react'
-import { RelatedApi } from "@catalogue/api/geonetwork";
-
-export interface MetadataLinksFamilyProps {}
+import {RecordsApi} from "@catalogue/api/geonetwork";
 
 interface Props {
   id: string;
@@ -12,14 +9,12 @@ interface Props {
 }
 
 export function MetadataLinksFamily({id, types}: Props) {
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT;
-  const typesParameters = 'type=' + types.replace(/[, ]+/g,'&type=')
+  const typesParameters2:Array<any> = types.split(',')
   const[relatedLinks, setRelatedLinks] = React.useState<any>(null)
   React.useEffect(()=> {
-    new RelatedApi().getAssociatedResourcesForRecords(["children", "associated"])
-    axios.get(api +'/srv/api/records/'+ id +'/related?'+ typesParameters).then((res) => {
+    new RecordsApi().getAssociatedResources(id, typesParameters2).then(res => {
       setRelatedLinks(res.data)
-    })
+    });
   },[])
   if (!relatedLinks) return null
   const familyLinks = []

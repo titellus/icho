@@ -5,6 +5,7 @@ import SearchResultTableSort, { SortOption } from "../search-result-table-sort/s
 import { SearchResultTableCellObject } from "../search-result-table-cell-object/search-result-table-cell-object";
 import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
 import SearchResultTableCellString from "../search-result-table-cell-string/search-result-table-cell-string";
+import {DataSearch} from "@appbaseio/reactivesearch";
 
 interface Props {
   data: Array<Record<string, unknown>>;

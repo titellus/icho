@@ -1,10 +1,11 @@
 import styles from './metadata-result.module.scss';
 import React, {useState} from "react";
 import {ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {Label, Card, List, Grid, Image, Header, Container} from 'semantic-ui-react'
+import {Label, Button, Icon, Card, List, Grid, Image, Header, Container} from 'semantic-ui-react'
 import {MetadataLinksFamily} from "../metadata-links-family/metadata-links-family";
 import MetadataUniqueElementList from "../metadata-unique-element-list/metadata-unique-element-list";
 import MetadataList from "../metadata-list/metadata-list";
+import MetadataTimeLine from "../metadata-time-line/metadata-time-line";
 
 /* eslint-disable-next-line */
 export interface MetadataResultProps {
@@ -69,6 +70,30 @@ export function MetadataResult({uuid}: Props) {
                             ? res.overview[0].url
                             : "https://react.semantic-ui.com/images/wireframe/image.png"
                         }/>
+                        <MetadataTimeLine timeValue={res.resourceDate || ''}/>
+                        {res.resourceTemporalExtentDetails ? (
+                          <React.Fragment>
+                            {res.resourceTemporalExtentDetails.map((element: any) => (
+                              <List>
+                                <List.Item>
+                                  <List.Content>
+                                    <List.Header>ResourceTemporalExtent</List.Header>
+                                    <Button as='div' labelPosition='left' style={{cursor : 'default'}}>
+                                      <Label basic color='blue' pointing='right'>
+                                        <Icon name='flag outline' />
+                                        {element.start.date}
+                                      </Label>
+                                      <Button as='div' color='blue' style={{cursor : 'default'}}>
+                                        <Icon name='flag checkered' />
+                                        {element.end.date}
+                                      </Button>
+                                    </Button>
+                                  </List.Content>
+                                </List.Item>
+                              </List>
+                            ))}
+                          </React.Fragment>
+                        ):('')}
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={3}>
@@ -146,22 +171,9 @@ export function MetadataResult({uuid}: Props) {
                             </Card>
                           ))}
                         </Card.Group>
-                        <List>
-                          <List.Item>
-                            <List.Content>
-                              <List.Header>ResourceContact</List.Header>
-                              {res.metadataIdentifier}
-                            </List.Content>
-                          </List.Item>
-                        </List>
-                        <List>
-                          <List.Item>
-                            <List.Content>
-                              <List.Header>ResourceContact</List.Header>
-                              {res.mainLanguage}
-                            </List.Content>
-                          </List.Item>
-                        </List>
+                        <MetadataUniqueElementList title='MetadataIdentifier' value={res.metadataIdentifier || ''}/>
+                        <MetadataUniqueElementList title='MainLanguage' value={res.mainLanguage || ''}/>
+                        <MetadataUniqueElementList title='dateStamp' value={res.dateStamp || ''}/>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
