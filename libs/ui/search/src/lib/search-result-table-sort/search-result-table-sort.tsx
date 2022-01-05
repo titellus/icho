@@ -1,57 +1,64 @@
-import './search-result-table-sort.module.scss';
-import { Button, Icon } from 'semantic-ui-react';
-import React from 'react';
+import "./search-result-table-sort.module.scss";
+import { Button, Icon } from "semantic-ui-react";
+import React from "react";
 
 /* eslint-disable-next-line */
-export interface SortProps {}
+export interface SortProps {
+}
+
+export enum SortOrder {
+  asc = "asc",
+  desc = "desc"
+}
+
+export const DEFAULT_SORT_ORDER = SortOrder.asc;
 
 export interface SortOption {
-  label: string;
-  dataField: string;
-  sortBy: 'asc' | 'desc';
-}
-
-interface Props {
-  onChange: (newValue: SortOption)=> void;
-  selectedSortSelector: SortOption;
   field: string;
+  order: SortOrder;
 }
 
-export const sortOptions: SortOption[] = [
-  {
-    label: 'desc',
-    dataField: 'uuid',
-    sortBy: 'desc',
-  },
-  {
-    label: 'asc',
-    dataField: 'uuid',
-    sortBy: 'asc',
-  },
-];
+export const DEFAULT_SORT = {
+  field: "_score",
+  order: SortOrder.asc
+};
+
+interface SearchResultTableSortProps {
+  onChange: (newValue: SortOption) => void;
+  currentSort: SortOption;
+  field: string;
+  children?: React.ReactNode
+}
 
 export function SearchResultTableSort({
-  onChange,
-  selectedSortSelector,
-  field,
-}: Props) {
+                                        onChange,
+                                        currentSort,
+                                        field,
+                                        children
+                                      }: SearchResultTableSortProps) {
   const handleChange = (field: string) => () => {
-    if (selectedSortSelector.sortBy === 'asc') {
-      sortOptions[0].dataField = field;
-      onChange(sortOptions[0]);
-    } else {
-      sortOptions[1].dataField = field;
-      onChange(sortOptions[1]);
-    }
+    let order: SortOrder =
+      currentSort.field === field
+        ? (currentSort.order === SortOrder.asc ? SortOrder.desc : DEFAULT_SORT_ORDER)
+        : DEFAULT_SORT_ORDER;
+
+    onChange({
+      field: field,
+      order: order
+    });
   };
+  const isCurrent = currentSort.field === field;
   return (
-    <Button basic circular icon onClick={handleChange(field)}>
-      {selectedSortSelector.sortBy === 'asc' ? (
-        <Icon name="sort up" />
+      isCurrent ? (
+        <Icon name={currentSort.order === "asc" ? "sort up" : "sort down"}
+              link={true}
+              color={isCurrent ? "blue" : undefined}
+              onClick={handleChange(field)}/>
       ) : (
-        <Icon name="sort down" />
-      )}
-    </Button>
+        <Icon name="sort"
+              link={true}
+              onClick={handleChange(field)}/>
+      )
   );
 }
 

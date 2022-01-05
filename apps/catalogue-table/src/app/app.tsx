@@ -1,12 +1,30 @@
 import styles from './app.module.scss';
 
-import { SearchResultTableReactivelist } from '@catalogue/ui/search';
+import { SearchResultTableWrapper } from '@catalogue/ui/search';
 
 export function App() {
   return (
     <div className={styles.app}>
       <main>
-        <SearchResultTableReactivelist
+        <h1>Simple table</h1>
+        <SearchResultTableWrapper
+          url="http://localhost:9200/"
+          index="gn-records"
+          columns={[
+            'resourceTitleObject',
+            'resourceAltTitleObject'
+          ]}
+          columnsName={[
+            'Nom explicite',
+            'Nom abrégé'
+          ]}
+          landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
+          landingPageLink={'resourceTitleObject'}
+          size={10}
+        />
+
+        {/*<h1>Table with overview, links, ... (with a filter on 'Reporting INSPIRE')</h1>
+        <SearchResultTableWrapper
           url="http://localhost:9200/"
           index="gn-records"
           filter={'+tag.default:"Reporting INSPIRE"'}
@@ -26,15 +44,16 @@ export function App() {
             'Titre',
             'Rating',
             'Valide',
-            'i18n',
+            'Langue',
             '',
             '',
             'Nom abrégé',
             'Mots-clés',
-            'liens',
+            'Liens',
           ]}
           resultNumber={3}
         />
+*/}
       </main>
     </div>
   );

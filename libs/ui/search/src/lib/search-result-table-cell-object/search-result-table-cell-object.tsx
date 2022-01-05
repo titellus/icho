@@ -7,7 +7,7 @@ import {type} from "os";
 export interface SearchResultTableCellObjectProps {
   objectKeyname: string;
   data:any;
-  mtdRoot: string;
+  landingPageUrlTemplate: string;
   objectValue:any;
   styles:any;
 }
@@ -15,8 +15,9 @@ export interface SearchResultTableCellObjectProps {
 export function SearchResultTableCellObject(
   props: SearchResultTableCellObjectProps
 ) {
-  console.log(props.data)
-  console.log(typeof props.data)
+  let landingPageUrl = props.landingPageUrlTemplate
+        ? props.landingPageUrlTemplate.replace("{uuid}", props.data["_id"])
+        : "";
 
   if (
     props.objectKeyname === 'resourceTitleObject' &&
@@ -34,7 +35,7 @@ export function SearchResultTableCellObject(
                className={props.styles.image}
           />
           <Header.Content>
-            <a href={props.mtdRoot + '/' + props.data['_id']}>
+            <a href={landingPageUrl}>
               {props.objectValue.default}
             </a>
             <Header.Subheader></Header.Subheader>
@@ -49,7 +50,7 @@ export function SearchResultTableCellObject(
     return (
       <Header as="h4">
         <Header.Content>
-          <a href={props.mtdRoot + '/' + props.data['_id']}>
+          <a href={landingPageUrl}>
             {props.objectValue.default}
           </a>
           <Header.Subheader>{props.data['resourceType'][0]}</Header.Subheader>
@@ -64,7 +65,7 @@ export function SearchResultTableCellObject(
       <Header as="h4" image>
         <Image src={props.data['overview'][0].url} rounded size="mini" />
         <Header.Content>
-          <a href={props.mtdRoot + '/' + props.data['_id']}>
+          <a href={landingPageUrl}>
             {props.objectValue.default}
           </a>
         </Header.Content>

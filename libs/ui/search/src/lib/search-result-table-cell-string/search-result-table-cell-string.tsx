@@ -6,7 +6,7 @@ import React from "react";
 export interface SearchResultTableCellStringProps {
   stringValue: string;
   stringKeyname: string;
-  mtdRoot:string;
+  landingPageUrlTemplate:string;
 
 }
 
@@ -19,7 +19,7 @@ export function SearchResultTableCellString(
     props.stringKeyname === '_id'
   ) {
     return (
-      <a href={props.mtdRoot + '/' + props.stringValue}>
+      <a href={props.landingPageUrlTemplate + '/' + props.stringValue}>
         {props.stringValue}
       </a>
     );

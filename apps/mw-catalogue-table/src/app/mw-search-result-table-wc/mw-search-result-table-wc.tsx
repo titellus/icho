@@ -1,6 +1,6 @@
 import React from "react";
 import styles from './mw-search-result-table-wc.module.scss';
-import { SearchResultTableReactivelist } from '@catalogue/ui/search';
+import { SearchResultTableWrapper } from '@catalogue/ui/search';
 import PropTypes from "prop-types";
 
 export function MwSearchResultTableWc({size = '1',
@@ -11,14 +11,14 @@ export function MwSearchResultTableWc({size = '1',
   const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
     <div className={styles.searchAndResult}>
-      <SearchResultTableReactivelist
+      <SearchResultTableWrapper
         url={api + '/srv/api/search/'}
         index="gn-records"
         filter={filter}
-        mtdRoot="https://metawal.wallonie.be/geonetwork/srv/api/records"
-        dataFields={columns.split(',')}
-        dataFieldsName={columnnames.split(',')}
-        resultNumber={parseInt(size)}
+        landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records"
+        columns={columns.split(',')}
+        columnsName={columnnames.split(',')}
+        size={parseInt(size)}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResultTableReactivelist } from '@catalogue/ui/search';
+import { SearchResultTableWrapper } from '@catalogue/ui/search';
 import PropTypes from 'prop-types';
 
 export function SearchResultsTableWc({
@@ -9,14 +9,14 @@ export function SearchResultsTableWc({
 }) {
   const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
-    <SearchResultTableReactivelist
+    <SearchResultTableWrapper
       url={api + '/srv/api/search/'}
       index="gn-records"
       filter={filter}
-      mtdRoot="https://metawal.wallonie.be/geonetwork/srv/api/records"
-      dataFields={columns.split(',')}
-      dataFieldsName={columns.split(',')}
-      resultNumber={parseInt(size)}
+      landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records"
+      columns={columns.split(',')}
+      columnsName={columns.split(',')}
+      size={parseInt(size)}
     />
   );
 };
