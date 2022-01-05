@@ -5,6 +5,7 @@ import {Label, Card, List, Grid, Image, Header, Container} from 'semantic-ui-rea
 import {MetadataLinksFamily} from "../metadata-links-family/metadata-links-family";
 import MetadataUniqueElementList from "../metadata-unique-element-list/metadata-unique-element-list";
 import MetadataList from "../metadata-list/metadata-list";
+import MetadataTimeLine from "../metadata-time-line/metadata-time-line";
 
 /* eslint-disable-next-line */
 export interface MetadataResultProps {
@@ -69,6 +70,7 @@ export function MetadataResult({uuid}: Props) {
                             ? res.overview[0].url
                             : "https://react.semantic-ui.com/images/wireframe/image.png"
                         }/>
+                        <MetadataTimeLine timeValue={res.resourceDate || ''}/>
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row columns={3}>

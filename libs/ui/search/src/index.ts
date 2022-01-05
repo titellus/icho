@@ -1,3 +1,4 @@
+export * from './lib/metadata-time-line/metadata-time-line';
 export * from './lib/metadata-list/metadata-list';
 export * from './lib/metadata-unique-element-list/metadata-unique-element-list';
 export * from './lib/metadata-links-family/metadata-links-family';
