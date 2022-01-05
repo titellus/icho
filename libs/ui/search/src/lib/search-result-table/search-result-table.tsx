@@ -48,9 +48,6 @@ export function SearchResultTable({
     setSortSelector(newValue);
     handleChangeSortReactiveList(newValue);
   }
-  if (loading) {
-    return <div>...</div>;
-  }
   if (error) {
     return (
       <div>Something went wrong! Error details {JSON.stringify(error)}</div>
