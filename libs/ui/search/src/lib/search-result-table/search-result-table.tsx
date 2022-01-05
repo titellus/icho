@@ -1,6 +1,6 @@
 import styles from "./search-result-table.module.scss";
-import { Table } from "semantic-ui-react";
-import React from "react";
+import { Container, Sticky, Table } from "semantic-ui-react";
+import React, { createRef } from "react";
 import SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
 import { SearchResultTableCellObject } from "../search-result-table-cell-object/search-result-table-cell-object";
 import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
@@ -8,12 +8,17 @@ import SearchResultTableCellString from "../search-result-table-cell-string/sear
 
 interface Props {
   data: Array<Record<string, unknown>>;
-  landingPageUrlTemplate: string;
-  landingPageLink: string;
+  landingPageUrlTemplate?: string;
+  landingPageLink?: string;
   columns: Array<string>;
-  columnsName: Array<string>;
+  columnNames?: Array<string>;
   handleSetSort: (newValue: SortOption) => void;
   currentSort: SortOption;
+}
+
+interface CellContentAttributes {
+  as: string;
+  href?: string;
 }
 
 /* eslint-disable-next-line */
@@ -25,7 +30,7 @@ export function SearchResultTable({
                                     columns,
                                     landingPageUrlTemplate,
                                     landingPageLink,
-                                    columnsName,
+                                    columnNames,
                                     handleSetSort,
                                     currentSort
                                   }: Props) {
@@ -51,15 +56,19 @@ export function SearchResultTable({
     return null;
   }
 
+  let ref: React.RefObject<HTMLInputElement> = createRef();
+
   return (
-    <Table>
+    <Table ref={ref.current}>
+      {/*<Sticky context={ref.current} as={'thead'}>*/}
+      {/*</Sticky>*/}
       <Table.Header>
         <Table.Row>
           {Object.keys(tableData[0])
             .slice(1)
             .map((keyname, i) => (
               <Table.HeaderCell key={i}>
-                {columnsName[i]}
+                {columnNames ? columnNames[i] : keyname}
                 {
                   typeof tableData[0][keyname] === "string" ? (
                     <SearchResultTableSort
@@ -79,38 +88,49 @@ export function SearchResultTable({
             <Table.Row key={i}>
               {Object.keys(dataItem)
                 .slice(1)
-                .map((keyname, j) => (
-                  <Table.Cell key={j}>
-                    {dataItem[keyname] instanceof Object ? (
-                      <SearchResultTableCellObject
-                        objectValue={dataItem[keyname]}
-                        objectKeyname={keyname}
-                        data={dataItem}
-                        landingPageUrlTemplate={landingPageUrlTemplate}
-                        styles={styles}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    {Array.isArray(dataItem[keyname]) ? (
-                      <SearchResultTableCellArray
-                        arrayValue={dataItem[keyname]}
-                        arrayKeyname={keyname}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    {typeof dataItem[keyname] === "string" ? (
-                      <SearchResultTableCellString
-                        stringValue={dataItem[keyname]}
-                        stringKeyname={keyname}
-                        landingPageUrlTemplate={landingPageUrlTemplate}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </Table.Cell>
-                ))}
+                .map((keyname, j) => {
+                  let attributes: CellContentAttributes = {
+                    as: landingPageLink === keyname ? "a" : "div"
+                  };
+
+                  if (landingPageUrlTemplate && landingPageLink === keyname) {
+                    attributes.href = landingPageUrlTemplate
+                      .replace("{uuid}", dataItem["_id"]);
+                  }
+
+                  return (
+                    <Table.Cell key={j}>
+                      <Container {...attributes} fluid={true}>
+                        {dataItem[keyname] instanceof Object ? (
+                          <SearchResultTableCellObject
+                            objectValue={dataItem[keyname]}
+                            objectKeyname={keyname}
+                            data={dataItem}
+                            styles={styles}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {Array.isArray(dataItem[keyname]) ? (
+                          <SearchResultTableCellArray
+                            arrayValue={dataItem[keyname]}
+                            arrayKeyname={keyname}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {typeof dataItem[keyname] === "string" ? (
+                          <SearchResultTableCellString
+                            stringValue={dataItem[keyname]}
+                            stringKeyname={keyname}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </Container>
+                    </Table.Cell>);
+                })
+              }
             </Table.Row>
           ))}
       </Table.Body>

@@ -14,7 +14,7 @@ export function App() {
             'resourceTitleObject',
             'resourceAltTitleObject'
           ]}
-          columnsName={[
+          columnNames={[
             'Nom explicite',
             'Nom abrégé'
           ]}
@@ -23,13 +23,13 @@ export function App() {
           size={10}
         />
 
-        {/*<h1>Table with overview, links, ... (with a filter on 'Reporting INSPIRE')</h1>
+        <h1>Table with overview, links, ... (with a filter on 'Reporting INSPIRE')</h1>
         <SearchResultTableWrapper
           url="http://localhost:9200/"
           index="gn-records"
           filter={'+tag.default:"Reporting INSPIRE"'}
-          mtdRoot="https://metawal.wallonie.be/geonetwork/srv/api/records"
-          dataFields={[
+          landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
+          columns={[
             'resourceTitleObject',
             'rating',
             'valid',
@@ -40,7 +40,7 @@ export function App() {
             'tag',
             'link',
           ]}
-          dataFieldsName={[
+          columnNames={[
             'Titre',
             'Rating',
             'Valide',
@@ -51,9 +51,10 @@ export function App() {
             'Mots-clés',
             'Liens',
           ]}
-          resultNumber={3}
+          landingPageLink={'resourceTitleObject'}
+          size={3}
         />
-*/}
+
       </main>
     </div>
   );

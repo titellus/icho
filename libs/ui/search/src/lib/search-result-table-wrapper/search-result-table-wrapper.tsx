@@ -12,11 +12,11 @@ interface Props {
   url: string;
   index: string;
   filter?: string;
-  landingPageUrlTemplate: string;
-  landingPageLink: string;
+  landingPageUrlTemplate?: string;
+  landingPageLink?: string;
   columns: Array<string>;
-  columnsName: Array<string>;
-  size: number;
+  columnNames?: Array<string>;
+  size?: number;
 }
 
 interface SearchResultTablePlaceholderProps {
@@ -63,12 +63,17 @@ export function SearchResultTableWrapper({
                                            index,
                                            filter,
                                            columns,
-                                           columnsName,
+                                           columnNames,
                                            size,
                                            landingPageUrlTemplate,
                                            landingPageLink
                                          }: Props) {
   let default_query: Record<string, unknown>;
+
+  // if (columns && columnNames && columns.length != columnNames.length) {
+  //   console.warn("Configure same number of columns and column label.")
+  // }
+
   if (filter) {
     default_query = {
       query_string: { query: filter }
@@ -147,7 +152,7 @@ export function SearchResultTableWrapper({
           return (
             <SearchResultTable
               columns={columns}
-              columnsName={columnsName}
+              columnNames={columnNames}
               data={data}
               landingPageUrlTemplate={landingPageUrlTemplate}
               landingPageLink={landingPageLink}

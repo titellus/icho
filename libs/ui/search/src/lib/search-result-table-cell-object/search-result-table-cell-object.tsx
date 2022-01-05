@@ -7,7 +7,6 @@ import {type} from "os";
 export interface SearchResultTableCellObjectProps {
   objectKeyname: string;
   data:any;
-  landingPageUrlTemplate: string;
   objectValue:any;
   styles:any;
 }
@@ -15,10 +14,6 @@ export interface SearchResultTableCellObjectProps {
 export function SearchResultTableCellObject(
   props: SearchResultTableCellObjectProps
 ) {
-  let landingPageUrl = props.landingPageUrlTemplate
-        ? props.landingPageUrlTemplate.replace("{uuid}", props.data["_id"])
-        : "";
-
   if (
     props.objectKeyname === 'resourceTitleObject' &&
     props.data['resourceType'] &&
@@ -26,7 +21,7 @@ export function SearchResultTableCellObject(
   ) {
     return (
       <React.Fragment>
-        <Label as="a" color="red" ribbon>
+        <Label color="red" ribbon>
           {props.data['resourceType'][0]}
         </Label>
         <Header as="h4" image>
@@ -35,9 +30,7 @@ export function SearchResultTableCellObject(
                className={props.styles.image}
           />
           <Header.Content>
-            <a href={landingPageUrl}>
-              {props.objectValue.default}
-            </a>
+            {props.objectValue.default}
             <Header.Subheader></Header.Subheader>
           </Header.Content>
         </Header>
@@ -50,9 +43,7 @@ export function SearchResultTableCellObject(
     return (
       <Header as="h4">
         <Header.Content>
-          <a href={landingPageUrl}>
-            {props.objectValue.default}
-          </a>
+          {props.objectValue.default}
           <Header.Subheader>{props.data['resourceType'][0]}</Header.Subheader>
         </Header.Content>
       </Header>
@@ -65,9 +56,7 @@ export function SearchResultTableCellObject(
       <Header as="h4" image>
         <Image src={props.data['overview'][0].url} rounded size="mini" />
         <Header.Content>
-          <a href={landingPageUrl}>
-            {props.objectValue.default}
-          </a>
+          {props.objectValue.default}
         </Header.Content>
       </Header>
     );
