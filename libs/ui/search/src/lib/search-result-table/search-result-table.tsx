@@ -1,15 +1,15 @@
 import styles from "./search-result-table.module.scss";
 import { Table } from "semantic-ui-react";
-import React, { useState } from "react";
+import React from "react";
 import SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
 import { SearchResultTableCellObject } from "../search-result-table-cell-object/search-result-table-cell-object";
 import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
 import SearchResultTableCellString from "../search-result-table-cell-string/search-result-table-cell-string";
-import {DataSearch} from "@appbaseio/reactivesearch";
 
 interface Props {
   data: Array<Record<string, unknown>>;
   landingPageUrlTemplate: string;
+  landingPageLink: string;
   columns: Array<string>;
   columnsName: Array<string>;
   handleSetSort: (newValue: SortOption) => void;
@@ -24,6 +24,7 @@ export function SearchResultTable({
                                     data,
                                     columns,
                                     landingPageUrlTemplate,
+                                    landingPageLink,
                                     columnsName,
                                     handleSetSort,
                                     currentSort

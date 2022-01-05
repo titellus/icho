@@ -146,10 +146,11 @@ export function SearchResultTableWrapper({
           }
           return (
             <SearchResultTable
-              landingPageUrlTemplate={landingPageUrlTemplate}
               columns={columns}
               columnsName={columnsName}
               data={data}
+              landingPageUrlTemplate={landingPageUrlTemplate}
+              landingPageLink={landingPageLink}
               handleSetSort={setSort}
               currentSort={sort}
             />
