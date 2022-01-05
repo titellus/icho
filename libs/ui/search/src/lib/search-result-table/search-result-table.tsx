@@ -10,17 +10,19 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import SearchResultTableSort, {
-  SortOption,
+  SortOption, sortOptions,
 } from '../search-result-table-sort/search-result-table-sort';
 import React from 'react';
 import { CSVDownload, CSVLink } from 'react-csv';
 import {SearchResultTableCellObject} from "../search-result-table-cell-object/search-result-table-cell-object";
 import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
 import SearchResultTableCellString from "../search-result-table-cell-string/search-result-table-cell-string";
+import {DataSearch} from "@appbaseio/reactivesearch";
 
 interface Props {
   loading: boolean;
   error: Record<string,unknown>;
+  filter: string;
   data: Array<Record<string,unknown>>;
   mtdRoot: string;
   dataFields: Array<string>;
@@ -35,6 +37,7 @@ export interface SearchResultTableProps {}
 export function SearchResultTable({
   loading,
   error,
+  filter,
   data,
   dataFields,
   mtdRoot,
@@ -42,6 +45,15 @@ export function SearchResultTable({
   handleChangeSortReactiveList,
   selected,
 }: Props) {
+
+  let default_query: Record<string,unknown>;
+  if (filter) {
+    default_query = {
+      query_string: { query: filter },
+    };
+  }
+
+  const [sort, setSort] = useState<SortOption>(sortOptions[0])
   const newData: Array<Record<string,unknown>> =[];
   const [sortSelector, setSortSelector] = useState<SortOption>(selected);
   function handleChange(newValue: SortOption) {
@@ -93,6 +105,17 @@ export function SearchResultTable({
                     </Table.HeaderCell>
                   ))}
               </Table.Row>
+              <DataSearch
+                componentId="searchbox"
+                dataField={[]}
+                showClear={true}
+                placeholder="Search ..."
+                defaultQuery={() => ({
+                  sort: [{ [sort.dataField]: { order: sort.sortBy } }],
+                  //query: { match: { isTemplate: "n" } }
+                  query: default_query,
+                })}
+              />
             </Table.Header>
             <Table.Body>
               {newData.map((dataItem: any, i: number) => (

@@ -54,23 +54,10 @@ export function SearchResultTableReactivelist({
       url={api + '/srv/api/search/'}
       enableAppbase={false}
     >
-      <DataSearch
-        componentId="searchbox"
-        dataField={[]}
-        showClear={true}
-        placeholder="Search ..."
-        defaultQuery={() => ({
-          sort: [{ [sort.dataField]: { order: sort.sortBy } }],
-          //query: { match: { isTemplate: "n" } }
-          query: default_query,
-        })}
-      />
-      <br />
-
       <ReactiveList
         componentId="sortTableES"
         size={resultNumber}
-        pagination={false}
+        pagination={true}
         showResultStats={true}
         defaultQuery={() => ({
           sort: [{ [sort.dataField]: { order: sort.sortBy } }],
@@ -90,6 +77,7 @@ export function SearchResultTableReactivelist({
               mtdRoot={mtdRoot}
               dataFields={dataFields}
               data={data}
+              filter={filter}
               dataFieldsName={dataFieldsName}
               handleChangeSortReactiveList={handleChange}
               selected={sort}
