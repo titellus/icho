@@ -200,7 +200,7 @@ export function UiSearch({ filter = "" }) {
                               }
                             ></Item.Image>
                             <Item.Content>
-                              <Item.Header as={Link} to={'/metadata/' + res._id}>
+                              <Item.Header as={Link} to={'../metadata/' + res._id}>
                                 {res.resourceTitleObject?.default}
                               </Item.Header>
                               {/*<Item.Meta>{res.resourceAbstractObject?.default}</Item.Meta>*/}
