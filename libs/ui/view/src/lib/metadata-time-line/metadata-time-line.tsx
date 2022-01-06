@@ -1,7 +1,7 @@
 import styles from './metadata-time-line.module.scss';
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import {Icon} from 'semantic-ui-react'
+import {Icon, List} from 'semantic-ui-react'
 import React from "react";
 
 interface Props {
@@ -16,23 +16,17 @@ export function MetadataTimeLine({timeValue}: Props) {
     return Date.parse(a.date) - Date.parse(b.date);
   })
   return (
-    <div className={styles.timeline}>
-      <VerticalTimeline
-        layout={'1-column'}>
-        {timeValue.map((element: any) => (
-          <VerticalTimelineElement
-            className="vertical-timeline-element--work react-vertical-timeline "
-            contentStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
-            contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
-            date={element.date}
-            iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff',display:"flex",alignItems:"center",justifyContent:"center"}}
-            icon={<Icon name='calendar times outline' className={styles.timelineIcon}/>}
-          >
-            <h4 className="vertical-timeline-element-title">{element.type}</h4>
-          </VerticalTimelineElement>
+    <List divided relaxed>
+      {timeValue.map((element: any) => (
+      <List.Item>
+        <List.Icon inverted color='blue' name='calendar times outline' size='large' verticalAlign='middle' />
+        <List.Content>
+          <List.Header >{element.type}</List.Header>
+          <List.Description >{element.date}</List.Description>
+        </List.Content>
+      </List.Item>
         ))}
-      </VerticalTimeline>
-    </div>
+    </List>
   );
 }
 
