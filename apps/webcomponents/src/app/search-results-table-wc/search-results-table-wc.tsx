@@ -17,6 +17,7 @@ export function SearchResultsTableWc({
       filter={filter}
       filterField={filterfield}
       landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
+      landingPageLink={'resourceTitleObject'}
       columns={columns.split(",")}
       columnNames={columnnames.split(",")}
       size={parseInt(size)}
