@@ -10,6 +10,7 @@
     "ui-contribute": "libs/ui/contribute",
     "ui-nav": "libs/ui/nav",
     "ui-search": "libs/ui/search",
+    "ui-view": "libs/ui/view",
     "utils-shared": "libs/utils/shared",
     "webcomponents": "apps/webcomponents",
     "webcomponents-e2e": "apps/webcomponents-e2e"
