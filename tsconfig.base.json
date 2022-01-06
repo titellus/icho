@@ -20,6 +20,7 @@
       "@catalogue/ui/contribute": ["libs/ui/contribute/src/index.ts"],
       "@catalogue/ui/nav": ["libs/ui/nav/src/index.ts"],
       "@catalogue/ui/search": ["libs/ui/search/src/index.ts"],
+      "@catalogue/ui/view": ["libs/ui/view/src/index.ts"],
       "@catalogue/utils/shared": ["libs/utils/shared/src/index.ts"]
     }
   },
