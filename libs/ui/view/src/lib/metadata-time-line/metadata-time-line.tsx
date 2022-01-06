@@ -1,6 +1,4 @@
 import styles from './metadata-time-line.module.scss';
-import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
 import {Icon, List} from 'semantic-ui-react'
 import React from "react";
 
