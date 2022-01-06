@@ -9,18 +9,31 @@
   </head>
   <body>
     <!-- <catalogue-search filter='+resourceType:dataset'></catalogue-search>-->
-    <h2>INSPIRE valid records</h2>
+    <h1>INSPIRE valid records</h1>
     <catalogue-results-table
       columns="overview,resourceTitleObject,resourceAltTitleObject,tag"
       filter='+valid_inspire:1 +tag.default:"Reporting INSPIRE"'
       size="2"
     ></catalogue-results-table>
 
-    <h2>More about PICC</h2>
+    <hr/>
+
+    <h1>More about PICC</h1>
     <catalogue-results-table
       columns="resourceTitleObject,resourceAltTitleObject"
       filter="+any.\*:PICC"
       size="2"
+    ></catalogue-results-table>
+
+    <hr/>
+
+    <h1>Contenu de la base de données BD CARTON - INFRASIG</h1>
+    <catalogue-results-table
+      columns='resourceTitleObject,overview,resourceType,resourceAltTitleObject,custodianOrgForResource,link'
+      columnnames='Titre,,,Nom abrégé,Gestionnaire,Liens'
+      filterfield="th_Themes_geoportail_wallon_hierarchy.default"
+      filter=""
+      size="10"
     ></catalogue-results-table>
   </body>
 </html>
