@@ -10,6 +10,7 @@ export function App() {
         <SearchResultTableWrapper
           url="http://localhost:9200/"
           index="gn-records"
+          filterField={"th_Themes_geoportail_wallon_hierarchy.default"}
           columns={[
             'resourceTitleObject',
             'resourceAltTitleObject'

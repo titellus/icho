@@ -1,5 +1,5 @@
 import { DEFAULT_SORT, SortOption } from "../search-result-table-sort/search-result-table-sort";
-import { DataSearch, ReactiveBase, ReactiveList, SelectedFilters } from "@appbaseio/reactivesearch";
+import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
 import { Grid, Placeholder, Table, TableCell } from "semantic-ui-react";
@@ -12,6 +12,7 @@ interface Props {
   url: string;
   index: string;
   filter?: string;
+  filterField?: string;
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   columns: Array<string>;
@@ -62,6 +63,7 @@ export function SearchResultTableWrapper({
                                            url,
                                            index,
                                            filter,
+                                           filterField,
                                            columns,
                                            columnNames,
                                            size,
@@ -91,7 +93,7 @@ export function SearchResultTableWrapper({
     >
       <Grid columns={3} divided>
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column width={4}>
             <DataSearch
               componentId="tableFullTextFilter"
               dataField={["resourceTitleObject.default"]}
@@ -114,6 +116,11 @@ export function SearchResultTableWrapper({
             <SelectedFilters />
           </Grid.Column>
           <Grid.Column>
+            {filterField && (
+              <MultiDropdownList componentId="tableQuickFilter"
+                                 dataField={filterField}
+                                 placeholder="Focus on" />
+            )}
             {/*<CSVLink data={newData}>
               <Button icon>
                 <Icon name="download" />
@@ -136,7 +143,7 @@ export function SearchResultTableWrapper({
         includeFields={columns}
         dataField={"_id"}
         react={{
-          and: ["tableFullTextFilter"]
+          and: ["tableFullTextFilter", "tableQuickFilter"]
         }}
         render={({ loading, error, data }) => {
           if (loading) {
