@@ -1,8 +1,4 @@
-export * from './lib/metadata-time-line/metadata-time-line';
-export * from './lib/metadata-list/metadata-list';
-export * from './lib/metadata-unique-element-list/metadata-unique-element-list';
-export * from './lib/metadata-links-family/metadata-links-family';
-export * from './lib/metadata-result/metadata-result';
+
 export * from './lib/search-result-table-cell-string/search-result-table-cell-string';
 export * from './lib/search-result-table-cell-array/search-result-table-cell-array';
 export * from './lib/search-result-table-cell-object/search-result-table-cell-object';

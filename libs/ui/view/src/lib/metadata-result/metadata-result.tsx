@@ -2,7 +2,7 @@ import styles from './metadata-result.module.scss';
 import React, {useState} from "react";
 import {ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
 import {Label, Button, Icon, Card, List, Grid, Image, Header, Container} from 'semantic-ui-react'
-import {MetadataLinksFamily} from "../metadata-links-family/metadata-links-family";
+import {AssociatedResources} from "../associated-resources/associated-resources";
 import MetadataUniqueElementList from "../metadata-unique-element-list/metadata-unique-element-list";
 import MetadataList from "../metadata-list/metadata-list";
 import MetadataTimeLine from "../metadata-time-line/metadata-time-line";
@@ -58,11 +58,11 @@ export function MetadataResult({uuid}: Props) {
                         <p>
                           {res.resourceAbstractObject?.default}
                         </p>
-                        <MetadataLinksFamily id={res.id || ''} types='onlines'/>
-                        <MetadataLinksFamily id={res.id || ''} types='parent,children,brothersAndSisters,services,datasets'/>
-                        <MetadataLinksFamily id={res.id || ''} types='fcats,related'/>
-                        <MetadataLinksFamily id={res.id || ''} types='sources'/>
-                        <MetadataLinksFamily id={res.id || ''} types='hassources'/>
+                        <AssociatedResources id={res.id || ''} types='onlines'/>
+                        <AssociatedResources id={res.id || ''} types='parent,children,brothersAndSisters,services,datasets'/>
+                        <AssociatedResources id={res.id || ''} types='fcats,related'/>
+                        <AssociatedResources id={res.id || ''} types='sources'/>
+                        <AssociatedResources id={res.id || ''} types='hassources'/>
                       </Grid.Column>
                       <Grid.Column width={4}>
                         <Image src={

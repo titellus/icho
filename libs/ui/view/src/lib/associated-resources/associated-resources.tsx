@@ -1,4 +1,4 @@
-import styles from './metadata-links-family.module.scss';
+import styles from './associated-resources.module.scss';
 import React from "react";
 import {Message, List, Icon} from 'semantic-ui-react'
 import {RecordsApi} from "@catalogue/api/geonetwork";
@@ -8,7 +8,7 @@ interface Props {
   types:string;
 }
 
-export function MetadataLinksFamily({id, types}: Props) {
+export function AssociatedResources({id, types}: Props) {
   const typesParameters2:Array<any> = types.split(',')
   const[relatedLinks, setRelatedLinks] = React.useState<any>(null)
   React.useEffect(()=> {
@@ -85,4 +85,4 @@ export function MetadataLinksFamily({id, types}: Props) {
   );
 }
 
-export default MetadataLinksFamily;
+export default AssociatedResources;
