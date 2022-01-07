@@ -15,8 +15,8 @@ export function MetadataTimeLine({timeValue}: Props) {
   })
   return (
     <List divided relaxed>
-      {timeValue.map((element: any) => (
-      <List.Item>
+      {timeValue.map((element: any, index:number) => (
+      <List.Item key={index}>
         <List.Icon inverted color='blue' name='calendar times outline' size='large' verticalAlign='middle' />
         <List.Content>
           <List.Header >{element.type}</List.Header>

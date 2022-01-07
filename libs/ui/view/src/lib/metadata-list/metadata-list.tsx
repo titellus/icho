@@ -19,8 +19,8 @@ export function MetadataList({title, value, field}: Props) {
       <List.Item>
         <List.Content>
           <List.Header>{title}</List.Header>
-          {value.map((element: any) => (
-            <React.Fragment>
+          {value.map((element: any, index:number) => (
+            <React.Fragment key={index}>
               {field != "" ? (
                 <List.Description>{element[field]}</List.Description>):(
                     <List.Description>{element}</List.Description>

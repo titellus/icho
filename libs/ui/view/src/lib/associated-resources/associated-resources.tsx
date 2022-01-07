@@ -26,17 +26,17 @@ export function AssociatedResources({id, types}: Props) {
   }
   return (
     <div>
-      {familyLinks.map(familyLink => (
-        <div>
-          {Object.entries(familyLink).map((item: [string, any]) => {
+      {familyLinks.map((familyLink:any,index:number) => (
+        <div key={index}>
+          {Object.entries(familyLink).map((item: [string, any], index:number) => {
             return(
-              <React.Fragment>
+              <React.Fragment key={index}>
                 {item[0] != "thumbnails" ? (
                   <React.Fragment>
                     <Message info>
                       <Message.Header className={styles.linkTypesNames}>{item[0]}</Message.Header>
-                        {item[1].map((parameters:any) => (
-                          <React.Fragment>
+                        {item[1].map((parameters:any, index:number) => (
+                          <React.Fragment key={index}>
                             <List>
                               <List.Item as='a' href={parameters.url[Object.keys(parameters.url)[0]]}>
                                 {item[0] === "hassources" ? (

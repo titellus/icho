@@ -47,11 +47,12 @@ export function MetadataResult({uuid}: Props) {
               </div>
             );
           }
+          // @ts-ignore
           return (
             <div className={styles.mtdResult}>
               <Container fluid>
                 {data.map((res: any) => (
-                  <Grid divided='vertically'>
+                  <Grid divided='vertically' key={res.uuid}>
                     <Grid.Row columns={2}>
                       <Grid.Column width={12}>
                         <Header as='h2'>{res.resourceTitleObject?.default}</Header>
@@ -73,8 +74,8 @@ export function MetadataResult({uuid}: Props) {
                         <MetadataTimeLine timeValue={res.resourceDate || ''}/>
                         {res.resourceTemporalExtentDetails ? (
                           <React.Fragment>
-                            {res.resourceTemporalExtentDetails.map((element: any) => (
-                              <List>
+                            {res.resourceTemporalExtentDetails.map((element: any, index:number) => (
+                              <List key={index}>
                                 <List.Item>
                                   <List.Content>
                                     <List.Header>ResourceTemporalExtent</List.Header>
@@ -115,8 +116,8 @@ export function MetadataResult({uuid}: Props) {
                             <List.Content>
                               <List.Header>ResourceContact</List.Header>
                               <Card.Group itemsPerRow={1}>
-                                {res.contactForResource.map((element: any) => (
-                                  <Card>
+                                {res.contactForResource.map((element: any, index:number) => (
+                                  <Card key={index}>
                                     <Card.Content>
                                       <Card.Header>{element.organisation}</Card.Header>
                                       <Card.Meta>{element.role}</Card.Meta>
@@ -136,7 +137,7 @@ export function MetadataResult({uuid}: Props) {
                             <List.Content>
                               <List.Header>Format</List.Header>
                               {res.format.map((element: any) => (
-                                <Label>
+                                <Label key={element}>
                                   {element}
                                 </Label>
                               ))}
@@ -159,8 +160,8 @@ export function MetadataResult({uuid}: Props) {
                       <Grid.Column width={16}>
                         <Header as='h3'>Metadata information</Header>
                         <Card.Group>
-                          {res.contact.map((element: any) => (
-                            <Card>
+                          {res.contact.map((element: any, index:number) => (
+                            <Card key={index}>
                               <Card.Content>
                                 <Card.Header>{element.organisation}</Card.Header>
                                 <Card.Meta>{element.role}</Card.Meta>
