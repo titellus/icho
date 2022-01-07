@@ -3,11 +3,13 @@ import { AuthProvider } from '@catalogue/utils/shared';
 import { Link, Outlet } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Button, Container, Icon, Menu } from 'semantic-ui-react';
-import { FooterPanel, SidebarMenu } from '@catalogue/ui/nav';
+import  { I18nSwitcher, FooterPanel, SidebarMenu } from '@catalogue/ui/nav';
 import { AuthenticateMenu } from '@catalogue/ui/authenticate';
+import {useTranslation} from "react-i18next";
 
 export function App() {
   const [sidebarVisible, setSitebarVisible] = useState(false);
+  const { t, i18n } = useTranslation();
 
   return (
     <AuthProvider>
@@ -27,9 +29,10 @@ export function App() {
               </Menu.Item>
 
               <Menu.Item as={Link} to="search">
-                Search
+                 {t('Search')}
               </Menu.Item>
 
+              <I18nSwitcher />
               <AuthenticateMenu />
             </Container>
           </Menu>
