@@ -14,51 +14,24 @@ export interface IndexFieldTypeObjectProps {
 export function IndexFieldTypeObject(
   props: IndexFieldTypeObjectProps
 ) {
-  if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['resourceType'] &&
-    props.data['overview']
-  ) {
+  if (props.objectKeyname === 'resourceTitleObject') {
     return (
       <React.Fragment>
-        <Label color="red" ribbon>
+        {props.data['resourceType']?(<Label color="red" ribbon>
           {props.data['resourceType'][0]}
-        </Label>
+        </Label>):
+            ('')}
         <Header as="h4" image>
-          <img alt=''
+          {props.data['overview']?(<img alt=''
                src={props.data['overview'][0].url}
                className={props.styles.image}
-          />
+          />): ('')}
           <Header.Content>
             {props.objectValue.default}
             <Header.Subheader></Header.Subheader>
           </Header.Content>
         </Header>
       </React.Fragment>
-    );
-  } else if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['resourceType']
-  ) {
-    return (
-      <Header as="h4">
-        <Header.Content>
-          {props.objectValue.default}
-          <Header.Subheader>{props.data['resourceType'][0]}</Header.Subheader>
-        </Header.Content>
-      </Header>
-    );
-  } else if (
-    props.objectKeyname === 'resourceTitleObject' &&
-    props.data['overview']
-  ) {
-    return (
-      <Header as="h4" image>
-        <Image src={props.data['overview'][0].url} rounded size="mini" />
-        <Header.Content>
-          {props.objectValue.default}
-        </Header.Content>
-      </Header>
     );
   } else if (props.objectValue.default) {
     return (
