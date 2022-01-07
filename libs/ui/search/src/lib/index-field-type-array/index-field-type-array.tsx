@@ -1,15 +1,15 @@
-import './search-result-table-cell-array.module.scss';
+import './index-field-type-array.module.scss';
 import React from "react";
 import {Icon, Label} from "semantic-ui-react";
 
 /* eslint-disable-next-line */
-export interface SearchResultTableCellArrayProps {
+export interface IndexFieldTypeArrayProps {
   arrayValue: Array<string|Record<string, unknown>>;
   arrayKeyname: string;
 }
 
-export function SearchResultTableCellArray(
-  props: SearchResultTableCellArrayProps
+export function IndexFieldTypeArray(
+  props: IndexFieldTypeArrayProps
 ) {
   return !props.arrayValue ? null : (
     <React.Fragment>
@@ -49,4 +49,4 @@ export function SearchResultTableCellArray(
   );
 }
 
-export default SearchResultTableCellArray;
+export default IndexFieldTypeArray;

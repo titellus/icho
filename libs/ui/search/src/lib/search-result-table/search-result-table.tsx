@@ -2,9 +2,9 @@ import styles from "./search-result-table.module.scss";
 import { Container, Sticky, Table } from "semantic-ui-react";
 import React, { createRef } from "react";
 import SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
-import { SearchResultTableCellObject } from "../search-result-table-cell-object/search-result-table-cell-object";
-import SearchResultTableCellArray from "../search-result-table-cell-array/search-result-table-cell-array";
-import SearchResultTableCellString from "../search-result-table-cell-string/search-result-table-cell-string";
+import { IndexFieldTypeObject } from "../index-field-type-object/index-field-type-object";
+import IndexFieldTypeArray from "../index-field-type-array/index-field-type-array";
+import IndexFieldTypeString from "../index-field-type-string/index-field-type-string";
 
 interface Props {
   data: Array<Record<string, unknown>>;
@@ -102,7 +102,7 @@ export function SearchResultTable({
                     <Table.Cell key={j}>
                       <Container {...attributes} fluid={true}>
                         {dataItem[keyname] instanceof Object ? (
-                          <SearchResultTableCellObject
+                          <IndexFieldTypeObject
                             objectValue={dataItem[keyname]}
                             objectKeyname={keyname}
                             data={dataItem}
@@ -112,7 +112,7 @@ export function SearchResultTable({
                           ""
                         )}
                         {Array.isArray(dataItem[keyname]) ? (
-                          <SearchResultTableCellArray
+                          <IndexFieldTypeArray
                             arrayValue={dataItem[keyname]}
                             arrayKeyname={keyname}
                           />
@@ -120,7 +120,7 @@ export function SearchResultTable({
                           ""
                         )}
                         {typeof dataItem[keyname] === "string" ? (
-                          <SearchResultTableCellString
+                          <IndexFieldTypeString
                             stringValue={dataItem[keyname]}
                             stringKeyname={keyname}
                           />

@@ -1,16 +1,16 @@
-import "./search-result-table-cell-string.module.scss";
+import "./index-field-type-string.module.scss";
 import { Icon, Rating } from "semantic-ui-react";
 import React from "react";
 
 /* eslint-disable-next-line */
-export interface SearchResultTableCellStringProps {
+export interface IndexFieldTypeStringProps {
   stringValue: string;
   stringKeyname: string;
 
 }
 
-export function SearchResultTableCellString(
-  props: SearchResultTableCellStringProps
+export function IndexFieldTypeString(
+  props: IndexFieldTypeStringProps
 ) {
   if (props.stringKeyname === "rating") {
     return (
@@ -46,4 +46,4 @@ export function SearchResultTableCellString(
   }
 }
 
-export default SearchResultTableCellString;
+export default IndexFieldTypeString;

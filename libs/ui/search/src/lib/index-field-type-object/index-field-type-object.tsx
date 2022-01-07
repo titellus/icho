@@ -1,18 +1,18 @@
-import './search-result-table-cell-object.module.scss';
+import './index-field-type-object.module.scss';
 import React from "react";
 import {Header, Image, Label} from "semantic-ui-react";
 import {type} from "os";
 
 /* eslint-disable-next-line */
-export interface SearchResultTableCellObjectProps {
+export interface IndexFieldTypeObjectProps {
   objectKeyname: string;
   data:any;
   objectValue:any;
   styles:any;
 }
 
-export function SearchResultTableCellObject(
-  props: SearchResultTableCellObjectProps
+export function IndexFieldTypeObject(
+  props: IndexFieldTypeObjectProps
 ) {
   if (
     props.objectKeyname === 'resourceTitleObject' &&
@@ -69,4 +69,4 @@ export function SearchResultTableCellObject(
   }
 }
 
-export default SearchResultTableCellObject;
+export default IndexFieldTypeObject;
