@@ -14,10 +14,22 @@ export interface IndexFieldTypeObjectProps {
 export function IndexFieldTypeObject(
   props: IndexFieldTypeObjectProps
 ) {
+  let resourceTypeColor: any ="grey";
+  if (props.data['resourceType']){
+    if (props.data['resourceType'][0] === "series" || props.data['resourceType'][0] === "dataset") {
+      resourceTypeColor = "red"
+   } else if (props.data['resourceType'][0] === "service") {
+      resourceTypeColor = "green"
+    } else if (props.data['resourceType'][0] === "application") {
+      resourceTypeColor = "blue"
+    } else {
+      resourceTypeColor = "grey"
+    }
+  }
   if (props.objectKeyname === 'resourceTitleObject') {
     return (
       <React.Fragment>
-        {props.data['resourceType']?(<Label color="red" ribbon>
+        {props.data['resourceType']?(<Label color={resourceTypeColor} ribbon>
           {props.data['resourceType'][0]}
         </Label>):
             ('')}
