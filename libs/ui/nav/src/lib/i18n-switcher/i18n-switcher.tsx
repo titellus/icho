@@ -7,24 +7,23 @@ import React from "react";
 
 export function I18nSwitcher() {
   const languageOptions = [
-    { key: 'en', value: 'en', flag: 'gb', text: 'en' },
-    { key: 'fr', value: 'fr', flag: 'fr', text: 'fr' }
+    {key: 'en', value: 'en', flag: 'gb', text: 'en'},
+    {key: 'fr', value: 'fr', flag: 'fr', text: 'fr'}
   ]
-  const handleChange = (event:any,data:any) => {
+  const handleChange = (event: any, data: any) => {
     i18n.changeLanguage(data.value)
   };
   return (
-    <Menu.Menu position="right">
+    <Menu.Item>
       <Dropdown className={styles.dropdownI18nSwitcher}
-        fluid
-        search
-        selection
-        options={languageOptions}
-        defaultValue={languageOptions[0].value}
-        onChange={handleChange}
+                fluid
+                search
+                selection
+                options={languageOptions}
+                defaultValue={languageOptions[0].value}
+                onChange={handleChange}
       />
-  </Menu.Menu>
-
+    </Menu.Item>
   );
 }
 

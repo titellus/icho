@@ -3,8 +3,7 @@ import { AuthProvider } from '@catalogue/utils/shared';
 import { Link, Outlet } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Button, Container, Icon, Menu } from 'semantic-ui-react';
-import  { I18nSwitcher, FooterPanel, SidebarMenu } from '@catalogue/ui/nav';
-import { AuthenticateMenu } from '@catalogue/ui/authenticate';
+import { NavHearderRight, FooterPanel, SidebarMenu } from '@catalogue/ui/nav';
 import {useTranslation} from "react-i18next";
 
 export function App() {
@@ -32,8 +31,7 @@ export function App() {
                  {t('Search')}
               </Menu.Item>
 
-              <I18nSwitcher />
-              <AuthenticateMenu />
+              <NavHearderRight />
             </Container>
           </Menu>
 

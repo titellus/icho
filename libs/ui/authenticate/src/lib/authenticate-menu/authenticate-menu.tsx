@@ -13,25 +13,25 @@ export function AuthenticateMenu(props: AuthenticateMenuProps) {
 
   if (isLoggedIn) {
     return (
-      <Menu.Menu position="right">
+      <React.Fragment>
         <Menu.Item as={Label}>
           <strong>{authData?.username}</strong>
         </Menu.Item>
         <Menu.Item as={Link} to="authenticate">
           Sign out
         </Menu.Item>
-      </Menu.Menu>
+      </React.Fragment>
     );
   } else {
     return (
-      <Menu.Menu position="right">
+      <React.Fragment>
         <Menu.Item as={Link} to="authenticate">
           Sign in
         </Menu.Item>
         <Menu.Item as={Link} to="authenticate">
           Sign up
         </Menu.Item>
-      </Menu.Menu>
+      </React.Fragment>
     );
   }
 }
