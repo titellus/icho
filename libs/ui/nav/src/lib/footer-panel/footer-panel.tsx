@@ -26,11 +26,9 @@ export function FooterPanel(props: FooterPanelProps) {
             </Grid.Column>
             <Grid.Column width={7}>
               <Header as="h4" inverted content="News"></Header>
-              <p>
                 <List>
                   <List.Item>Maintenance planned on the 13th.</List.Item>
                 </List>
-              </p>
             </Grid.Column>
           </Grid.Row>
         </Grid>
