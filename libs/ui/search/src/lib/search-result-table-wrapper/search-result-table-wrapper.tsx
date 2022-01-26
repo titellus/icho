@@ -119,6 +119,9 @@ export function SearchResultTableWrapper({
             {filterField && (
               <MultiDropdownList componentId="tableQuickFilter"
                                  dataField={filterField}
+                                 defaultQuery={() => ({
+                                   query: default_query
+                                 })}
                                  placeholder="Focus on" />
             )}
             {/*<CSVLink data={newData}>

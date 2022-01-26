@@ -56,6 +56,33 @@ export function App() {
           size={3}
         />
 
+        <h1>Services</h1>
+        <SearchResultTableWrapper
+          url="http://localhost:9200/"
+          index="gn-records"
+          filter={'+resourceType:service'}
+          filterField={'linkProtocol'}
+          landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
+          columns={[
+            'resourceTitleObject',
+            'serviceType',
+            'linkProtocol',
+            'linkUrl',
+            'recordLink',
+            'custodianOrgForResource'
+          ]}
+          columnNames={[
+            'Titre',
+            'Type de service',
+            'Protocol',
+            'Point d\'accès',
+            'Données',
+            'Gestionnaire'
+          ]}
+          landingPageLink={'resourceTitleObject'}
+          size={10}
+        />
+
       </main>
     </div>
   );

@@ -99,7 +99,7 @@ export function SearchResultTable({
                   }
 
                   return (
-                    <Table.Cell key={j}>
+                    <Table.Cell key={j} className={styles.breakWord}>
                       <Container {...attributes} fluid={true}>
                         {dataItem[keyname] instanceof Object ? (
                           <IndexFieldTypeObject
