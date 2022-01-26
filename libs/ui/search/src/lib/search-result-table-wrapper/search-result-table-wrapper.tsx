@@ -1,5 +1,5 @@
 import { DEFAULT_SORT, SortOption } from "../search-result-table-sort/search-result-table-sort";
-import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters } from "@appbaseio/reactivesearch";
+import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters, ToggleButton } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
 import { Grid, Placeholder, Table, TableCell } from "semantic-ui-react";
@@ -13,6 +13,9 @@ interface Props {
   index: string;
   filter?: string;
   filterField?: string;
+  toggleFilterField?: string;
+  toggleIsMultiSelect?: boolean;
+  toggleLabel?: Array<any>;
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   columns: Array<string>;
@@ -64,6 +67,9 @@ export function SearchResultTableWrapper({
                                            index,
                                            filter,
                                            filterField,
+                                           toggleFilterField,
+                                           toggleIsMultiSelect,
+                                           toggleLabel,
                                            columns,
                                            columnNames,
                                            size,
@@ -84,11 +90,10 @@ export function SearchResultTableWrapper({
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT;
   return (
     <ReactiveBase
       app="records"
-      url={api + "/srv/api/search/"}
+      url={url}
       enableAppbase={false}
     >
       <Grid columns={3} divided>
@@ -113,7 +118,12 @@ export function SearchResultTableWrapper({
             />
           </Grid.Column>
           <Grid.Column>
-            <SelectedFilters />
+            {toggleFilterField && (
+              <ToggleButton componentId="tableToggleFilter"
+                            dataField={toggleFilterField}
+                            multiSelect={toggleIsMultiSelect}
+                            data={toggleLabel} />
+            )}
           </Grid.Column>
           <Grid.Column>
             {filterField && (
@@ -143,7 +153,7 @@ export function SearchResultTableWrapper({
         includeFields={columns}
         dataField={"_id"}
         react={{
-          and: ["tableFullTextFilter", "tableQuickFilter"]
+          and: ["tableFullTextFilter", "tableQuickFilter","tableToggleFilter"]
         }}
         render={({ loading, error, data }) => {
           if (loading) {
