@@ -8,8 +8,7 @@ export function App() {
     {
       menuItem: 'Simple table',
       render: () => <SearchResultTableWrapper
-        url="http://localhost:9200/"
-        index="gn-records"
+        catalogueUrl="https://apps.titellus.net/geonetwork/srv/api/search/"
         filterField={"th_Themes_geoportail_wallon_hierarchy.default"}
         columns={[
           'resourceTitleObject',
@@ -27,8 +26,7 @@ export function App() {
     {
       menuItem: 'Table with overview, links, ... (with a filter on \'Reporting INSPIRE\')',
       render: () => <SearchResultTableWrapper
-        url="http://localhost:9200/"
-        index="gn-records"
+        catalogueUrl="https://apps.titellus.net/geonetwork/srv/api/search/"
         filter={'+tag.default:"Reporting INSPIRE"'}
         landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
         columns={[
@@ -60,8 +58,7 @@ export function App() {
     {
       menuItem: 'Services',
       render: () => <SearchResultTableWrapper
-        url="http://localhost:9200/"
-        index="gn-records"
+        catalogueUrl="https://apps.titellus.net/geonetwork/srv/api/search/"
         filter={'+resourceType:service'}
         filterField={'linkProtocol'}
         landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"

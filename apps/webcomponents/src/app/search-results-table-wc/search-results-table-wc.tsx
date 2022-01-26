@@ -11,34 +11,39 @@ export function SearchResultsTableWc({
                                        togglelabel = "",
                                        columns = "resourceTitleObject",
                                        columnnames = "Title",
-                                       indexurl=""
+                                       catalogueurl=""
                                      }) {
-  let api = process.env.NX_CATALOGUE_API_ENDPOINT
-  if (indexurl && indexurl != ''){
-    api = indexurl
-  }
   let togglelabelArray = [];
   if (togglelabel.split("|")[0] != ''){
     for (const element of togglelabel.split("|")) {
       togglelabelArray.push(JSON.parse(element))
     }
   }
-  return (
-    <SearchResultTableWrapper
-      url={api + "/srv/api/search/"}
-      index="gn-records"
-      filter={filter}
-      filterField={filterfield}
-      toggleFilterField={togglefilterfield}
-      toggleIsMultiSelect={(toggleismultiselect === 'true')}
-      toggleLabel= {togglelabelArray}
-      landingPageUrlTemplate="https://metawal.wallonie.be/geonetwork/srv/api/records/{uuid}"
-      landingPageLink={'resourceTitleObject'}
-      columns={columns.split(",")}
-      columnNames={columnnames.split(",")}
-      size={parseInt(size)}
-    />
+  let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/srv/api/search/"
+  let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/srv/api/records/{uuid}"
+  if (catalogueurl && catalogueurl != ''){
+    url = catalogueurl + "/srv/api/search/"
+    //if (catalogueUrllandingPageUrlTemplate && landingPageUrlTemplate != '') {
+    landingPageUrlTemplate = catalogueurl + "/srv/api/records/{uuid}"
+    //}
+  }
+
+    return (
+      <SearchResultTableWrapper
+        catalogueUrl={url}
+        filter={filter}
+        filterField={filterfield}
+        toggleFilterField={togglefilterfield}
+        toggleIsMultiSelect={(toggleismultiselect === 'true')}
+        toggleLabel= {togglelabelArray}
+        landingPageLink={'resourceTitleObject'}
+        landingPageUrlTemplate ={landingPageUrlTemplate}
+        columns={columns.split(",")}
+        columnNames={columnnames.split(",")}
+        size={parseInt(size)}
+      />
   );
+
 };
 
 SearchResultsTableWc.propTypes = {
@@ -50,7 +55,7 @@ SearchResultsTableWc.propTypes = {
   togglelabel: PropTypes.string,
   columns: PropTypes.string,
   columnnames: PropTypes.string,
-  indexurl:PropTypes.string
+  catalogueurl:PropTypes.string
 };
 
 export default SearchResultsTableWc;

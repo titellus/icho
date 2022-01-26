@@ -9,8 +9,7 @@ export interface ResultTableProps {
 }
 
 interface Props {
-  url: string;
-  index: string;
+  catalogueUrl: string;
   filter?: string;
   filterField?: string;
   toggleFilterField?: string;
@@ -63,8 +62,7 @@ function TablePlaceholder({ cols, rows = 1 }: SearchResultTablePlaceholderProps)
 }
 
 export function SearchResultTableWrapper({
-                                           url,
-                                           index,
+                                           catalogueUrl,
                                            filter,
                                            filterField,
                                            toggleFilterField,
@@ -93,7 +91,7 @@ export function SearchResultTableWrapper({
   return (
     <ReactiveBase
       app="records"
-      url={url}
+      url={catalogueUrl}
       enableAppbase={false}
     >
       <Grid columns={3} divided>
