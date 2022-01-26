@@ -51,7 +51,7 @@ export function IndexFieldTypeObject(
       <span>{props.objectValue.default}</span>
     );
   } else {
-    return;
+    return <span/>;
     // TODO array of objects
     // TODO objects
     // return (
