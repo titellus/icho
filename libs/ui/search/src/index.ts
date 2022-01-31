@@ -1,3 +1,5 @@
+export * from './lib/search-result-card/search-result-card';
+export * from './lib/search-result-card-wrapper/search-result-card-wrapper';
 
 export * from './lib/index-field-type-string/index-field-type-string';
 export * from './lib/index-field-type-array/index-field-type-array';

@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 import reactToWebComponent from 'react-to-webcomponent';
 import { UiSearch } from '@catalogue/ui/search';
 import SearchResultsTableWc from './app/search-results-table-wc/search-results-table-wc';
+import SearchResultsCardWc from "./app/search-results-card-wc/search-results-card-wc";
 
 const catalogueSearch = reactToWebComponent(UiSearch, React, ReactDOM, {
   shadow: true,
@@ -16,3 +17,10 @@ const searchResultTableReactivelist = reactToWebComponent(
   ReactDOM
 );
 customElements.define('catalogue-results-table', searchResultTableReactivelist);
+
+const searchResultCardReactivelist = reactToWebComponent(
+  SearchResultsCardWc,
+  React,
+  ReactDOM
+);
+customElements.define('catalogue-results-card', searchResultCardReactivelist);
