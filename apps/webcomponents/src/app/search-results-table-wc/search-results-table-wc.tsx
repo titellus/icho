@@ -19,12 +19,12 @@ export function SearchResultsTableWc({
       togglelabelArray.push(JSON.parse(element))
     }
   }
-  let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/srv/api/search/"
-  let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/srv/api/records/{uuid}"
+  let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/search/"
+  let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/records/{uuid}"
   if (catalogueurl && catalogueurl != ''){
-    url = catalogueurl + "/srv/api/search/"
+    url = catalogueurl + "/api/search/"
     //if (catalogueUrllandingPageUrlTemplate && landingPageUrlTemplate != '') {
-    landingPageUrlTemplate = catalogueurl + "/srv/api/records/{uuid}"
+    landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
     //}
   }
 
