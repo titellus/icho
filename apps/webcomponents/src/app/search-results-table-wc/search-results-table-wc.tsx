@@ -11,7 +11,9 @@ export function SearchResultsTableWc({
                                        togglelabel = "",
                                        columns = "resourceTitleObject",
                                        columnnames = "Title",
-                                       catalogueurl=""
+                                       catalogueurl="",
+                                       sortby="",
+                                       sorttype=""
                                      }) {
   let togglelabelArray = [];
   if (togglelabel.split("|")[0] != ''){
@@ -41,6 +43,8 @@ export function SearchResultsTableWc({
         columns={columns.split(",")}
         columnNames={columnnames.split(",")}
         size={parseInt(size)}
+        sortBy={sortby}
+        sortType={sorttype}
       />
   );
 
@@ -55,7 +59,9 @@ SearchResultsTableWc.propTypes = {
   togglelabel: PropTypes.string,
   columns: PropTypes.string,
   columnnames: PropTypes.string,
-  catalogueurl:PropTypes.string
+  catalogueurl:PropTypes.string,
+  sortby:PropTypes.string,
+  sorttype:PropTypes.string
 };
 
 export default SearchResultsTableWc;

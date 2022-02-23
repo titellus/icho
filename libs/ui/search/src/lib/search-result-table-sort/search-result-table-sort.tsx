@@ -15,7 +15,7 @@ export const DEFAULT_SORT_ORDER = SortOrder.asc;
 
 export interface SortOption {
   field: string;
-  order: SortOrder;
+  order: string;
 }
 
 export const DEFAULT_SORT = {

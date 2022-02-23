@@ -1,4 +1,4 @@
-import { DEFAULT_SORT, SortOption } from "../search-result-table-sort/search-result-table-sort";
+import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters, ToggleButton } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
@@ -20,6 +20,8 @@ interface Props {
   columns: Array<string>;
   columnNames?: Array<string>;
   size?: number;
+  sortBy?:string;
+  sortType?:string;
 }
 
 interface SearchResultTablePlaceholderProps {
@@ -71,6 +73,8 @@ export function SearchResultTableWrapper({
                                            columns,
                                            columnNames,
                                            size,
+                                           sortType,
+                                           sortBy,
                                            landingPageUrlTemplate,
                                            landingPageLink
                                          }: Props) {
@@ -85,6 +89,10 @@ export function SearchResultTableWrapper({
       query_string: { query: filter }
     };
   }
+  const DEFAULT_SORT = {
+    field: sortBy || "_score",
+    order: sortType ||SortOrder.asc
+  };
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
