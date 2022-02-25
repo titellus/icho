@@ -18,7 +18,7 @@ export function SearchResultsCardWc({
     <SearchResultCardWrapper
       catalogueUrl={url}
       filter={filter}
-      fields={fields.split(",")}
+      fields={fields.replace(/\s+/g,"").split(",")}
       size={parseInt(size)}
     />
   );
