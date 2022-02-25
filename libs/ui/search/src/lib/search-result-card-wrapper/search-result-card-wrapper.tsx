@@ -4,7 +4,7 @@ import {DEFAULT_SORT, SortOption} from "../search-result-table-sort/search-resul
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 
 import SearchResultTable from "../search-result-table/search-result-table";
-import {v4 as uuidv4} from "uuid";
+
 import SearchResultCard from "../search-result-card/search-result-card";
 
 /* eslint-disable-next-line */
@@ -22,9 +22,6 @@ export function SearchResultCardWrapper({catalogueUrl,
                                           fields,
                                           size}: Props) {
   let default_query: Record<string, unknown>;
-  let uuid = uuidv4();
-  let reactiveListUuid= "tableOfRecord" + uuid
-  console.log(uuid)
   if (filter) {
     default_query = {
       query_string: { query: filter }
@@ -40,7 +37,7 @@ export function SearchResultCardWrapper({catalogueUrl,
       enableAppbase={false}
     >
       <ReactiveList
-        componentId={reactiveListUuid}
+        componentId="reactiveListCard"
         size={size}
         pagination={true}
         showResultStats={true}
