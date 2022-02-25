@@ -27,7 +27,7 @@ export function SearchResultCard({data}: Props) {
                 <span className='date'>{dataItem.custodianOrgForResource}</span>
               </Card.Meta>
               <Card.Description>
-                {dataItem.resourceTitleHookObject?.default}
+                {dataItem.resourceHookAbstractObject?.default}
               </Card.Description>
             </Card.Content>
             <Card.Content extra>
