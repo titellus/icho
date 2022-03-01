@@ -1,6 +1,6 @@
 import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
-import {DEFAULT_SORT, SortOption} from "../search-result-table-sort/search-result-table-sort";
+import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
 
 import SearchResultTable from "../search-result-table/search-result-table";
@@ -13,20 +13,37 @@ export interface SearchResultCardWrapperProps {}
 interface Props {
   catalogueUrl: string;
   filter?: string;
-  fields:Array<string>;
+  fields:string;
   size?: number;
+  sortBy?:string;
+  sortType?:string;
 }
 
 export function SearchResultCardWrapper({catalogueUrl,
                                           filter,
                                           fields,
-                                          size}: Props) {
+                                          size,
+                                          sortType,
+                                          sortBy}: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
     default_query = {
       query_string: { query: filter }
     };
   }
+  const DEFAULT_SORT = {
+    field: sortBy || "_score",
+    order: sortType ||SortOrder.asc
+  };
+
+  let cardTemplate = JSON.parse(fields)
+  for ( const k in cardTemplate){
+    if (cardTemplate[k].endsWith('JsonPath')) {
+      delete cardTemplate[k];
+    }
+  }
+  let EsFields: Array<string> = Object.values(cardTemplate)
+  cardTemplate = JSON.parse(fields)
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
   console.log(fields)
@@ -46,7 +63,7 @@ export function SearchResultCardWrapper({catalogueUrl,
           //query: { match: { isTemplate: "n" } }
           query: default_query
         })}
-        includeFields={fields}
+        includeFields={EsFields}
         dataField={"_id"}
         react={{
           and: []
@@ -67,6 +84,7 @@ export function SearchResultCardWrapper({catalogueUrl,
           return (
             <SearchResultCard
               data={data}
+              template = {cardTemplate}
             />
           );
         }}

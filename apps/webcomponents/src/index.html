@@ -9,7 +9,7 @@
   </head>
   <body>
     <!-- <catalogue-search filter='+resourceType:dataset'></catalogue-search>-->
-    <h1>INSPIRE valid records</h1>
+    <!--<h1>INSPIRE valid records</h1>
     <catalogue-results-table
       columns="overview,resourceTitleObject,resourceAltTitleObject,tag"
       filter='+valid_inspire:1 +tag.default:"Reporting INSPIRE"'
@@ -25,29 +25,40 @@
       size="2"
     ></catalogue-results-table>
 
-    <hr/>
+    <hr/>-->
 
     <h1>Contenu de la base de données BD CARTON - INFRASIG</h1>
-    <catalogue-results-table
+    <!--catalogue-results-table
       columns='resourceTitleObject,overview,resourceType,resourceAltTitleObject,custodianOrgForResource,link'
       columnnames='Titre,,,Nom abrégé,Gestionnaire,Liens'
       filterfield="th_Themes_geoportail_wallon_hierarchy.default"
       togglefilterfield="th_Themes_geoportail_wallon_hierarchy.default"
-      toggleismultiselect="false"
-      togglelabel='{"label": "Air", "value": "Air"} | {"label": "Eau", "value": "Eau"} | {"label": "Agriculture", "value": "Agriculture"}'
+      toggleismultiselect="true"
+      togglelabel='{"label": "Air", "value": "Air AND Eau"} | {"label": "Eau", "value": "Eau"} | {"label": "Agriculture", "value": "Agriculture"}'
       filter=""
       size="4"
       catalogueurl="https://apps.titellus.net/geonetwork/srv"
       sorttype="desc"
       sortby="custodianOrgForResource"
-    ></catalogue-results-table>
+    ></catalogue-results-table-->
 
     <h1>Exemple Service cards</h1>
+    <!--catalogue-results-card
+      filter=""
+      size="25"
+      fields='resourceTitleObject,overview, custodianOrgForResource , resourceHookAbstractObject,revisionDateForResource,mw-gp-thematicMap'
+      catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
+      sorttype="asc"
+      sortby="custodianOrgForResource"
+    ></catalogue-results-card-->
+
     <catalogue-results-card
       filter=""
-      size="5"
-      fields='resourceTitleObject,overview,custodianOrgForResource, resourceHookAbstractObject, revisionDateForResource, link'
+      size="25"
+      fields='{"image": "overview", "imageJsonPath":"$[0].url", "title": "resourceTitleObject", "titleJsonPath":"$.default", "subTitle": "custodianOrgForResource", "subTitleJsonPath":"", "text": "resourceHookAbstractObject", "textJsonPath":"$.default","link": "mw-gp-thematicMap", "linkJsonPath":"$[0].url","info": "revisionDateForResource","infoJsonPath":"$[0]"}'
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
+      sorttype="asc"
+      sortby="custodianOrgForResource"
     ></catalogue-results-card>
   </body>
 </html>
