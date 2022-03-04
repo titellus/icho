@@ -132,7 +132,7 @@ export function SearchResultTableWrapper({
                             dataField={toggleFilterField}
                             multiSelect={toggleIsMultiSelect}
                             data={toggleLabel}
-                            /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888
+                            /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888*/
 /*                           customQuery={
                               function(value, props) {
                                 if (value[0]) {
