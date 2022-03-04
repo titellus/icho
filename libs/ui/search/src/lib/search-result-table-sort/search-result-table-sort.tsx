@@ -1,5 +1,5 @@
 import "./search-result-table-sort.module.scss";
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Popup, Icon } from "semantic-ui-react";
 import React from "react";
 
 /* eslint-disable-next-line */
@@ -50,14 +50,14 @@ export function SearchResultTableSort({
   const isCurrent = currentSort.field === field;
   return (
       isCurrent ? (
-        <Icon name={currentSort.order === "asc" ? "sort up" : "sort down"}
+        <Popup content={field} trigger={<Icon name={currentSort.order === "asc" ? "sort up" : "sort down"}
               link={true}
               color={isCurrent ? "blue" : undefined}
-              onClick={handleChange(field)}/>
+              onClick={handleChange(field)}/>} />
       ) : (
-        <Icon name="sort"
+        <Popup content={field} trigger={<Icon name="sort"
               link={true}
-              onClick={handleChange(field)}/>
+              onClick={handleChange(field)}/>} />
       )
   );
 }
