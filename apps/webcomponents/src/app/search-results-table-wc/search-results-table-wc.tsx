@@ -9,8 +9,7 @@ export function SearchResultsTableWc({
                                        togglefilterfield="",
                                        toggleismultiselect = "false",
                                        togglelabel = "",
-                                       columns = "resourceTitleObject",
-                                       columnnames = "Title",
+                                       fields="",
                                        catalogueurl="",
                                        sortby="",
                                        sorttype=""
@@ -20,6 +19,18 @@ export function SearchResultsTableWc({
     for (const element of togglelabel.split("|")) {
       togglelabelArray.push(JSON.parse(element))
     }
+  }
+  let fieldsArray = []
+  for (const element of fields.split("|")) {
+    fieldsArray.push(JSON.parse(element))
+  }
+  let indexArray = []
+  for (const element of fieldsArray) {
+    indexArray.push(element.columnIndex)
+  }
+  let columnNameArray = []
+  for (const element of fieldsArray) {
+    columnNameArray.push(element.columnName)
   }
   let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/search/"
   let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/records/{uuid}"
@@ -40,8 +51,8 @@ export function SearchResultsTableWc({
         toggleLabel= {togglelabelArray}
         landingPageLink={'resourceTitleObject'}
         landingPageUrlTemplate ={landingPageUrlTemplate}
-        columns={columns.split(",")}
-        columnNames={columnnames.split(",")}
+        includedFields={indexArray}
+        fields={fieldsArray}
         size={parseInt(size)}
         sortBy={sortby}
         sortType={sorttype}
@@ -57,8 +68,7 @@ SearchResultsTableWc.propTypes = {
   togglefilterfield: PropTypes.string,
   toggleismultiselect: PropTypes.string,
   togglelabel: PropTypes.string,
-  columns: PropTypes.string,
-  columnnames: PropTypes.string,
+  fields: PropTypes.string,
   catalogueurl:PropTypes.string,
   sortby:PropTypes.string,
   sorttype:PropTypes.string

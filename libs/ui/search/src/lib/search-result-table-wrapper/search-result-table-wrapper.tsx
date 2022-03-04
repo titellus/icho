@@ -8,6 +8,14 @@ import { Grid, Placeholder, Table, TableCell } from "semantic-ui-react";
 export interface ResultTableProps {
 }
 
+
+export interface FieldDescription {
+  columnIndex: string;
+  columnJsonPath: string;
+  columnName: string;
+}
+
+
 interface Props {
   catalogueUrl: string;
   filter?: string;
@@ -17,8 +25,8 @@ interface Props {
   toggleLabel?: Array<any>;
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
-  columns: Array<string>;
-  columnNames?: Array<string>;
+  includedFields: Array<string>;
+  fields:Array<FieldDescription>;
   size?: number;
   sortBy?:string;
   sortType?:string;
@@ -70,8 +78,8 @@ export function SearchResultTableWrapper({
                                            toggleFilterField,
                                            toggleIsMultiSelect,
                                            toggleLabel,
-                                           columns,
-                                           columnNames,
+                                           includedFields,
+                                           fields,
                                            size,
                                            sortType,
                                            sortBy,
@@ -79,12 +87,7 @@ export function SearchResultTableWrapper({
                                            landingPageLink
                                          }: Props) {
   let default_query: Record<string, unknown>;
-
-  // if (columns && columnNames && columns.length != columnNames.length) {
-  //   console.warn("Configure same number of columns and column label.")
-  // }
-
-  if (filter) {
+   if (filter) {
     default_query = {
       query_string: { query: filter }
     };
@@ -128,7 +131,26 @@ export function SearchResultTableWrapper({
               <ToggleButton componentId="tableToggleFilter"
                             dataField={toggleFilterField}
                             multiSelect={toggleIsMultiSelect}
-                            data={toggleLabel} />
+                            data={toggleLabel}
+                           customQuery={
+                              function(value, props) {
+                                if (value[0]) {
+                                  let test = props.dataField+":("+ value[0].value +")"
+                                  let analyser:{[index: string]:any} = {}
+                                  analyser["query"]= test
+                                  let query:{[index: string]:any} = {
+                                    query:
+                                      {
+                                      }
+                                 }
+                                  query.query["query_string"]= analyser
+                                  return {query}
+                                } else {
+                                  return {}
+                                }
+                              }
+                            }
+              />
             )}
           </Grid.Column>
           <Grid.Column>
@@ -159,7 +181,7 @@ export function SearchResultTableWrapper({
           //query: { match: { isTemplate: "n" } }
           query: default_query
         })}
-        includeFields={columns}
+        includeFields={includedFields}
         dataField={"_id"}
         react={{
           and: ["tableFullTextFilter", "tableQuickFilter","tableToggleFilter"]
@@ -167,7 +189,7 @@ export function SearchResultTableWrapper({
         render={({ loading, error, data }) => {
           if (loading) {
             return (
-              <TablePlaceholder cols={columns} rows={3} />
+              <TablePlaceholder cols={includedFields} rows={3} />
             );
           }
           if (error) {
@@ -177,9 +199,8 @@ export function SearchResultTableWrapper({
           }
           return (
             <SearchResultTable
-              columns={columns}
-              columnNames={columnNames}
               data={data}
+              fields={fields}
               landingPageUrlTemplate={landingPageUrlTemplate}
               landingPageLink={landingPageLink}
               handleSetSort={setSort}

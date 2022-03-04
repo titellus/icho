@@ -42,15 +42,40 @@
       sortby="custodianOrgForResource"
     ></catalogue-results-table-->
 
-    <h1>Exemple Service cards</h1>
-    <!--catalogue-results-card
+<!--
+
+catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
+columnnames="Nom de la donnée,,,BD,Nom physique,statut,Note,Consulter (services),Voir (application),crédits"
+columns="resourceTitleObject,overview,resourceType,mw-gp-localIdentifierCodespace,mw-gp-localIdentifier,cl_status,supplementalInformationObject,mw-gp-allWebServices,mw-gp-thematicMap,resourceCreditObject"
+filter="+(resourceType:dataset or resourceType:series) -(th_infraSIG.default:Reporting_INSPIRE) -(cl_status.key:obsolete) +(custodianOrgForResource:*SPW*)"
+filterfield="th_Themes_geoportail_wallon_hierarchy.default"
+size="10"
+togglefilterfield="mw-gp-localIdentifierCodespace"
+toggleismultiselect="false"
+togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
+-->
+
+    <catalogue-results-table
+      fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
+      {"columnName":"Image","columnIndex":"overview","columnJsonPath":"$[0].url"} |
+      {"columnName":"Titre","columnIndex":"resourceType","columnJsonPath":"$[0]", "columnLabel":"red", "columnRibon":{"dataset":"blue", "series":"teal","application":"green","service":"green"}} |
+      {"columnName":"Nom abrégé","columnIndex":"resourceAltTitleObject","columnJsonPath":"$.default", "columnLabel":"blue"} |
+      {"columnName":"Gestionnaire","columnIndex":"custodianOrgForResource","columnJsonPath":""} |
+      {"columnName":"Liens","columnIndex":"link","columnJsonPath":"$[0].url","columnIcon":"world", "columnLabel":"red"}'
+      filterfield="th_Themes_geoportail_wallon_hierarchy.default"
+      togglefilterfield="th_Themes_geoportail_wallon_hierarchy.default"
+      toggleismultiselect="true"
+      togglelabel='{"label": "Air", "value": "Air AND Eau"} |
+      {"label": "Eau", "value": "Eau"} |
+      {"label": "Agriculture", "value": "Agriculture"}'
       filter=""
-      size="25"
-      fields='resourceTitleObject,overview, custodianOrgForResource , resourceHookAbstractObject,revisionDateForResource,mw-gp-thematicMap'
+      size="4"
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
-      sorttype="asc"
+      sorttype="desc"
       sortby="custodianOrgForResource"
-    ></catalogue-results-card-->
+    ></catalogue-results-table>
+
+    <h1>Exemple Service cards</h1>
 
     <catalogue-results-card
       filter=""

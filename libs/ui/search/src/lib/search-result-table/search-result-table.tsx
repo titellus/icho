@@ -1,20 +1,20 @@
 import styles from "./search-result-table.module.scss";
-import { Container, Sticky, Table } from "semantic-ui-react";
-import React, { createRef } from "react";
-import SearchResultTableSort, { SortOption } from "../search-result-table-sort/search-result-table-sort";
-import { IndexFieldTypeObject } from "../index-field-type-object/index-field-type-object";
-import IndexFieldTypeArray from "../index-field-type-array/index-field-type-array";
-import IndexFieldTypeString from "../index-field-type-string/index-field-type-string";
+import {Container, Icon, Label, Sticky, Table} from "semantic-ui-react";
+import React, {createRef} from "react";
+import SearchResultTableSort, {SortOption} from "../search-result-table-sort/search-result-table-sort";
+import jp from "jsonpath";
+import {FieldDescription} from "../search-result-table-wrapper/search-result-table-wrapper";
 
 interface Props {
   data: Array<Record<string, unknown>>;
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
-  columns: Array<string>;
-  columnNames?: Array<string>;
+  fields: Array<FieldDescription>
   handleSetSort: (newValue: SortOption) => void;
   currentSort: SortOption;
 }
+
+
 
 interface CellContentAttributes {
   as: string;
@@ -25,12 +25,10 @@ interface CellContentAttributes {
 export interface SearchResultTableProps {
 }
 
-export function SearchResultTable({
-                                    data,
-                                    columns,
+export function SearchResultTable({ data,
                                     landingPageUrlTemplate,
                                     landingPageLink,
-                                    columnNames,
+                                    fields,
                                     handleSetSort,
                                     currentSort
                                   }: Props) {
@@ -40,101 +38,147 @@ export function SearchResultTable({
     handleSetSort(newValue);
   }
 
-  console.log("SearchResultTable", data);
-
-  if (data.length > 0) {
-    for (const element in data) {
-      const newElement: Record<string, unknown> = {};
-      newElement["_id"] = data[element]["_id"];
-      for (const key of columns) {
-        if (data[element][key]) newElement[key] = data[element][key];
-        else newElement[key] = "";
-      }
-      tableData.push(newElement);
-    }
-  } else {
-    return null;
+  let columnNameArray: Array<string> = []
+  for (const element of fields) {
+    columnNameArray.push(element.columnName)
   }
+  //Remove duplicated columnName
+  columnNameArray = [...new Set(columnNameArray)];
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
-
   return (
     <Table ref={ref.current}>
       {/*<Sticky context={ref.current} as={'thead'}>*/}
       {/*</Sticky>*/}
       <Table.Header>
         <Table.Row>
-          {Object.keys(tableData[0])
-            .slice(1)
-            .map((keyname, i) => (
-              <Table.HeaderCell key={i}>
-                {columnNames ? columnNames[i] : keyname}
-                {
-                  typeof tableData[0][keyname] === "string" ? (
+          {columnNameArray.map((elem: string, i) => (
+            <Table.HeaderCell key={i}>
+              {elem}
+              {fields.map((fieldsItem: any, k) => {
+                let type = ""
+                if (fieldsItem.columnJsonPath.endsWith('default')) {
+                  type = '.keyword'
+                }
+                return (
+                  (fieldsItem.columnName === elem && (fieldsItem.columnJsonPath === "" || type != "")) ? (
                     <SearchResultTableSort
                       onChange={handleChange}
                       currentSort={currentSort}
-                      field={keyname}
+                      field={fieldsItem.columnIndex + fieldsItem.columnJsonPath.replace('$', '') + type}
                     />
                   ) : ("")
-                }
-              </Table.HeaderCell>
-            ))}
+                )
+              })}
+            </Table.HeaderCell>
+          ))}
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {
-          tableData.map((dataItem: any, i: number) => (
-            <Table.Row key={i}>
-              {Object.keys(dataItem)
-                .slice(1)
-                .map((keyname, j) => {
+        {data.map((dataTtem: any, index) => (
+          <Table.Row key={index}>
+            {columnNameArray.map((columnNameItem: string, j) => (
+              <Table.Cell key={j}>
+                {fields.map((fieldsItem: any, k) => {
                   let attributes: CellContentAttributes = {
-                    as: landingPageLink === keyname ? "a" : "div"
+                    as: landingPageLink === fieldsItem.columnIndex ? "a" : "div"
                   };
-
-                  if (landingPageUrlTemplate && landingPageLink === keyname) {
-                    attributes.href = landingPageUrlTemplate
-                      .replace("{uuid}", dataItem["_id"]);
+                  if (landingPageUrlTemplate && landingPageLink === fieldsItem.columnIndex) {
+                    attributes.href = landingPageUrlTemplate.replace("{uuid}", dataTtem["_id"]);
                   }
-
                   return (
-                    <Table.Cell key={j} className={styles.breakWord}>
-                      <Container {...attributes} fluid={true}>
-                        {dataItem[keyname] instanceof Object ? (
-                          <IndexFieldTypeObject
-                            objectValue={dataItem[keyname]}
-                            objectKeyname={keyname}
-                            data={dataItem}
-                            styles={styles}
-                          />
-                        ) : (
-                          ""
-                        )}
-                        {Array.isArray(dataItem[keyname]) ? (
-                          <IndexFieldTypeArray
-                            arrayValue={dataItem[keyname]}
-                            arrayKeyname={keyname}
-                          />
-                        ) : (
-                          ""
-                        )}
-                        {typeof dataItem[keyname] === "string" ? (
-                          <IndexFieldTypeString
-                            stringValue={dataItem[keyname]}
-                            stringKeyname={keyname}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </Container>
-                    </Table.Cell>);
-                })
-              }
-            </Table.Row>
-          ))}
+                    <span key={k}>
+                {fieldsItem.columnName === columnNameItem ? (
+                  <Container {...attributes} fluid={true}>
+                    {dataTtem[fieldsItem.columnIndex] ? (
+                      fieldsItem.columnJsonPath === '' ?
+                        dataTtem[fieldsItem.columnIndex] :
+                        <HtmlType value={dataTtem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
+                                  label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon}
+                                  iconValue={fieldsItem.columnIcon}/>
+                    ) : ""}
+                    <br/>
+                  </Container>
+                ) : (
+                  ""
+                )}
+              </span>
+                  )
+                })}
+              </Table.Cell>
+            ))}
+          </Table.Row>
+        ))}
       </Table.Body>
     </Table>
+  );
+}
+
+interface HtmlTypeProps {
+  jsonPath: string;
+  value: Object;
+  label?: undefined;
+  iconValue?: undefined;
+  ribon?: Object;
+}
+
+function HtmlType({
+                    jsonPath,
+                    value,
+                    label,
+                    ribon,
+                    iconValue
+                  }: HtmlTypeProps) {
+  let linkStyle;
+  let icon;
+  let result;
+  if (iconValue) {
+    icon = <Icon name={iconValue}/>
+  }
+  if (jsonPath.endsWith('url')) {
+    let url = jp.query(value, jsonPath).toString()
+    if (jp.query(value, jsonPath.replace('url', 'name')).length > 0) {
+      linkStyle = <a href={jp.query(value, jsonPath).toString()}> {icon}
+        {jp.query(value, jsonPath.replace('url', 'name'))}
+      </a>;
+    } else {
+      if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(jp.query(value, jsonPath).toString())) {
+        linkStyle = <img alt=""
+                         src={jp.query(value, jsonPath).toString()}
+                         className={styles.image}/>
+      } else {
+        linkStyle = <a href={jp.query(value, jsonPath).toString()}> {icon}
+          {jp.query(value, jsonPath)}
+        </a>;
+      }
+    }
+  } else {
+    if (jp.query(value, jsonPath).toString() != '') {
+      linkStyle = <span> {icon} {jp.query(value, jsonPath)}</span>;
+    } else {
+      linkStyle = ''
+    }
+  }
+
+  if (ribon) {
+    for (const [key, ribonColor] of Object.entries(ribon)) {
+      if (jp.query(value, jsonPath).toString() === key) {
+        result =
+          <React.Fragment><br/><Label color={ribonColor.toString()} ribbon>{linkStyle}</Label><br/></React.Fragment>
+      }
+    }
+  } else {
+    if (label && linkStyle !='') {
+      result = <React.Fragment><Label color={label}>{linkStyle}</Label><br/></React.Fragment>
+    } else {
+      result = linkStyle
+    }
+  }
+
+  return (
+    <span>
+      {result}
+    </span>
   );
 }
 
