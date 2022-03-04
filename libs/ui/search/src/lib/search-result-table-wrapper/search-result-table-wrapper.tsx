@@ -132,7 +132,8 @@ export function SearchResultTableWrapper({
                             dataField={toggleFilterField}
                             multiSelect={toggleIsMultiSelect}
                             data={toggleLabel}
-                           customQuery={
+                            /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888
+/*                           customQuery={
                               function(value, props) {
                                 if (value[0]) {
                                   let test = props.dataField+":("+ value[0].value +")"
@@ -149,7 +150,7 @@ export function SearchResultTableWrapper({
                                   return {}
                                 }
                               }
-                            }
+                            }*/
               />
             )}
           </Grid.Column>
