@@ -1,0 +1,23 @@
+{
+  "root": "libs/ui/admin",
+  "sourceRoot": "libs/ui/admin/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/admin/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/admin"],
+      "options": {
+        "jestConfig": "libs/ui/admin/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
