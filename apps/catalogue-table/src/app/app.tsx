@@ -4,7 +4,7 @@ import { SearchResultTableWrapper } from '@catalogue/ui/search';
 import { Tab } from "semantic-ui-react";
 
 export function App() {
-  const examples = [
+/*  const examples = [
     {
       menuItem: 'Simple table',
       render: () => <SearchResultTableWrapper
@@ -82,13 +82,14 @@ export function App() {
         size={10}
       />
     }
-  ]
+  ]*/
 
 
   return (
     <div className={styles.app}>
       <main>
-       <Tab menu={{secondary: true, pointing: true}} panes={examples}/>
+       {/*<Tab menu={{secondary: true, pointing: true}} panes={examples}/>*/}
+        <p>test</p>
       </main>
     </div>
   );
