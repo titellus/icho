@@ -1,7 +1,8 @@
 import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
 import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
-import { ReactiveBase, ReactiveList } from "@appbaseio/reactivesearch";
+import {MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
+import { Grid } from "semantic-ui-react";
 
 import SearchResultTable from "../search-result-table/search-result-table";
 
@@ -14,6 +15,7 @@ interface Props {
   catalogueUrl: string;
   filter?: string;
   fields:string;
+  filterField?: string;
   size?: number;
   sortBy?:string;
   sortType?:string;
@@ -21,6 +23,7 @@ interface Props {
 
 export function SearchResultCardWrapper({catalogueUrl,
                                           filter,
+                                          filterField,
                                           fields,
                                           size,
                                           sortType,
@@ -53,6 +56,24 @@ export function SearchResultCardWrapper({catalogueUrl,
       url={catalogueUrl}
       enableAppbase={false}
     >
+      <Grid columns={3} divided>
+        <Grid.Row>
+          <Grid.Column width={4}>
+        </Grid.Column>
+        <Grid.Column>
+        </Grid.Column>
+        <Grid.Column>
+      {filterField && (
+        <MultiDropdownList componentId="cardQuickFilter"
+                           dataField={filterField}
+                           defaultQuery={() => ({
+                             query: default_query
+                           })}
+                           placeholder="Focus on" />
+      )}
+        </Grid.Column>
+        </Grid.Row>
+      </Grid>
       <ReactiveList
         componentId="reactiveListCard"
         size={size}
@@ -66,7 +87,7 @@ export function SearchResultCardWrapper({catalogueUrl,
         includeFields={EsFields}
         dataField={"_id"}
         react={{
-          and: []
+          and: ["cardQuickFilter"]
         }}
         render={({ loading, error, data }) => {
           if (loading) {

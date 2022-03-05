@@ -7,6 +7,7 @@ import {SearchResultCardWrapper} from "@catalogue/ui/search";
 export function SearchResultsCardWc({
   size = "10",
   filter = "",
+  filterfield = "",
   fields= "resourceTitleObject",
   catalogueurl="",
   sortby="",
@@ -36,6 +37,7 @@ export function SearchResultsCardWc({
     <SearchResultCardWrapper
       catalogueUrl={url}
       filter={filter}
+      filterField={filterfield}
       fields={fields}
       size={parseInt(size)}
       sortBy={sortby}
@@ -47,6 +49,7 @@ export function SearchResultsCardWc({
 SearchResultsCardWc.propTypes = {
   size: PropTypes.string,
   filter: PropTypes.string,
+  filterfield: PropTypes.string,
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
   sortby:PropTypes.string,
