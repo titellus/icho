@@ -8,11 +8,13 @@ import { Grid, Placeholder, Table, TableCell } from "semantic-ui-react";
 export interface ResultTableProps {
 }
 
-
 export interface FieldDescription {
   columnIndex: string;
   columnJsonPath: string;
   columnName: string;
+  columnLabel?: string;
+  columnIcon?: string;
+  columnRibon?: Object;
 }
 
 
