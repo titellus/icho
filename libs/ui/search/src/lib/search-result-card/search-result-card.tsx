@@ -1,90 +1,114 @@
 import './search-result-card.module.scss';
-import {Card, Icon, Image, SemanticWIDTHS} from 'semantic-ui-react'
-import {SortOption} from "../search-result-table-sort/search-result-table-sort";
+import {
+  Button,
+  Card,
+  Header,
+  Icon,
+  Image,
+  SemanticCOLORS,
+  SemanticICONS,
+  SemanticWIDTHS
+} from 'semantic-ui-react'
 import React from "react";
 import jp from 'jsonpath';
-import {string} from "prop-types";
 
 /* eslint-disable-next-line */
 export interface SearchResultCardProps {
 }
 
 export interface templateCard {
-  image: string;
+  imageIndex: string;
   imageJsonPath: string;
-  title: string;
+  titleIndex: string;
+  titleSize:string;
   titleJsonPath: string;
-  subTitle: string;
+  subTitleIndex: string;
   subTitleJsonPath: string;
-  text: string;
+  textIndex: string;
   textJsonPath: string;
-  link: string;
+  linkIndex: string;
   linkJsonPath: string;
-  linkIcon:string;
-  info: string;
+  linkIcon?:SemanticICONS | undefined;
+  linkButtonColor?:SemanticCOLORS | undefined;
+  infoIndex: string;
   infoJsonPath: string;
+  linkHook:string;
 }
 
 interface Props {
   data: Array<Record<string, unknown>>;
-  template: templateCard
+  template: templateCard;
+  landingPageUrlTemplate: string;
   itemsPerRow:SemanticWIDTHS | undefined;
 }
 
-export function SearchResultCard({data, template,itemsPerRow}: Props) {
-  console.log(data)
+interface InfoContentAttributes {
+  as: string;
+  href?: string;
+}
+
+export function SearchResultCard({data,
+                                   template,
+                                   landingPageUrlTemplate,
+                                   itemsPerRow}: Props) {
   return (
     <div>
       <Card.Group centered itemsPerRow={itemsPerRow}>
-        {data.map((dataItem: any) => (
-          <Card key={dataItem._id}>
-            {dataItem[template.image] ? (
-              <Image src={template.imageJsonPath === '' ?
-                dataItem[template.image] : jp.query(dataItem[template.image], template.imageJsonPath)
-              } ui={false} wrapped/>
-            ) : ("")}
-            <Card.Content>
-              <Card.Header>
-                {dataItem[template.title] ? (
-                  template.titleJsonPath === '' ?
-                    dataItem[template.title] : jp.query(dataItem[template.title], template.titleJsonPath)
-                ) : ""}
-              </Card.Header>
-              <Card.Meta>
+        {data.map((dataItem: any) => {
+          return (
+            <Card key={dataItem._id} >
+              {dataItem[template.imageIndex] ? (
+                <Image src={template.imageJsonPath === '' ?
+                  dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
+                } ui={false} wrapped/>
+              ) : ("")}
+              <Card.Content>
+                <Card.Header>
+                  <Header as={template.titleSize}>{dataItem[template.titleIndex] ? (
+                    template.titleJsonPath === '' ?
+                      dataItem[template.titleIndex] : jp.query(dataItem[template.titleIndex], template.titleJsonPath)
+                  ) : ""}</Header>
+                </Card.Header>
+                <Card.Meta>
                   <span className='date'>
-                    {dataItem[template.subTitle] ? (
+                    {dataItem[template.subTitleIndex] ? (
                       template.subTitleJsonPath === '' ?
-                        dataItem[template.subTitle] : jp.query(dataItem[template.subTitle], template.subTitleJsonPath)
+                        dataItem[template.subTitleIndex] : jp.query(dataItem[template.subTitleIndex], template.subTitleJsonPath)
                     ) : ""}
                   </span>
-              </Card.Meta>
-              <Card.Description>
-                {dataItem[template.text] ? (
-                  template.textJsonPath === '' ?
-                    dataItem[template.text] : jp.query(dataItem[template.text], template.textJsonPath)
-                ) : ""}
-              </Card.Description>
-            </Card.Content>
-            {dataItem[template.info] || dataItem[template.link] ? (
-              <Card.Content extra>
-                <span className="right floated">
-                  {dataItem[template.info] ? (
-                    template.infoJsonPath === '' ?
-                      dataItem[template.info] : jp.query(dataItem[template.info], template.infoJsonPath)
+                </Card.Meta>
+                <Card.Description>
+                  {dataItem[template.textIndex] ? (
+                    template.textJsonPath === '' ?
+                      dataItem[template.textIndex] : jp.query(dataItem[template.textIndex], template.textJsonPath)
                   ) : ""}
-                </span>
-                {dataItem[template.link] ? (
-                  <button className="ui icon button">
-                    <a href={template.linkJsonPath === '' ?
-                      dataItem[template.link] : jp.query(dataItem[template.link], template.linkJsonPath).toString()
-                    }>
-                      <i aria-hidden="true" className="world icon"></i>
-                    </a>
-                  </button>) : ("")}
+                </Card.Description>
               </Card.Content>
-            ):""}
-          </Card>
-        ))}
+              {dataItem[template.infoIndex] || dataItem[template.linkIndex] ? (
+                <Card.Content extra>
+                <span className="right floated">
+                  {dataItem[template.infoIndex] ? (
+                    template.infoJsonPath === '' ?
+                      (<span>{dataItem[template.infoIndex]}<br/></span>) :
+                      (<span>{jp.query(dataItem[template.infoIndex], template.infoJsonPath)}<br/></span>)
+                  ) : ""}
+                  <a className="right floated" href={landingPageUrlTemplate.replace("{uuid}", dataItem["_id"])}>
+                    <Icon name="info circle"/>Plus d'infos
+                  </a>
+                </span>
+                  {dataItem[template.linkIndex] ? (
+                    <Button color={template.linkButtonColor} >
+                      <a style={{color: "white"}} href={template.linkJsonPath === '' ?
+                        dataItem[template.linkIndex] : jp.query(dataItem[template.linkIndex], template.linkJsonPath).toString()
+                      }>
+                        <Icon name={template.linkIcon}/>{template.linkHook}
+                      </a>
+                    </Button>) : ("")}
+                </Card.Content>
+              ):""}
+            </Card>
+          )
+        })}
       </Card.Group>
     </div>
   );

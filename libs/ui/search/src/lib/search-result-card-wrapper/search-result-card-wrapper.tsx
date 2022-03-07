@@ -20,6 +20,7 @@ interface Props {
   sortBy?:string;
   sortType?:string;
   itemsPerRow?:SemanticWIDTHS;
+  landingPageUrlTemplate: string;
 }
 
 export function SearchResultCardWrapper({catalogueUrl,
@@ -29,7 +30,8 @@ export function SearchResultCardWrapper({catalogueUrl,
                                           size,
                                           sortType,
                                           sortBy,
-                                          itemsPerRow}: Props) {
+                                          itemsPerRow,
+                                          landingPageUrlTemplate}: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
     default_query = {
@@ -41,17 +43,17 @@ export function SearchResultCardWrapper({catalogueUrl,
     order: sortType ||SortOrder.asc
   };
 
-  let cardTemplate = JSON.parse(fields)
-  for ( const k in cardTemplate){
-    if (cardTemplate[k].endsWith('JsonPath')) {
-      delete cardTemplate[k];
+  let EsFields=[]
+  let fieldsTs: {[key: string]: string} = JSON.parse(fields)
+  for (const [key, value] of Object.entries(fieldsTs)) {
+    if (key.endsWith('Index')) {
+      EsFields.push(value)
     }
   }
-  let EsFields: Array<string> = Object.values(cardTemplate)
-  cardTemplate = JSON.parse(fields)
 
+  let cardTemplate = JSON.parse(fields)
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
-  console.log(fields)
+
   return (
     <ReactiveBase
       app="records"
@@ -108,6 +110,7 @@ export function SearchResultCardWrapper({catalogueUrl,
             <SearchResultCard
               data={data}
               template = {cardTemplate}
+              landingPageUrlTemplate={landingPageUrlTemplate}
               itemsPerRow={itemsPerRow}
             />
           );

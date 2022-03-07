@@ -55,6 +55,7 @@ toggleismultiselect="false"
 togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
 -->
 
+<!--
     <catalogue-results-table
       fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
       {"columnName":"Image","columnIndex":"overview","columnJsonPath":"$[0].url"} |
@@ -74,6 +75,7 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       sorttype="desc"
       sortby="custodianOrgForResource"
     ></catalogue-results-table>
+-->
 
     <h1>Exemple Service cards</h1>
 
@@ -82,7 +84,7 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       size="25"
       itemsperrow="3"
       filterfield="th_Themes_geoportail_wallon_hierarchy.default"
-      fields='{"image": "overview", "imageJsonPath":"$[0].url", "title": "resourceTitleObject", "titleJsonPath":"$.default", "subTitle": "custodianOrgForResource", "subTitleJsonPath":"", "text": "resourceHookAbstractObject", "textJsonPath":"$.default","link": "mw-gp-thematicMap", "linkJsonPath":"$[0].url", "linkIcon":"world","info": "revisionDateForResource","infoJsonPath":"$[0]"}'
+      fields='{"imageIndex": "overview", "imageJsonPath":"$[0].url", "titleIndex": "resourceTitleObject", "titleJsonPath":"$.default", "titleSize":"h4", "subTitleIndex": "custodianOrgForResource", "subTitleJsonPath":"", "textIndex": "resourceHookAbstractObject", "textJsonPath":"$.default","linkIndex": "mw-gp-thematicMap", "linkJsonPath":"$[0].url", "linkIcon":"map", "linkButtonColor":"green", "linkHook":"Découvrir", "infoIndex": "revisionDateForResource","infoJsonPath":"$[0]"}'
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
       sorttype="asc"
       sortby="custodianOrgForResource"

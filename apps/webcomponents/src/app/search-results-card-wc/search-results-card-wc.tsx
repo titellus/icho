@@ -31,8 +31,10 @@ export function SearchResultsCardWc({
   /*console.log(cardTemplate)
   console.log(EsFields)*/
   let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/search/"
+  let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/records/{uuid}"
   if (catalogueurl && catalogueurl != ''){
     url = catalogueurl + "/api/search/"
+    landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
   }
   console.log(url)
   return (
@@ -41,6 +43,7 @@ export function SearchResultsCardWc({
       filter={filter}
       filterField={filterfield}
       fields={fields}
+      landingPageUrlTemplate ={landingPageUrlTemplate}
       size={parseInt(size)}
       sortBy={sortby}
       sortType={sorttype}
