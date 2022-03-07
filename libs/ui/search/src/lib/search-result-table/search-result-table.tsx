@@ -75,7 +75,7 @@ export function SearchResultTable({ data,
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {data.map((dataTtem: any, index) => (
+        {data.map((dataItem: any, index) => (
           <Table.Row key={index}>
             {columnNameArray.map((columnNameItem: string, j) => (
               <Table.Cell key={j}>
@@ -84,16 +84,16 @@ export function SearchResultTable({ data,
                     as: landingPageLink === fieldsItem.columnIndex ? "a" : "div"
                   };
                   if (landingPageUrlTemplate && landingPageLink === fieldsItem.columnIndex) {
-                    attributes.href = landingPageUrlTemplate.replace("{uuid}", dataTtem["_id"]);
+                    attributes.href = landingPageUrlTemplate.replace("{uuid}", dataItem["_id"]);
                   }
                   return (
                     <span key={k}>
                 {fieldsItem.columnName === columnNameItem ? (
                   <Container {...attributes} fluid={true}>
-                    {dataTtem[fieldsItem.columnIndex] ? (
+                    {dataItem[fieldsItem.columnIndex] ? (
                       fieldsItem.columnJsonPath === '' ?
-                        dataTtem[fieldsItem.columnIndex] :
-                        <HtmlType value={dataTtem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
+                        dataItem[fieldsItem.columnIndex] :
+                        <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
                                   label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon}
                                   iconValue={fieldsItem.columnIcon}/>
                     ) : ""}
