@@ -1,5 +1,5 @@
 import './search-result-card.module.scss';
-import {Card, Icon, Image} from 'semantic-ui-react'
+import {Card, Icon, Image, SemanticWIDTHS} from 'semantic-ui-react'
 import {SortOption} from "../search-result-table-sort/search-result-table-sort";
 import React from "react";
 import jp from 'jsonpath';
@@ -20,6 +20,7 @@ export interface templateCard {
   textJsonPath: string;
   link: string;
   linkJsonPath: string;
+  linkIcon:string;
   info: string;
   infoJsonPath: string;
 }
@@ -27,13 +28,14 @@ export interface templateCard {
 interface Props {
   data: Array<Record<string, unknown>>;
   template: templateCard
+  itemsPerRow:SemanticWIDTHS | undefined;
 }
 
-export function SearchResultCard({data, template}: Props) {
+export function SearchResultCard({data, template,itemsPerRow}: Props) {
   console.log(data)
   return (
     <div>
-      <Card.Group>
+      <Card.Group centered itemsPerRow={itemsPerRow}>
         {data.map((dataItem: any) => (
           <Card key={dataItem._id}>
             {dataItem[template.image] ? (

@@ -2,6 +2,7 @@ import './search-results-card-wc.module.scss';
 import React from "react";
 import PropTypes from "prop-types";
 import {SearchResultCardWrapper} from "@catalogue/ui/search";
+import {SemanticWIDTHS} from "semantic-ui-react";
 
 
 export function SearchResultsCardWc({
@@ -11,7 +12,8 @@ export function SearchResultsCardWc({
   fields= "resourceTitleObject",
   catalogueurl="",
   sortby="",
-  sorttype=""
+  sorttype="",
+  itemsperrow = undefined,
 }) {
 
   /*let cardTemplate = [];
@@ -42,6 +44,7 @@ export function SearchResultsCardWc({
       size={parseInt(size)}
       sortBy={sortby}
       sortType={sorttype}
+      itemsPerRow={itemsperrow}
     />
   );
 }
@@ -53,7 +56,8 @@ SearchResultsCardWc.propTypes = {
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
   sortby:PropTypes.string,
-  sorttype:PropTypes.string
+  sorttype:PropTypes.string,
+  itemsperrow: undefined,
 };
 
 export default SearchResultsCardWc;

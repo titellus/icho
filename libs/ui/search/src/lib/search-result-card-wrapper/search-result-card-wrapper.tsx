@@ -2,7 +2,7 @@ import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
 import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import {MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import { Grid } from "semantic-ui-react";
+import {Grid, SemanticWIDTHS} from "semantic-ui-react";
 
 import SearchResultTable from "../search-result-table/search-result-table";
 
@@ -19,6 +19,7 @@ interface Props {
   size?: number;
   sortBy?:string;
   sortType?:string;
+  itemsPerRow?:SemanticWIDTHS;
 }
 
 export function SearchResultCardWrapper({catalogueUrl,
@@ -27,7 +28,8 @@ export function SearchResultCardWrapper({catalogueUrl,
                                           fields,
                                           size,
                                           sortType,
-                                          sortBy}: Props) {
+                                          sortBy,
+                                          itemsPerRow}: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
     default_query = {
@@ -106,6 +108,7 @@ export function SearchResultCardWrapper({catalogueUrl,
             <SearchResultCard
               data={data}
               template = {cardTemplate}
+              itemsPerRow={itemsPerRow}
             />
           );
         }}
