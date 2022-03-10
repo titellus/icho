@@ -55,7 +55,6 @@ toggleismultiselect="false"
 togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
 -->
 
-<!--
     <catalogue-results-table
       fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
       {"columnName":"Image","columnIndex":"overview","columnJsonPath":"$[0].url"} |
@@ -75,19 +74,36 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       sorttype="desc"
       sortby="custodianOrgForResource"
     ></catalogue-results-table>
--->
 
     <h1>Exemple Service cards</h1>
 
     <catalogue-results-card
       filter=""
-      size="25"
-      itemsperrow="3"
+      size="5"
+      itemsperrow="4"
       filterfield="th_Themes_geoportail_wallon_hierarchy.default"
-      fields='{"imageIndex": "overview", "imageJsonPath":"$[0].url", "titleIndex": "resourceTitleObject", "titleJsonPath":"$.default", "titleSize":"h4", "subTitleIndex": "custodianOrgForResource", "subTitleJsonPath":"", "textIndex": "resourceHookAbstractObject", "textJsonPath":"$.default","linkIndex": "mw-gp-thematicMap", "linkJsonPath":"$[0].url", "linkIcon":"map", "linkButtonColor":"green", "linkHook":"Découvrir", "infoIndex": "revisionDateForResource","infoJsonPath":"$[0]"}'
+      fields='{"imageIndex": "overview", "imageJsonPath":"$[0].url", "titleIndex": "resourceTitleObject", "titleJsonPath":"$.default", "titleSize":"h4", "subTitleIndex": "custodianOrgForResource", "subTitleJsonPath":"", "textIndex": "resourceHookAbstractObject", "textJsonPath":"$.default","linkIndex": "mw-gp-thematicMap", "linkJsonPath":"$[0].url", "linkIcon":"map", "linkButtonColor":"green", "linkHook":"Découvrir"}'
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
       sorttype="asc"
       sortby="custodianOrgForResource"
     ></catalogue-results-card>
+
+    <h1>Exemple Tableau des service (#702)</h1>
+
+    <catalogue-results-table
+      fields='{"columnName":"Nom du service","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
+      {"columnName":"Type de service","columnIndex":"serviceType","columnJsonPath":""} |
+      {"columnName":"Protocole","columnIndex":"linkProtocol","columnJsonPath":"", "columnLabel":"red"} |
+      {"columnName":"Point d accès","columnIndex":"linkUrl","columnJsonPath":""} |
+      {"columnName":"Gestionnaire","columnIndex":"custodianOrgForResource","columnJsonPath":""}'
+      filterfield="linkProtocol"
+      togglefilterfield="serviceType"
+      toggleismultiselect="true"
+      togglelabel='{"label": "Consultation", "value": "view"} | {"label": "Download", "value": "download"}'
+      filter="+(resourceType:service) -(cl_status.key:obsolete)"
+      size="4"
+      catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
+    ></catalogue-results-table>
+
   </body>
 </html>

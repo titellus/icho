@@ -91,8 +91,6 @@ export function SearchResultTable({ data,
                 {fieldsItem.columnName === columnNameItem ? (
                   <Container {...attributes} fluid={true}>
                     {dataItem[fieldsItem.columnIndex] ? (
-                      fieldsItem.columnJsonPath === '' ?
-                        dataItem[fieldsItem.columnIndex] :
                         <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
                                   label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon}
                                   iconValue={fieldsItem.columnIcon}/>
@@ -135,7 +133,14 @@ function HtmlType({
   if (iconValue) {
     icon = <Icon name={iconValue}/>
   }
-  if (jsonPath.endsWith('url')) {
+  if(jsonPath === '') {
+    if (value.toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+      linkStyle =<a href={value.toString()}> {icon} {value}</a>;
+    } else {
+      linkStyle =<span> {icon} {value}</span>;
+    }
+  }
+  else if (jsonPath.endsWith('url')) {
     let url = jp.query(value, jsonPath).toString()
     if (jp.query(value, jsonPath.replace('url', 'name')).length > 0) {
       linkStyle = <a href={jp.query(value, jsonPath).toString()}> {icon}
@@ -154,7 +159,11 @@ function HtmlType({
     }
   } else {
     if (jp.query(value, jsonPath).toString() != '') {
-      linkStyle = <span> {icon} {jp.query(value, jsonPath)}</span>;
+      if (jp.query(value, jsonPath).toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+        linkStyle =<a href={jp.query(value, jsonPath).toString()}> {icon} {jp.query(value, jsonPath)}</a>;
+      } else {
+        linkStyle = <span> {icon} {jp.query(value, jsonPath)}</span>;
+      }
     } else {
       linkStyle = ''
     }
