@@ -4,6 +4,7 @@ import React, {createRef} from "react";
 import SearchResultTableSort, {SortOption} from "../search-result-table-sort/search-result-table-sort";
 import jp from "jsonpath";
 import {FieldDescription} from "../search-result-table-wrapper/search-result-table-wrapper";
+import {object} from "prop-types";
 
 interface Props {
   data: Array<Record<string, unknown>>;
@@ -120,6 +121,8 @@ interface HtmlTypeProps {
   ribon?: Object;
 }
 
+
+
 function HtmlType({
                     jsonPath,
                     value,
@@ -130,14 +133,32 @@ function HtmlType({
   let linkStyle;
   let icon;
   let result;
+
+
   if (iconValue) {
     icon = <Icon name={iconValue}/>
   }
-  if(jsonPath === '') {
-    if (value.toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
-      linkStyle =<a href={value.toString()}> {icon} {value}</a>;
-    } else {
-      linkStyle =<span> {icon} {value}</span>;
+  if(jsonPath === '' && value) {
+    if (typeof value != "string") {
+      linkStyle ='';
+      // @ts-ignore
+      for(let elem of value){
+        let elemlinkStyle =null;
+        if (elem.toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+          elemlinkStyle = <React.Fragment><a href={elem.toString()}> {icon} {elem}</a><br/></React.Fragment>;
+        } else {
+          elemlinkStyle = <React.Fragment><span> {icon} {elem}</span><br/></React.Fragment>;
+        }
+        linkStyle = [linkStyle,elemlinkStyle]
+      }
+      linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
+    }
+  if (typeof value === "string") {
+      if (value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+        linkStyle =<React.Fragment><a href={value.toString()}> {icon} {value}</a><br/></React.Fragment>;
+      } else {
+        linkStyle =<React.Fragment><span> {icon} {value}</span><br/></React.Fragment>;
+      }
     }
   }
   else if (jsonPath.endsWith('url')) {
