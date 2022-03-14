@@ -1,8 +1,8 @@
 import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
-import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
-import {MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {Grid, SemanticWIDTHS} from "semantic-ui-react";
+//import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
+import {DataSearch, MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
+import {Dropdown, Grid, SemanticWIDTHS} from "semantic-ui-react";
 
 import SearchResultTable from "../search-result-table/search-result-table";
 
@@ -16,18 +16,25 @@ interface Props {
   filter?: string;
   fields:string;
   filterField?: string;
+  filterField_2?: string;
+  fullTextFilter: Array<string>;
   size?: number;
   sortBy?:string;
   sortType?:string;
+  sortByList?:string;
   itemsPerRow?:SemanticWIDTHS;
   landingPageUrlTemplate: string;
 }
 
+
 export function SearchResultCardWrapper({catalogueUrl,
                                           filter,
                                           filterField,
+                                          filterField_2,
                                           fields,
+                                          fullTextFilter,
                                           size,
+                                          sortByList,
                                           sortType,
                                           sortBy,
                                           itemsPerRow,
@@ -38,10 +45,30 @@ export function SearchResultCardWrapper({catalogueUrl,
       query_string: { query: filter }
     };
   }
+
+  interface SortOption {
+    field: string;
+    order: string;
+  }
+
+  enum SortOrder {
+    asc = "asc",
+    desc = "desc"
+  }
+
   const DEFAULT_SORT = {
     field: sortBy || "_score",
-    order: sortType ||SortOrder.asc
+    order: sortType ||SortOrder.asc,
   };
+
+  interface sortElementTemplate {
+    field:  string;
+    order:  string;
+    value: string;
+    text: string;
+    key: string;
+    icon: string;
+  }
 
   let EsFields=[]
   let fieldsTs: {[key: string]: string} = JSON.parse(fields)
@@ -54,19 +81,87 @@ export function SearchResultCardWrapper({catalogueUrl,
   let cardTemplate = JSON.parse(fields)
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
+ //TODO refactor the sortArray, sortElementTemplate, sortArrayOptions mechanisms
+  let sortArrayOptions:Array<sortElementTemplate>=[]
+  let sortElementTemplate:sortElementTemplate = {
+    field:  "",
+    order:  "",
+    value: "",
+    text:"",
+    key: "",
+    icon: "",
+  }
+  let resetSortElementTemplate = sortElementTemplate;
+
+  if (sortByList){
+    // @ts-ignore
+    let sortByListArray = []
+    for (const element of sortByList.split("|")) {
+      sortByListArray.push(JSON.parse(element))
+    }
+    for (let sortElement of sortByListArray) {
+      let sortElementTemplate:sortElementTemplate = {
+        field:  "",
+        order:  "",
+        value: "",
+        text:"",
+        key: "",
+        icon: "",
+      }
+      sortElementTemplate['field']=sortElement.sortIndexRef;
+      sortElementTemplate['order']='asc';
+      sortElementTemplate['value']= sortElement.sortIndexRef.toString() +'_asc';
+      sortElementTemplate['text']= sortElement.sortName.toString() +' (asc)';
+      sortElementTemplate['key']= sortElement.sortIndexRef.toString() +'_asc';
+      sortElementTemplate['icon']= 'arrow up';
+      sortArrayOptions.push(sortElementTemplate)
+      sortElementTemplate = {
+        field:  "",
+        order:  "",
+        value: "",
+        text:"",
+        key: "",
+        icon: "",
+      }
+      sortElementTemplate['field']=sortElement.sortIndexRef;
+      sortElementTemplate['order']='desc';
+      sortElementTemplate['value']= sortElement.sortIndexRef.toString()+'_desc';
+      sortElementTemplate['text']= sortElement.sortName.toString() +' (desc)';
+      sortElementTemplate['key']= sortElement.sortIndexRef.toString()  +'_desc';
+      sortElementTemplate['icon']= 'arrow down';
+      sortArrayOptions.push(sortElementTemplate)
+    }
+  }
   return (
     <ReactiveBase
       app="records"
       url={catalogueUrl}
       enableAppbase={false}
     >
-      <Grid columns={3} divided>
+      <Grid columns={4} divided>
         <Grid.Row>
-          <Grid.Column width={4}>
+          <Grid.Column width={4} floated='left'>
+            { fullTextFilter.length > 0 ?
+              <DataSearch
+                componentId="cardFullTextFilter"
+                dataField={fullTextFilter}
+                showClear={true}
+                placeholder="Search ..."
+                autosuggest={false}
+                debounce={200}
+              />:""}
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column width={3} floated='left'>
+          {filterField_2 && (
+          <MultiDropdownList componentId="cardQuickFilter_2"
+                             dataField={filterField_2}
+                             defaultQuery={() => ({
+                               query: default_query
+                             })}
+                             placeholder="Focus on" />
+          )}
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column width={3} floated='left'>
       {filterField && (
         <MultiDropdownList componentId="cardQuickFilter"
                            dataField={filterField}
@@ -76,6 +171,26 @@ export function SearchResultCardWrapper({catalogueUrl,
                            placeholder="Focus on" />
       )}
         </Grid.Column>
+          <Grid.Column width={2} floated='right'>
+            <Dropdown placeholder='Tri'
+                      search
+                      selection
+                      labeled
+                      options={sortArrayOptions}
+                      onChange={(e,data)=> {
+                        console.log(data.value)
+                        // @ts-ignore
+                        const fieldValue = data.value.toString().split('_')[0]
+                        // @ts-ignore
+                        const orderValue =  data?.value.toString().split('_')[1]
+                        const sort = {
+                          field: fieldValue,
+                          order: orderValue
+                        }
+                        setSort(sort)
+                      }}
+            />
+          </Grid.Column>
         </Grid.Row>
       </Grid>
       <ReactiveList
@@ -91,12 +206,10 @@ export function SearchResultCardWrapper({catalogueUrl,
         includeFields={EsFields}
         dataField={"_id"}
         react={{
-          and: ["cardQuickFilter"]
+          and: ["cardQuickFilter","cardFullTextFilter","cardQuickFilter_2"]
         }}
         render={({ loading, error, data }) => {
           if (loading) {
-            console.log('loading');
-            console.log(loading);
             return (
               <span>loadding</span>
             );

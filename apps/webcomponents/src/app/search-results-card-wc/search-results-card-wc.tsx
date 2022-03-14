@@ -9,8 +9,11 @@ export function SearchResultsCardWc({
   size = "10",
   filter = "",
   filterfield = "",
+  filterfield_2 = "",
   fields= "resourceTitleObject",
+  fulltextfilter= "",
   catalogueurl="",
+  sortbylist="",
   sortby="",
   sorttype="",
   itemsperrow = undefined,
@@ -37,14 +40,23 @@ export function SearchResultsCardWc({
     landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
   }
   console.log(url)
+  let textFilter: string[];
+  if (fulltextfilter && fulltextfilter !='') {
+    textFilter = fulltextfilter.split(',')
+  } else {
+    textFilter = []
+  }
   return (
     <SearchResultCardWrapper
       catalogueUrl={url}
       filter={filter}
       filterField={filterfield}
+      filterField_2={filterfield_2}
       fields={fields}
+      fullTextFilter={textFilter}
       landingPageUrlTemplate ={landingPageUrlTemplate}
       size={parseInt(size)}
+      sortByList={sortbylist}
       sortBy={sortby}
       sortType={sorttype}
       itemsPerRow={itemsperrow}
@@ -56,8 +68,11 @@ SearchResultsCardWc.propTypes = {
   size: PropTypes.string,
   filter: PropTypes.string,
   filterfield: PropTypes.string,
+  filterField_2: PropTypes.string,
   fields: PropTypes.string,
+  fulltextfilter: PropTypes.string,
   catalogueurl:PropTypes.string,
+  sortbylist:PropTypes.string,
   sortby:PropTypes.string,
   sorttype:PropTypes.string,
   itemsperrow: undefined,

@@ -84,7 +84,7 @@ export function SearchResultCard({data,
                   ) : ""}
                 </Card.Description>
               </Card.Content>
-              {dataItem[template.infoIndex] || dataItem[template.linkIndex] ? (
+
                 <Card.Content extra>
                 <span className="right floated">
                   {dataItem[template.infoIndex] ? (
@@ -105,7 +105,7 @@ export function SearchResultCard({data,
                       </a>
                     </Button>) : ("")}
                 </Card.Content>
-              ):""}
+
             </Card>
           )
         })}
