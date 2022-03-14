@@ -24,6 +24,7 @@ interface Props {
   sortType?: string;
   sortByList?: string;
   itemsPerRow?: SemanticWIDTHS;
+  marginX?:number;
   landingPageUrlTemplate: string;
 }
 
@@ -40,6 +41,7 @@ export function SearchResultCardWrapper({
                                           sortType,
                                           sortBy,
                                           itemsPerRow,
+                                          marginX,
                                           landingPageUrlTemplate
                                         }: Props) {
   let default_query: Record<string, unknown>;
@@ -234,6 +236,7 @@ export function SearchResultCardWrapper({
               template={cardTemplate}
               landingPageUrlTemplate={landingPageUrlTemplate}
               itemsPerRow={itemsPerRow}
+              marginX={marginX}
             />
           );
         }}

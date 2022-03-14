@@ -40,6 +40,7 @@ interface Props {
   template: templateCard;
   landingPageUrlTemplate: string;
   itemsPerRow:SemanticWIDTHS | undefined;
+  marginX:number | undefined;
 }
 
 interface InfoContentAttributes {
@@ -50,13 +51,21 @@ interface InfoContentAttributes {
 export function SearchResultCard({data,
                                    template,
                                    landingPageUrlTemplate,
-                                   itemsPerRow}: Props) {
+                                   itemsPerRow,marginX}: Props) {
+  let style:any;
+  if (marginX){
+    let margin = marginX +"em";
+    let spacing = 2*marginX +"em";
+    // @ts-ignore
+    let elem = 'calc('+ (100/itemsPerRow) +'% - ' + spacing +')'
+    style = {marginLeft: margin, marginRight: margin, width:elem}
+  }
   return (
     <div>
       <Card.Group centered itemsPerRow={itemsPerRow}>
         {data.map((dataItem: any) => {
           return (
-            <Card key={dataItem._id} >
+            <Card style={style} key={dataItem._id}>
               {dataItem[template.imageIndex] ? (
                 <Image src={template.imageJsonPath === '' ?
                   dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
