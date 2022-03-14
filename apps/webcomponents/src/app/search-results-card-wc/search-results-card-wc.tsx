@@ -17,7 +17,8 @@ export function SearchResultsCardWc({
   sortby="",
   sorttype="",
   itemsperrow = undefined,
-  marginx =undefined
+  marginx = undefined,
+  margintoolsbottom = undefined
 }) {
 
   /*let cardTemplate = [];
@@ -62,6 +63,7 @@ export function SearchResultsCardWc({
       sortType={sorttype}
       itemsPerRow={itemsperrow}
       marginX={marginx}
+      marginToolsBottom={margintoolsbottom}
     />
   );
 }
@@ -79,6 +81,7 @@ SearchResultsCardWc.propTypes = {
   sorttype:PropTypes.string,
   itemsperrow: undefined,
   marginx:PropTypes.number,
+  margintoolsbottom:PropTypes.number,
 };
 
 export default SearchResultsCardWc;

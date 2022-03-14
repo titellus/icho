@@ -25,6 +25,7 @@ interface Props {
   sortByList?: string;
   itemsPerRow?: SemanticWIDTHS;
   marginX?:number;
+  marginToolsBottom?:number;
   landingPageUrlTemplate: string;
 }
 
@@ -42,6 +43,7 @@ export function SearchResultCardWrapper({
                                           sortBy,
                                           itemsPerRow,
                                           marginX,
+                                          marginToolsBottom,
                                           landingPageUrlTemplate
                                         }: Props) {
   let default_query: Record<string, unknown>;
@@ -137,13 +139,18 @@ export function SearchResultCardWrapper({
       sortArrayOptions.push(sortElementTemplate)
     }
   }
+  let styleTools:any;
+  if (marginToolsBottom){
+    let marginBottom = marginToolsBottom +"em";
+    styleTools = {marginBottom: marginBottom}
+  }
   return (
     <ReactiveBase
       app="records"
       url={catalogueUrl}
       enableAppbase={false}
     >
-      <Grid columns={4} divided>
+      <Grid columns={4} divided style={styleTools}>
         <Grid.Row>
           <Grid.Column width={4} floated='left'>
             {fullTextFilter.length > 0 ?
