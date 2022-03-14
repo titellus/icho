@@ -9,25 +9,27 @@ import SearchResultTable from "../search-result-table/search-result-table";
 import SearchResultCard from "../search-result-card/search-result-card";
 
 /* eslint-disable-next-line */
-export interface SearchResultCardWrapperProps {}
+export interface SearchResultCardWrapperProps {
+}
 
 interface Props {
   catalogueUrl: string;
   filter?: string;
-  fields:string;
+  fields: string;
   filterField?: string;
   filterField_2?: string;
   fullTextFilter: Array<string>;
   size?: number;
-  sortBy?:string;
-  sortType?:string;
-  sortByList?:string;
-  itemsPerRow?:SemanticWIDTHS;
+  sortBy?: string;
+  sortType?: string;
+  sortByList?: string;
+  itemsPerRow?: SemanticWIDTHS;
   landingPageUrlTemplate: string;
 }
 
 
-export function SearchResultCardWrapper({catalogueUrl,
+export function SearchResultCardWrapper({
+                                          catalogueUrl,
                                           filter,
                                           filterField,
                                           filterField_2,
@@ -38,11 +40,12 @@ export function SearchResultCardWrapper({catalogueUrl,
                                           sortType,
                                           sortBy,
                                           itemsPerRow,
-                                          landingPageUrlTemplate}: Props) {
+                                          landingPageUrlTemplate
+                                        }: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
     default_query = {
-      query_string: { query: filter }
+      query_string: {query: filter}
     };
   }
 
@@ -58,20 +61,20 @@ export function SearchResultCardWrapper({catalogueUrl,
 
   const DEFAULT_SORT = {
     field: sortBy || "_score",
-    order: sortType ||SortOrder.asc,
+    order: sortType || SortOrder.asc,
   };
 
   interface sortElementTemplate {
-    field:  string;
-    order:  string;
+    field: string;
+    order: string;
     value: string;
     text: string;
     key: string;
     icon: string;
   }
 
-  let EsFields=[]
-  let fieldsTs: {[key: string]: string} = JSON.parse(fields)
+  let EsFields = []
+  let fieldsTs: { [key: string]: string } = JSON.parse(fields)
   for (const [key, value] of Object.entries(fieldsTs)) {
     if (key.endsWith('Index')) {
       EsFields.push(value)
@@ -81,54 +84,54 @@ export function SearchResultCardWrapper({catalogueUrl,
   let cardTemplate = JSON.parse(fields)
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
- //TODO refactor the sortArray, sortElementTemplate, sortArrayOptions mechanisms
-  let sortArrayOptions:Array<sortElementTemplate>=[]
-  let sortElementTemplate:sortElementTemplate = {
-    field:  "",
-    order:  "",
+  //TODO refactor the sortArray, sortElementTemplate, sortArrayOptions mechanisms
+  let sortArrayOptions: Array<sortElementTemplate> = []
+  let sortElementTemplate: sortElementTemplate = {
+    field: "",
+    order: "",
     value: "",
-    text:"",
+    text: "",
     key: "",
     icon: "",
   }
   let resetSortElementTemplate = sortElementTemplate;
 
-  if (sortByList){
+  if (sortByList) {
     // @ts-ignore
     let sortByListArray = []
     for (const element of sortByList.split("|")) {
       sortByListArray.push(JSON.parse(element))
     }
     for (let sortElement of sortByListArray) {
-      let sortElementTemplate:sortElementTemplate = {
-        field:  "",
-        order:  "",
+      let sortElementTemplate: sortElementTemplate = {
+        field: "",
+        order: "",
         value: "",
-        text:"",
+        text: "",
         key: "",
         icon: "",
       }
-      sortElementTemplate['field']=sortElement.sortIndexRef;
-      sortElementTemplate['order']='asc';
-      sortElementTemplate['value']= sortElement.sortIndexRef.toString() +'_asc';
-      sortElementTemplate['text']= sortElement.sortName.toString() +' (asc)';
-      sortElementTemplate['key']= sortElement.sortIndexRef.toString() +'_asc';
-      sortElementTemplate['icon']= 'arrow up';
+      sortElementTemplate['field'] = sortElement.sortIndexRef;
+      sortElementTemplate['order'] = 'asc';
+      sortElementTemplate['value'] = sortElement.sortIndexRef.toString() + '_asc';
+      sortElementTemplate['text'] = sortElement.sortName.toString() + ' (asc)';
+      sortElementTemplate['key'] = sortElement.sortIndexRef.toString() + '_asc';
+      sortElementTemplate['icon'] = 'arrow up';
       sortArrayOptions.push(sortElementTemplate)
       sortElementTemplate = {
-        field:  "",
-        order:  "",
+        field: "",
+        order: "",
         value: "",
-        text:"",
+        text: "",
         key: "",
         icon: "",
       }
-      sortElementTemplate['field']=sortElement.sortIndexRef;
-      sortElementTemplate['order']='desc';
-      sortElementTemplate['value']= sortElement.sortIndexRef.toString()+'_desc';
-      sortElementTemplate['text']= sortElement.sortName.toString() +' (desc)';
-      sortElementTemplate['key']= sortElement.sortIndexRef.toString()  +'_desc';
-      sortElementTemplate['icon']= 'arrow down';
+      sortElementTemplate['field'] = sortElement.sortIndexRef;
+      sortElementTemplate['order'] = 'desc';
+      sortElementTemplate['value'] = sortElement.sortIndexRef.toString() + '_desc';
+      sortElementTemplate['text'] = sortElement.sortName.toString() + ' (desc)';
+      sortElementTemplate['key'] = sortElement.sortIndexRef.toString() + '_desc';
+      sortElementTemplate['icon'] = 'arrow down';
       sortArrayOptions.push(sortElementTemplate)
     }
   }
@@ -141,7 +144,7 @@ export function SearchResultCardWrapper({catalogueUrl,
       <Grid columns={4} divided>
         <Grid.Row>
           <Grid.Column width={4} floated='left'>
-            { fullTextFilter.length > 0 ?
+            {fullTextFilter.length > 0 ?
               <DataSearch
                 componentId="cardFullTextFilter"
                 dataField={fullTextFilter}
@@ -149,40 +152,46 @@ export function SearchResultCardWrapper({catalogueUrl,
                 placeholder="Search ..."
                 autosuggest={false}
                 debounce={200}
-              />:""}
-        </Grid.Column>
-        <Grid.Column width={3} floated='left'>
-          {filterField_2 && (
-          <MultiDropdownList componentId="cardQuickFilter_2"
-                             dataField={filterField_2}
-                             defaultQuery={() => ({
-                               query: default_query
-                             })}
-                             placeholder="Focus on" />
-          )}
-        </Grid.Column>
-        <Grid.Column width={3} floated='left'>
-      {filterField && (
-        <MultiDropdownList componentId="cardQuickFilter"
-                           dataField={filterField}
-                           defaultQuery={() => ({
-                             query: default_query
-                           })}
-                           placeholder="Focus on" />
-      )}
-        </Grid.Column>
+              /> : ""}
+          </Grid.Column>
+          <Grid.Column width={3} floated='left'>
+            {filterField_2 && (
+              <MultiDropdownList componentId="cardQuickFilter_2"
+                                 dataField={filterField_2}
+                                 defaultQuery={() => ({
+                                   query: default_query
+                                 })}
+                                 placeholder="Focus on"
+                                 react={{
+                                   and: ["cardQuickFilter", "cardFullTextFilter"]
+                                 }}/>
+            )}
+          </Grid.Column>
+          <Grid.Column width={3} floated='left'>
+            {filterField && (
+              <MultiDropdownList componentId="cardQuickFilter"
+                                 dataField={filterField}
+                                 defaultQuery={() => ({
+                                   query: default_query
+                                 })}
+                                 placeholder="Focus on"
+                                 react={{
+                                   and: ["cardQuickFilter_2", "cardFullTextFilter"]
+                                 }}/>
+            )}
+          </Grid.Column>
           <Grid.Column width={2} floated='right'>
             <Dropdown placeholder='Tri'
                       search
                       selection
                       labeled
                       options={sortArrayOptions}
-                      onChange={(e,data)=> {
+                      onChange={(e, data) => {
                         console.log(data.value)
                         // @ts-ignore
                         const fieldValue = data.value.toString().split('_')[0]
                         // @ts-ignore
-                        const orderValue =  data?.value.toString().split('_')[1]
+                        const orderValue = data?.value.toString().split('_')[1]
                         const sort = {
                           field: fieldValue,
                           order: orderValue
@@ -199,16 +208,16 @@ export function SearchResultCardWrapper({catalogueUrl,
         pagination={true}
         showResultStats={true}
         defaultQuery={() => ({
-          sort: [{ [sort.field]: { order: sort.order } }],
+          sort: [{[sort.field]: {order: sort.order}}],
           //query: { match: { isTemplate: "n" } }
           query: default_query
         })}
         includeFields={EsFields}
         dataField={"_id"}
         react={{
-          and: ["cardQuickFilter","cardFullTextFilter","cardQuickFilter_2"]
+          and: ["cardQuickFilter", "cardFullTextFilter", "cardQuickFilter_2"]
         }}
-        render={({ loading, error, data }) => {
+        render={({loading, error, data}) => {
           if (loading) {
             return (
               <span>loadding</span>
@@ -222,7 +231,7 @@ export function SearchResultCardWrapper({catalogueUrl,
           return (
             <SearchResultCard
               data={data}
-              template = {cardTemplate}
+              template={cardTemplate}
               landingPageUrlTemplate={landingPageUrlTemplate}
               itemsPerRow={itemsPerRow}
             />

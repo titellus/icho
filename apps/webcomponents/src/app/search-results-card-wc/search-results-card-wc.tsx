@@ -68,7 +68,7 @@ SearchResultsCardWc.propTypes = {
   size: PropTypes.string,
   filter: PropTypes.string,
   filterfield: PropTypes.string,
-  filterField_2: PropTypes.string,
+  filterfield_2: PropTypes.string,
   fields: PropTypes.string,
   fulltextfilter: PropTypes.string,
   catalogueurl:PropTypes.string,
