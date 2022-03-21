@@ -101,13 +101,15 @@ export function SearchResultCard({data,
                       (<span>{dataItem[template.infoIndex]}<br/></span>) :
                       (<span>{jp.query(dataItem[template.infoIndex], template.infoJsonPath)}<br/></span>)
                   ) : ""}
-                  <a className="right floated" href={landingPageUrlTemplate.replace("{uuid}", dataItem["_id"])}>
+                  <a className="right floated" target="_blank"
+                     href={landingPageUrlTemplate.replace("{uuid}", dataItem["_id"])}>
                     <Icon name="info circle"/>Plus d'infos
                   </a>
                 </span>
                   {dataItem[template.linkIndex] ? (
                     <Button style={{background: template.linkButtonColor}}>
-                      <a style={{color: "white"}} href={template.linkJsonPath === '' ?
+                      <a style={{color: "white"}} target="_blank"
+                         href={template.linkJsonPath === '' ?
                         dataItem[template.linkIndex] : jp.query(dataItem[template.linkIndex], template.linkJsonPath).toString()
                       }>
                         <Icon name={template.linkIcon}/>{template.linkHook}
