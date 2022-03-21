@@ -106,7 +106,7 @@ export function SearchResultCard({data,
                   </a>
                 </span>
                   {dataItem[template.linkIndex] ? (
-                    <Button color={template.linkButtonColor} >
+                    <Button style={{background: template.linkButtonColor}}>
                       <a style={{color: "white"}} href={template.linkJsonPath === '' ?
                         dataItem[template.linkIndex] : jp.query(dataItem[template.linkIndex], template.linkJsonPath).toString()
                       }>
