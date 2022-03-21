@@ -156,9 +156,10 @@ export function SearchResultCardWrapper({
       url={catalogueUrl}
       enableAppbase={false}
     >
-      <Grid columns={4} divided style={styleTools}>
+      <div style={{margin:"1em"}}>
+      <Grid columns={4} style={styleTools}>
         <Grid.Row>
-          <Grid.Column width={4} floated='left'>
+          <Grid.Column width={3} floated='left'>
             {fullTextFilter.length > 0 ?
               <DataSearch
                 componentId="cardFullTextFilter"
@@ -195,7 +196,7 @@ export function SearchResultCardWrapper({
                                  }}/>
             )}
           </Grid.Column>
-          <Grid.Column width={2} floated='right'>
+          <Grid.Column width={3} floated='right'>
             <Dropdown placeholder='Tri'
                       search
                       selection
@@ -254,6 +255,7 @@ export function SearchResultCardWrapper({
           );
         }}
       />
+      </div>
     </ReactiveBase>
   );
 }
