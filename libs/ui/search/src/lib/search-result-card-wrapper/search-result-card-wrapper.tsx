@@ -16,8 +16,11 @@ interface Props {
   catalogueUrl: string;
   filter?: string;
   fields: string;
+  search_placeholder?:string;
   filterField?: string;
+  filterField_placeholder?:string;
   filterField_2?: string;
+  filterField_2_placeholder?:string;
   fullTextFilter: Array<string>;
   size?: number;
   sortBy?: string;
@@ -33,8 +36,11 @@ interface Props {
 export function SearchResultCardWrapper({
                                           catalogueUrl,
                                           filter,
+                                          search_placeholder,
                                           filterField,
+                                          filterField_placeholder,
                                           filterField_2,
+                                          filterField_2_placeholder,
                                           fields,
                                           fullTextFilter,
                                           size,
@@ -158,7 +164,7 @@ export function SearchResultCardWrapper({
                 componentId="cardFullTextFilter"
                 dataField={fullTextFilter}
                 showClear={true}
-                placeholder="Search ..."
+                placeholder={search_placeholder}
                 autosuggest={false}
                 debounce={200}
               /> : ""}
@@ -170,7 +176,7 @@ export function SearchResultCardWrapper({
                                  defaultQuery={() => ({
                                    query: default_query
                                  })}
-                                 placeholder="Focus on"
+                                 placeholder={filterField_2_placeholder}
                                  react={{
                                    and: ["cardQuickFilter", "cardFullTextFilter"]
                                  }}/>
@@ -183,7 +189,7 @@ export function SearchResultCardWrapper({
                                  defaultQuery={() => ({
                                    query: default_query
                                  })}
-                                 placeholder="Focus on"
+                                 placeholder={filterField_placeholder}
                                  react={{
                                    and: ["cardQuickFilter_2", "cardFullTextFilter"]
                                  }}/>
@@ -215,7 +221,7 @@ export function SearchResultCardWrapper({
         componentId="reactiveListCard"
         size={size}
         pagination={true}
-        showResultStats={true}
+        showResultStats={false}
         defaultQuery={() => ({
           sort: [{[sort.field]: {order: sort.order}}],
           //query: { match: { isTemplate: "n" } }
@@ -229,7 +235,7 @@ export function SearchResultCardWrapper({
         render={({loading, error, data}) => {
           if (loading) {
             return (
-              <span>loadding</span>
+              <span>loading</span>
             );
           }
           if (error) {

@@ -8,8 +8,11 @@ import {SemanticWIDTHS} from "semantic-ui-react";
 export function SearchResultsCardWc({
   size = "10",
   filter = "",
+  search_placeholder="",
   filterfield = "",
+  filterfield_placeholder="",
   filterfield_2 = "",
+  filterfield_2_placeholder="",
   fields= "resourceTitleObject",
   fulltextfilter= "",
   catalogueurl="",
@@ -52,8 +55,11 @@ export function SearchResultsCardWc({
     <SearchResultCardWrapper
       catalogueUrl={url}
       filter={filter}
+      search_placeholder={search_placeholder}
       filterField={filterfield}
+      filterField_placeholder={filterfield_placeholder}
       filterField_2={filterfield_2}
+      filterField_2_placeholder={filterfield_2_placeholder}
       fields={fields}
       fullTextFilter={textFilter}
       landingPageUrlTemplate ={landingPageUrlTemplate}
@@ -71,8 +77,11 @@ export function SearchResultsCardWc({
 SearchResultsCardWc.propTypes = {
   size: PropTypes.string,
   filter: PropTypes.string,
+  search_placeholder: PropTypes.string,
   filterfield: PropTypes.string,
+  filterfield_placeholder: PropTypes.string,
   filterfield_2: PropTypes.string,
+  filterfield_2_placeholder: PropTypes.string,
   fields: PropTypes.string,
   fulltextfilter: PropTypes.string,
   catalogueurl:PropTypes.string,
