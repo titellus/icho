@@ -66,6 +66,7 @@ export function SearchResultTable({ data,
                     <SearchResultTableSort
                       onChange={handleChange}
                       currentSort={currentSort}
+                      key={fieldsItem.columnIndex + fieldsItem.columnJsonPath.replace('$', '') + type}
                       field={fieldsItem.columnIndex + fieldsItem.columnJsonPath.replace('$', '') + type}
                     />
                   ) : ("")

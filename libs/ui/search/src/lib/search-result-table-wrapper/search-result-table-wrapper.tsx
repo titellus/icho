@@ -105,6 +105,12 @@ export function SearchResultTableWrapper({
     <ReactiveBase
       app="records"
       url={catalogueUrl}
+       transformRequest={(props) => ({
+          ...props,
+         url: props.url + 'relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services'
+       })}
+
+      //url='https://metawal4.test.wallonie.be/geonetwork/srv/api/search/records/_search?bucket=e101&relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services'
       enableAppbase={false}
     >
       <Grid columns={3} divided>
@@ -173,7 +179,6 @@ export function SearchResultTableWrapper({
           </Grid.Column>
         </Grid.Row>
       </Grid>
-
       <ReactiveList
         componentId="tableOfRecord"
         size={size}
