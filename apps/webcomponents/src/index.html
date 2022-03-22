@@ -54,33 +54,33 @@ togglefilterfield="mw-gp-localIdentifierCodespace"
 toggleismultiselect="false"
 togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
 -->
-
-    <!--catalogue-results-table
+    <catalogue-results-table
       fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
       {"columnName":"Titre","columnIndex":"overview","columnJsonPath":"$[0].url"} |
       {"columnName":"Titre","columnIndex":"resourceType","columnJsonPath":"$[0]", "columnLabel":"red", "columnRibon":{"dataset":"blue", "series":"teal","application":"green","service":"green"}} |
       {"columnName":"Nom abrégé","columnIndex":"resourceAltTitleObject","columnJsonPath":"$.default", "columnLabel":"blue"} |
       {"columnName":"Gestionnaire","columnIndex":"custodianOrgForResource","columnJsonPath":""} |
       {"columnName":"Liens","columnIndex":"link","columnJsonPath":"$[0].url","columnIcon":"world", "columnLabel":"red"} |
-      {"columnName":"related","columnIndex":"related","columnJsonPath":""}'
+      {"columnName":"related","columnIndex":"related","columnJsonPath":"$.datasets[?(@.origin==\"portal\")].title.eng"} |
+      {"columnName":"relatedTest","columnIndex":"related","columnJsonPath":"$.services[*].url"}'
       filterfield="th_Themes_geoportail_wallon_hierarchy.default"
       togglefilterfield="th_Themes_geoportail_wallon_hierarchy.default"
       toggleismultiselect="true"
       togglelabel='{"label": "Air", "value": "Air AND Eau"} |
       {"label": "Eau", "value": "Eau"} |
       {"label": "Agriculture", "value": "Agriculture"}'
-      filter=""
-      size="4"
+      filter="+(resourceType:service)"
+      size="100"
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
       sorttype="desc"
       sortby="custodianOrgForResource"
-    ></catalogue-results-table-->
+    ></catalogue-results-table>
 
 
 
     <h1>Exemple Service cards</h1>
 
-    <catalogue-results-card
+    <!--catalogue-results-card--
       filter=""
       size="5"
       itemsperrow="3"
@@ -100,7 +100,7 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       sortby="custodianOrgForResource"
       linkmdt="true"
       imageheight="280"
-    ></catalogue-results-card>
+    ></catalogue-results-card-->
 
 <!--
     <h1>Exemple Tableau des service (#702)</h1>

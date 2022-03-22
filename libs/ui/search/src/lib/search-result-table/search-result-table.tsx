@@ -46,6 +46,16 @@ export function SearchResultTable({ data,
   //Remove duplicated columnName
   columnNameArray = [...new Set(columnNameArray)];
 
+  /*if (data.length > 0) {
+    console.log(data)
+    for (var val of data) {
+      console.log(val.related)
+      // @ts-ignore
+      data["_source"]['related'] = val.related
+    }
+  }*/
+  console.log(data)
+
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
     <Table ref={ref.current}>
@@ -165,9 +175,23 @@ function HtmlType({
   else if (jsonPath.endsWith('url')) {
     let url = jp.query(value, jsonPath).toString()
     if (jp.query(value, jsonPath.replace('url', 'name')).length > 0) {
-      linkStyle = <a href={jp.query(value, jsonPath).toString()}> {icon}
-        {jp.query(value, jsonPath.replace('url', 'name'))}
-      </a>;
+      for (let i in jp.query(value, jsonPath)){
+        let elemlinkStyle =null;
+        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath).toString()}> {icon}
+          {jp.query(value, jsonPath.replace('url', 'name'))}
+        </a><br/></React.Fragment>;
+        linkStyle = [linkStyle,elemlinkStyle]
+      }
+      linkStyle = <React.Fragment>{linkStyle}</React.Fragment>;
+    }
+    else if (jp.query(value, jsonPath.replace('url', 'title')).length > 0) {
+      //TODO to modify depending on the refactoring of the related section
+      for (let i in jp.query(value, jsonPath)){
+        let elemlinkStyle =null;
+        elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath+'.eng')[i].toString()}> {icon}  {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</a><br/></React.Fragment>;
+        linkStyle = [linkStyle,elemlinkStyle]
+      }
+      linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
     } else {
       if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(jp.query(value, jsonPath).toString())) {
         linkStyle = <img alt=""
@@ -182,9 +206,19 @@ function HtmlType({
   } else {
     if (jp.query(value, jsonPath).toString() != '') {
       if (jp.query(value, jsonPath).toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
-        linkStyle =<a href={jp.query(value, jsonPath).toString()}> {icon} {jp.query(value, jsonPath)}</a>;
+        for (let i in jp.query(value, jsonPath)){
+          let elemlinkStyle =null;
+          elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath)[i].toString()}> {icon} {jp.query(value, jsonPath)[i]}</a><br/></React.Fragment>;
+          linkStyle = [linkStyle,elemlinkStyle]
+        }
+        linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
       } else {
-        linkStyle = <span> {icon} {jp.query(value, jsonPath)}</span>;
+        for (let i in jp.query(value, jsonPath)){
+          let elemlinkStyle =null;
+          elemlinkStyle = <React.Fragment><span> {icon} {jp.query(value, jsonPath)[i]}</span><br/></React.Fragment>;
+          linkStyle = [linkStyle,elemlinkStyle]
+        }
+        linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
       }
     } else {
       linkStyle = ''
