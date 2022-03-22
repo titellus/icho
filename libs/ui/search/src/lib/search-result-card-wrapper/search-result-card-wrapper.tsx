@@ -28,8 +28,10 @@ interface Props {
   sortByList?: string;
   itemsPerRow?: SemanticWIDTHS;
   marginX?:number;
+  marginBottom?:number;
   marginToolsBottom?:number;
   landingPageUrlTemplate: string;
+  linkMDT:string;
 }
 
 
@@ -49,8 +51,10 @@ export function SearchResultCardWrapper({
                                           sortBy,
                                           itemsPerRow,
                                           marginX,
+                                          marginBottom,
                                           marginToolsBottom,
-                                          landingPageUrlTemplate
+                                          landingPageUrlTemplate,
+                                          linkMDT
                                         }: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
@@ -251,6 +255,8 @@ export function SearchResultCardWrapper({
               landingPageUrlTemplate={landingPageUrlTemplate}
               itemsPerRow={itemsPerRow}
               marginX={marginX}
+              marginBottom={marginBottom}
+              linkMDT={linkMDT}
             />
           );
         }}
