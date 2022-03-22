@@ -32,6 +32,7 @@ interface Props {
   marginToolsBottom?:number;
   landingPageUrlTemplate: string;
   linkMDT:string;
+  imageHeight?:number;
 }
 
 
@@ -54,7 +55,8 @@ export function SearchResultCardWrapper({
                                           marginBottom,
                                           marginToolsBottom,
                                           landingPageUrlTemplate,
-                                          linkMDT
+                                          linkMDT,
+                                          imageHeight
                                         }: Props) {
   let default_query: Record<string, unknown>;
   if (filter) {
@@ -257,6 +259,7 @@ export function SearchResultCardWrapper({
               marginX={marginX}
               marginBottom={marginBottom}
               linkMDT={linkMDT}
+              imageHeight={imageHeight}
             />
           );
         }}

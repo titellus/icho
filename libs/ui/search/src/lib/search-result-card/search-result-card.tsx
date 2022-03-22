@@ -45,6 +45,7 @@ interface Props {
   marginX: number | undefined;
   marginBottom: number | undefined;
   linkMDT: string;
+  imageHeight: number | undefined;
 }
 
 interface InfoContentAttributes {
@@ -56,15 +57,19 @@ export function SearchResultCard({
                                    data,
                                    template,
                                    landingPageUrlTemplate,
-                                   itemsPerRow, marginX, marginBottom, linkMDT
+                                   itemsPerRow, marginX, marginBottom, linkMDT,imageHeight
                                  }: Props) {
   let style: any;
+  let imgStyle: any;
   if (marginX) {
     let margin = marginX + "em";
     let spacing = 2 * marginX + "em";
     // @ts-ignore
     let elem = 'calc(' + (100 / itemsPerRow) + '% - ' + spacing + ')'
     style = {marginLeft: margin, marginRight: margin, width: elem}
+  }
+  if (imageHeight) {
+    imgStyle = {maxHeight: imageHeight + "px", minHeight: imageHeight + "px", objectFit:"contain"}
   }
   return (
     <div>
@@ -74,7 +79,7 @@ export function SearchResultCard({
             <Card style={style} key={dataItem._id}>
               <div className={"image"}>
                 {dataItem[template.imageIndex] ? (
-                  <img src={template.imageJsonPath === '' ?
+                  <img style={imgStyle} src={template.imageJsonPath === '' ?
                     dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
                   }/>
                 ) : ("")}

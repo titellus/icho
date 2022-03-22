@@ -23,7 +23,8 @@ export function SearchResultsCardWc({
   marginx = undefined,
   marginbottom = undefined,
   margintoolsbottom = undefined,
-  linkmdt = "false"
+  linkmdt = "false",
+  imageheight= undefined
 }) {
 
   /*let cardTemplate = [];
@@ -74,6 +75,7 @@ export function SearchResultsCardWc({
       marginBottom={marginbottom}
       marginToolsBottom={margintoolsbottom}
       linkMDT={linkmdt}
+      imageHeight={imageheight}
     />
   );
 }
@@ -97,6 +99,7 @@ SearchResultsCardWc.propTypes = {
   marginbottom:PropTypes.number,
   margintoolsbottom:PropTypes.number,
   linkmdt:PropTypes.string,
+  imageheight:PropTypes.number
 };
 
 export default SearchResultsCardWc;
