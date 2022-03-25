@@ -163,9 +163,9 @@ export function SearchResultCardWrapper({
       enableAppbase={false}
     >
       <div style={{margin:"1em"}}>
-      <Grid columns={4} style={styleTools}>
-        <Grid.Row>
-          <Grid.Column width={3} floated='left'>
+      <Grid style={styleTools}>
+        <Grid.Row columns={4}>
+          <Grid.Column floated='left'>
             {fullTextFilter.length > 0 ?
               <DataSearch
                 componentId="cardFullTextFilter"
@@ -176,7 +176,7 @@ export function SearchResultCardWrapper({
                 debounce={200}
               /> : ""}
           </Grid.Column>
-          <Grid.Column width={3} floated='left'>
+          <Grid.Column floated='left'>
             {filterField_2 && (
               <MultiDropdownList componentId="cardQuickFilter_2"
                                  dataField={filterField_2}
@@ -189,7 +189,7 @@ export function SearchResultCardWrapper({
                                  }}/>
             )}
           </Grid.Column>
-          <Grid.Column width={3} floated='left'>
+          <Grid.Column floated='left'>
             {filterField && (
               <MultiDropdownList componentId="cardQuickFilter"
                                  dataField={filterField}
@@ -202,9 +202,10 @@ export function SearchResultCardWrapper({
                                  }}/>
             )}
           </Grid.Column>
-          <Grid.Column width={3} floated='right'>
+          <Grid.Column floated='right'>
             <Dropdown placeholder='Tri'
                       search
+                      fluid
                       selection
                       labeled
                       options={sortArrayOptions}
