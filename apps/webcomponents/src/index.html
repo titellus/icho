@@ -55,14 +55,14 @@ toggleismultiselect="false"
 togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
 -->
     <catalogue-results-table
-      fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
-      {"columnName":"Titre","columnIndex":"overview","columnJsonPath":"$[0].url"} |
-      {"columnName":"Titre","columnIndex":"resourceType","columnJsonPath":"$[0]", "columnLabel":"red", "columnRibon":{"dataset":"blue", "series":"teal","application":"green","service":"green"}} |
-      {"columnName":"Nom abrégé","columnIndex":"resourceAltTitleObject","columnJsonPath":"$.default", "columnLabel":"blue"} |
-      {"columnName":"Gestionnaire","columnIndex":"custodianOrgForResource","columnJsonPath":""} |
-      {"columnName":"Liens","columnIndex":"link","columnJsonPath":"$[0].url","columnIcon":"world", "columnLabel":"red"} |
-      {"columnName":"related","columnIndex":"related","columnJsonPath":"$.datasets[?(@.origin==\"portal\")].title.eng"} |
-      {"columnName":"relatedTest","columnIndex":"related","columnJsonPath":"$.services[*].url"}'
+      fields='{"columnName":"Titre","columnIndex":"resourceTitleObject","columnJsonPath":"$.default", "columnWidth":"2"} |
+      {"columnName":"Titre","columnIndex":"overview","columnJsonPath":"$[0].url", "columnWidth":"2"} |
+      {"columnName":"Titre","columnIndex":"resourceType","columnJsonPath":"$[0]", "columnLabel":"red", "columnRibon":{"dataset":"blue", "series":"teal","application":"green","service":"green", "columnWidth":"2"}} |
+      {"columnName":"Nom abrégé","columnIndex":"resourceAltTitleObject","columnJsonPath":"$.default", "columnLabel":"blue", "columnWidth":"2"} |
+      {"columnName":"Gestionnaire","columnIndex":"custodianOrgForResource","columnJsonPath":"", "columnWidth":"2"} |
+      {"columnName":"Liens","columnIndex":"link","columnJsonPath":"$[0].url","columnIcon":"world", "columnLabel":"red", "columnWidth":"2"} |
+      {"columnName":"related","columnIndex":"related","columnJsonPath":"$.datasets[?(@.origin==\"portal\")].title.eng", "columnWidth":"2"} |
+      {"columnName":"Consulter (applications et services)","columnIndex":"mw-gp-allWebServices","columnJsonPath":"$[*].url","columnIcon":"world"}'
       filterfield="th_Themes_geoportail_wallon_hierarchy.default"
       togglefilterfield="th_Themes_geoportail_wallon_hierarchy.default"
       toggleismultiselect="true"

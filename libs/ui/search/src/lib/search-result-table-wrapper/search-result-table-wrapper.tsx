@@ -113,8 +113,9 @@ export function SearchResultTableWrapper({
       //url='https://metawal4.test.wallonie.be/geonetwork/srv/api/search/records/_search?bucket=e101&relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services'
       enableAppbase={false}
     >
-      <Grid columns={3} divided>
-        <Grid.Row>
+      <div style={{margin:"1em"}}>
+      <Grid divided>
+        <Grid.Row columns={3}>
           <Grid.Column width={4}>
             <DataSearch
               componentId="tableFullTextFilter"
@@ -217,6 +218,7 @@ export function SearchResultTableWrapper({
           );
         }}
       />
+      </div>
     </ReactiveBase>
   );
 }

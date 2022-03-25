@@ -58,7 +58,7 @@ export function SearchResultTable({ data,
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
-    <Table ref={ref.current}>
+    <Table ref={ref.current} collapsing>
       {/*<Sticky context={ref.current} as={'thead'}>*/}
       {/*</Sticky>*/}
       <Table.Header>
@@ -160,7 +160,11 @@ function HtmlType({
         } else {
           elemlinkStyle = <React.Fragment><span> {icon} {elem}</span><br/></React.Fragment>;
         }
-        linkStyle = [linkStyle,elemlinkStyle]
+        if(linkStyle===''){
+          linkStyle = [linkStyle,elemlinkStyle]
+        } else {
+          linkStyle = [linkStyle,<br/>,elemlinkStyle]
+        }
       }
       linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
     }
@@ -175,21 +179,31 @@ function HtmlType({
   else if (jsonPath.endsWith('url')) {
     let url = jp.query(value, jsonPath).toString()
     if (jp.query(value, jsonPath.replace('url', 'name')).length > 0) {
+      linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
-        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath).toString()}> {icon}
-          {jp.query(value, jsonPath.replace('url', 'name'))}
+        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath)[i].toString()}> {icon}
+          {jp.query(value, jsonPath.replace('url', 'name'))[i]}
         </a><br/></React.Fragment>;
-        linkStyle = [linkStyle,elemlinkStyle]
+        if(linkStyle === ''){
+          linkStyle = [linkStyle,elemlinkStyle]
+        } else {
+          linkStyle = [linkStyle,<br/>,elemlinkStyle]
+        }
       }
       linkStyle = <React.Fragment>{linkStyle}</React.Fragment>;
     }
     else if (jp.query(value, jsonPath.replace('url', 'title')).length > 0) {
       //TODO to modify depending on the refactoring of the related section
+      linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
         elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath+'.eng')[i].toString()}> {icon}  {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</a><br/></React.Fragment>;
-        linkStyle = [linkStyle,elemlinkStyle]
+        if(linkStyle === ''){
+          linkStyle = [linkStyle,elemlinkStyle]
+        } else {
+          linkStyle = [linkStyle,<br/>,elemlinkStyle]
+        }
       }
       linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
     } else {
@@ -205,18 +219,28 @@ function HtmlType({
     }
   } else {
     if (jp.query(value, jsonPath).toString() != '') {
+      linkStyle ='';
       if (jp.query(value, jsonPath).toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+
         for (let i in jp.query(value, jsonPath)){
           let elemlinkStyle =null;
           elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath)[i].toString()}> {icon} {jp.query(value, jsonPath)[i]}</a><br/></React.Fragment>;
-          linkStyle = [linkStyle,elemlinkStyle]
+          if(linkStyle === ''){
+            linkStyle = [linkStyle,elemlinkStyle]
+          } else {
+            linkStyle = [linkStyle,<br/>,elemlinkStyle]
+          }
         }
         linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
       } else {
         for (let i in jp.query(value, jsonPath)){
           let elemlinkStyle =null;
           elemlinkStyle = <React.Fragment><span> {icon} {jp.query(value, jsonPath)[i]}</span><br/></React.Fragment>;
-          linkStyle = [linkStyle,elemlinkStyle]
+          if(linkStyle === ''){
+            linkStyle = [linkStyle,elemlinkStyle]
+          } else {
+            linkStyle = [linkStyle,<br/>,elemlinkStyle]
+          }
         }
         linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
       }
