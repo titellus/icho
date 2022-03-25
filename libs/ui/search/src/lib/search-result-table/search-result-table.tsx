@@ -58,7 +58,7 @@ export function SearchResultTable({ data,
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
-    <Table ref={ref.current} collapsing>
+    <Table ref={ref.current} fixed>
       {/*<Sticky context={ref.current} as={'thead'}>*/}
       {/*</Sticky>*/}
       <Table.Header>
@@ -156,7 +156,7 @@ function HtmlType({
       for(let elem of value){
         let elemlinkStyle =null;
         if (elem.toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
-          elemlinkStyle = <React.Fragment><a href={elem.toString()}> {icon} {elem}</a><br/></React.Fragment>;
+          elemlinkStyle = <React.Fragment><a href={elem.toString()} style={{wordBreak: "break-all"}}> {icon} {elem}</a><br/></React.Fragment>;
         } else {
           elemlinkStyle = <React.Fragment><span> {icon} {elem}</span><br/></React.Fragment>;
         }
@@ -170,7 +170,7 @@ function HtmlType({
     }
   if (typeof value === "string") {
       if (value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
-        linkStyle =<React.Fragment><a href={value.toString()}> {icon} {value}</a><br/></React.Fragment>;
+        linkStyle =<React.Fragment><a href={value.toString()} style={{wordBreak: "break-all"}}> {icon} {value}</a><br/></React.Fragment>;
       } else {
         linkStyle =<React.Fragment><span> {icon} {value}</span><br/></React.Fragment>;
       }
@@ -212,7 +212,7 @@ function HtmlType({
                          src={jp.query(value, jsonPath).toString()}
                          className={styles.image}/>
       } else {
-        linkStyle = <a href={jp.query(value, jsonPath).toString()}> {icon}
+        linkStyle = <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}> {icon}
           {jp.query(value, jsonPath)}
         </a>;
       }
@@ -224,7 +224,7 @@ function HtmlType({
 
         for (let i in jp.query(value, jsonPath)){
           let elemlinkStyle =null;
-          elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath)[i].toString()}> {icon} {jp.query(value, jsonPath)[i]}</a><br/></React.Fragment>;
+          elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath)[i].toString()} style={{wordBreak: "break-all"}}> {icon} {jp.query(value, jsonPath)[i]}</a><br/></React.Fragment>;
           if(linkStyle === ''){
             linkStyle = [linkStyle,elemlinkStyle]
           } else {
