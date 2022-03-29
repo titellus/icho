@@ -15,7 +15,7 @@ export interface FieldDescription {
   columnLabel?: string;
   columnIcon?: string;
   columnRibon?: Object;
-  columnWidth:SemanticWIDTHS | undefined;
+  columnWidth?:SemanticWIDTHS | undefined;
 }
 
 
