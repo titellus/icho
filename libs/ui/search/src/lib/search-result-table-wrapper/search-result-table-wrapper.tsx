@@ -2,7 +2,7 @@ import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/s
 import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters, ToggleButton } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
-import { Grid, Placeholder, Table, TableCell } from "semantic-ui-react";
+import { Grid, Placeholder, Table, TableCell,SemanticWIDTHS } from "semantic-ui-react";
 
 /* eslint-disable-next-line */
 export interface ResultTableProps {
@@ -15,6 +15,7 @@ export interface FieldDescription {
   columnLabel?: string;
   columnIcon?: string;
   columnRibon?: Object;
+  columnWidth:SemanticWIDTHS | undefined;
 }
 
 

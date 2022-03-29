@@ -1,5 +1,5 @@
 import styles from "./search-result-table.module.scss";
-import {Container, Icon, Label, Sticky, Table} from "semantic-ui-react";
+import {Container, Icon, Label, Sticky, Table, SemanticWIDTHS} from "semantic-ui-react";
 import React, {createRef} from "react";
 import SearchResultTableSort, {SortOption} from "../search-result-table-sort/search-result-table-sort";
 import jp from "jsonpath";
@@ -13,6 +13,11 @@ interface Props {
   fields: Array<FieldDescription>
   handleSetSort: (newValue: SortOption) => void;
   currentSort: SortOption;
+}
+
+interface TableCell {
+  columnName:string;
+  columnWidth:SemanticWIDTHS | undefined;
 }
 
 
@@ -39,40 +44,42 @@ export function SearchResultTable({ data,
     handleSetSort(newValue);
   }
 
-  let columnNameArray: Array<string> = []
+  let columnNameArray: Array<TableCell> = []
   for (const element of fields) {
-    columnNameArray.push(element.columnName)
+    let cellInfo:TableCell = {
+      'columnName':'',
+      'columnWidth':undefined
+    }
+    cellInfo.columnName = element.columnName
+    cellInfo.columnWidth = element?.columnWidth
+    //columnNameArray.push(element.columnName)
+    if(columnNameArray.some(elemArray => elemArray.columnName === element.columnName)){
+    } else{
+      columnNameArray.push(cellInfo)
+    }
   }
   //Remove duplicated columnName
-  columnNameArray = [...new Set(columnNameArray)];
+  //columnNameArray = [...new Set(columnNameArray)];
 
-  /*if (data.length > 0) {
-    console.log(data)
-    for (var val of data) {
-      console.log(val.related)
-      // @ts-ignore
-      data["_source"]['related'] = val.related
-    }
-  }*/
   console.log(data)
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
-    <Table ref={ref.current} fixed>
+    <Table ref={ref.current} >
       {/*<Sticky context={ref.current} as={'thead'}>*/}
       {/*</Sticky>*/}
       <Table.Header>
         <Table.Row>
-          {columnNameArray.map((elem: string, i) => (
-            <Table.HeaderCell key={i}>
-              {elem}
+          {columnNameArray.map((tableCellInfo: TableCell, i) => (
+            <Table.HeaderCell key={i} width={tableCellInfo.columnWidth}>
+              {tableCellInfo.columnName}
               {fields.map((fieldsItem: any, k) => {
                 let type = ""
                 if (fieldsItem.columnJsonPath.endsWith('default')) {
                   type = '.keyword'
                 }
                 return (
-                  (fieldsItem.columnName === elem && (fieldsItem.columnJsonPath === "" || type != "")) ? (
+                  (fieldsItem.columnName === tableCellInfo.columnName && (fieldsItem.columnJsonPath === "" || type != "")) ? (
                     <SearchResultTableSort
                       onChange={handleChange}
                       currentSort={currentSort}
@@ -89,7 +96,7 @@ export function SearchResultTable({ data,
       <Table.Body>
         {data.map((dataItem: any, index) => (
           <Table.Row key={index}>
-            {columnNameArray.map((columnNameItem: string, j) => (
+            {columnNameArray.map((tableCellInfo: TableCell, j) => (
               <Table.Cell key={j}>
                 {fields.map((fieldsItem: any, k) => {
                   let attributes: CellContentAttributes = {
@@ -100,7 +107,7 @@ export function SearchResultTable({ data,
                   }
                   return (
                     <span key={k}>
-                {fieldsItem.columnName === columnNameItem ? (
+                {fieldsItem.columnName === tableCellInfo.columnName? (
                   <Container {...attributes} fluid={true}>
                     {dataItem[fieldsItem.columnIndex] ? (
                         <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
