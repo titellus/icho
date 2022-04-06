@@ -53,7 +53,7 @@ export function SearchResultsTableWc({
         landingPageLink={'resourceTitleObject'}
         landingPageUrlTemplate ={landingPageUrlTemplate}
         includedFields={indexArray}
-        searchFields={searchfields.split(",")}
+        searchFields={searchfields.replace(/\s+/g,"").split(",")}
         fields={fieldsArray}
         size={parseInt(size)}
         sortBy={sortby}
