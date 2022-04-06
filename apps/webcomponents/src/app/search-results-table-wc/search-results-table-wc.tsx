@@ -9,6 +9,7 @@ export function SearchResultsTableWc({
                                        togglefilterfield="",
                                        toggleismultiselect = "false",
                                        togglelabel = "",
+                                       searchfields='',
                                        fields="",
                                        catalogueurl="",
                                        sortby="",
@@ -52,6 +53,7 @@ export function SearchResultsTableWc({
         landingPageLink={'resourceTitleObject'}
         landingPageUrlTemplate ={landingPageUrlTemplate}
         includedFields={indexArray}
+        searchFields={searchfields.split(",")}
         fields={fieldsArray}
         size={parseInt(size)}
         sortBy={sortby}
@@ -68,6 +70,7 @@ SearchResultsTableWc.propTypes = {
   togglefilterfield: PropTypes.string,
   toggleismultiselect: PropTypes.string,
   togglelabel: PropTypes.string,
+  searchfields: PropTypes.string,
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
   sortby:PropTypes.string,

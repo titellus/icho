@@ -29,6 +29,7 @@ interface Props {
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   includedFields: Array<string>;
+  searchFields: Array<string>;
   fields:Array<FieldDescription>;
   size?: number;
   sortBy?:string;
@@ -82,6 +83,7 @@ export function SearchResultTableWrapper({
                                            toggleIsMultiSelect,
                                            toggleLabel,
                                            includedFields,
+                                           searchFields,
                                            fields,
                                            size,
                                            sortType,
@@ -102,6 +104,8 @@ export function SearchResultTableWrapper({
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
+  console.log(searchFields)
+
   return (
     <ReactiveBase
       app="records"
@@ -120,7 +124,7 @@ export function SearchResultTableWrapper({
           <Grid.Column width={4}>
             <DataSearch
               componentId="tableFullTextFilter"
-              dataField={["resourceTitleObject.default"]}
+              dataField={searchFields}
               showClear={true}
               placeholder="Search ..."
               autosuggest={false}

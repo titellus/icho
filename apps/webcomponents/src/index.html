@@ -42,19 +42,7 @@
       sortby="custodianOrgForResource"
     ></catalogue-results-table-->
 
-<!--
-
-catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
-columnnames="Nom de la donnée,,,BD,Nom physique,statut,Note,Consulter (services),Voir (application),crédits"
-columns="resourceTitleObject,overview,resourceType,mw-gp-localIdentifierCodespace,mw-gp-localIdentifier,cl_status,supplementalInformationObject,mw-gp-allWebServices,mw-gp-thematicMap,resourceCreditObject"
-filter="+(resourceType:dataset or resourceType:series) -(th_infraSIG.default:Reporting_INSPIRE) -(cl_status.key:obsolete) +(custodianOrgForResource:*SPW*)"
-filterfield="th_Themes_geoportail_wallon_hierarchy.default"
-size="10"
-togglefilterfield="mw-gp-localIdentifierCodespace"
-toggleismultiselect="false"
-togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.GINET&quot;} | {&quot;label&quot;: &quot;CARTON&quot;, &quot;value&quot;: &quot;BE.SPW.INFRASIG.CARTON&quot;}">
--->
-    <catalogue-results-table
+<!--    <catalogue-results-table
       fields='{"columnName":"Nom du service","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
       {"columnName":"Type de service","columnIndex":"serviceType","columnJsonPath":""} |
       {"columnName":"Protocole","columnIndex":"linkProtocol","columnJsonPath":""} |
@@ -91,11 +79,38 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
       sorttype="desc"
       sortby="custodianOrgForResource"
-    ></catalogue-results-table>
+    ></catalogue-results-table>-->
 
 
+    <h1>Exemple tableau des données #700</h1>
 
-    <h1>Exemple Service cards</h1>
+    <catalogue-results-table
+      catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
+      searchfields="resourceTitleObject.default,resourceAbstractObject.default"
+      fields='{"columnName":"Nom de la donnée","columnIndex":"resourceTitleObject","columnJsonPath":"$.langfre"} |
+      {"columnName":"Nom de la donnée","columnIndex":"overview","columnJsonPath":"$[0].url"} |
+      {"columnName":"Type","columnIndex":"resourceType","columnJsonPath":"$[0]","columnWidth":"1"} |
+      {"columnName":"Nom physique","columnIndex":"mw-gp-localIdentifier","columnJsonPath":""} |
+      {"columnName":"Statut","columnIndex":"cl_status","columnJsonPath":"$[0].langfre","columnWidth":"1"} |
+      {"columnName":"Note","columnIndex":"supplementalInformationObject","columnJsonPath":"$[0].langfre"} |
+      {"columnName":"Modèle et légende","columnIndex":"related","columnJsonPath":"$.onlines[?(@.function==\"featureCatalogue\")].url.fre","columnIcon":"th"} |
+      {"columnName":"Modèle et légende","columnIndex":"related","columnJsonPath":"$.onlines[?(@.function==\"legend\")].url.fre","columnIcon":"paint brush"} |
+      {"columnName":"Consulter (applications et services)","columnIndex":"mw-gp-thematicMap","columnJsonPath":"$[*].url","columnIcon":"map"} |
+      {"columnName":"Consulter (applications et services)","columnIndex":"mw-gp-allWebServices","columnJsonPath":"$[*].url","columnIcon":"world"} |
+      {"columnName":"Crédits","columnIndex":"resourceCreditObject","columnJsonPath":"$[0].langfre"}'
+      filter="+(resourceType:dataset or resourceType:series) -(th_infraSIG.default:Reporting INSPIRE) -(cl_status.key:obsolete) +(custodianOrgForResource:*SPW*)"
+      filterfield="th_Themes_geoportail_wallon_hierarchy.default"
+      size="10"
+      sortby="mw-gp-localIdentifier"
+      sorttype="asc"
+      togglefilterfield="mw-gp-localIdentifierCodespace"
+      toggleismultiselect="true"
+      togglelabel='{"label": "GINET", "value": "BE.SPW.INFRASIG.GINET"} | {"label": "CARTON", "value": "BE.SPW.INFRASIG.CARTON"}'>
+    </catalogue-results-table>
+
+
+<!--
+    <h1>Exemple MapStore</h1>
 
     <catalogue-results-card
       filter=""
@@ -117,13 +132,14 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       sortby="custodianOrgForResource"
       linkmdt="true"
       imageheight="280"
-    ></catalogue-results-card>
+    ></catalogue-results-card>-->
 
-<!--
+
     <h1>Exemple Tableau des service (#702)</h1>
 
     <catalogue-results-table
       fields='{"columnName":"Nom du service","columnIndex":"resourceTitleObject","columnJsonPath":"$.default"} |
+      {"columnName":"Nom physique","columnIndex":"mw-gp-localIdentifier","columnJsonPath":""} |
       {"columnName":"Type de service","columnIndex":"serviceType","columnJsonPath":""} |
       {"columnName":"Protocole","columnIndex":"linkProtocol","columnJsonPath":"", "columnLabel":"red"} |
       {"columnName":"Point d accès","columnIndex":"linkUrl","columnJsonPath":""} |
@@ -137,6 +153,7 @@ togglelabel="{&quot;label&quot;: &quot;GINET&quot;, &quot;value&quot;: &quot;BE.
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
     ></catalogue-results-table>
 
+    <!--
     <h1>Exemple Tableau des service (VBS jahia)</h1>
     <catalogue-results-table catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv" fields="{&quot;columnName&quot;:&quot;Nom du service&quot;,&quot;columnIndex&quot;:&quot;resourceTitleObject&quot;,&quot;columnJsonPath&quot;:&quot;$.default&quot;} |
       {&quot;columnName&quot;:&quot;Type de service&quot;,&quot;columnIndex&quot;:&quot;serviceType&quot;,&quot;columnJsonPath&quot;:&quot;&quot;} |
