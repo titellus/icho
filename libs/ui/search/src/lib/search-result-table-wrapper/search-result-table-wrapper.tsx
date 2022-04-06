@@ -29,7 +29,7 @@ interface Props {
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   includedFields: Array<string>;
-  searchFields: Array<string>;
+  searchFields?: Array<string>;
   fields:Array<FieldDescription>;
   size?: number;
   sortBy?:string;
@@ -122,7 +122,7 @@ export function SearchResultTableWrapper({
       <Grid divided>
         <Grid.Row columns={3}>
           <Grid.Column width={4}>
-            <DataSearch
+            {searchFields && (<DataSearch
               componentId="tableFullTextFilter"
               dataField={searchFields}
               showClear={true}
@@ -138,7 +138,7 @@ export function SearchResultTableWrapper({
               //   //query: { match: { isTemplate: "n" } }
               //   // query: default_query
               // })}
-            />
+            />)}
           </Grid.Column>
           <Grid.Column>
             {toggleFilterField && (
