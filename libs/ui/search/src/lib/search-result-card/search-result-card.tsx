@@ -9,7 +9,7 @@ import {
   SemanticICONS,
   SemanticWIDTHS
 } from 'semantic-ui-react'
-import React from "react";
+import React, {Fragment} from "react";
 import jp from 'jsonpath';
 
 /* eslint-disable-next-line */
@@ -78,11 +78,28 @@ export function SearchResultCard({
           return (
             <Card style={style} key={dataItem._id}>
               <div className={"image"}>
-                {dataItem[template.imageIndex] ? (
-                  <img style={imgStyle} src={template.imageJsonPath === '' ?
-                    dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
-                  }/>
-                ) : ("")}
+                {dataItem[template.linkIndex] ?
+                  (
+                    <a style={{color: "white"}} target="_blank"
+                       href={template.linkJsonPath === '' ?
+                         dataItem[template.linkIndex] : jp.query(dataItem[template.linkIndex], template.linkJsonPath).toString()
+                       }>
+                      {dataItem[template.imageIndex] ? (
+                        <img style={imgStyle} src={template.imageJsonPath === '' ?
+                          dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
+                        }/>
+                      ) : ("")}
+                    </a>
+                  ):
+                  ( <React.Fragment>
+                    {dataItem[template.imageIndex] ? (
+                        <img style={imgStyle} src={template.imageJsonPath === '' ?
+                          dataItem[template.imageIndex] : jp.query(dataItem[template.imageIndex], template.imageJsonPath)
+                        }/>
+                      ) : ("")}
+                    </React.Fragment>
+                  )
+                }
               </div>
               <Card.Content>
                 <Card.Header>
