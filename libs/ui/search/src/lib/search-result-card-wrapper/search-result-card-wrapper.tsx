@@ -16,23 +16,23 @@ interface Props {
   catalogueUrl: string;
   filter?: string;
   fields: string;
-  search_placeholder?:string;
+  search_placeholder?: string;
   filterField?: string;
-  filterField_placeholder?:string;
+  filterField_placeholder?: string;
   filterField_2?: string;
-  filterField_2_placeholder?:string;
+  filterField_2_placeholder?: string;
   fullTextFilter: Array<string>;
   size?: number;
   sortBy?: string;
   sortType?: string;
   sortByList?: string;
   itemsPerRow?: SemanticWIDTHS;
-  marginX?:number;
-  marginBottom?:number;
-  marginToolsBottom?:number;
+  marginX?: number;
+  marginBottom?: number;
+  marginToolsBottom?: number;
   landingPageUrlTemplate: string;
-  linkMDT:string;
-  imageHeight?:number;
+  linkMDT: string;
+  imageHeight?: number;
 }
 
 
@@ -151,9 +151,9 @@ export function SearchResultCardWrapper({
       sortArrayOptions.push(sortElementTemplate)
     }
   }
-  let styleTools:any;
-  if (marginToolsBottom){
-    let marginBottom = marginToolsBottom +"em";
+  let styleTools: any;
+  if (marginToolsBottom) {
+    let marginBottom = marginToolsBottom + "em";
     styleTools = {marginBottom: marginBottom}
   }
   return (
@@ -162,109 +162,109 @@ export function SearchResultCardWrapper({
       url={catalogueUrl}
       enableAppbase={false}
     >
-      <div style={{margin:"1em"}}>
-      <Grid style={styleTools}>
-        <Grid.Row columns={4}>
-          <Grid.Column floated='left'>
-            {fullTextFilter.length > 0 ?
-              <DataSearch
-                componentId="cardFullTextFilter"
-                dataField={fullTextFilter}
-                showClear={true}
-                placeholder={search_placeholder}
-                autosuggest={false}
-                debounce={200}
-              /> : ""}
-          </Grid.Column>
-          <Grid.Column floated='left'>
-            {filterField_2 && (
-              <MultiDropdownList componentId="cardQuickFilter_2"
-                                 dataField={filterField_2}
-                                 defaultQuery={() => ({
-                                   query: default_query
-                                 })}
-                                 placeholder={filterField_2_placeholder}
-                                 react={{
-                                   and: ["cardQuickFilter", "cardFullTextFilter"]
-                                 }}/>
-            )}
-          </Grid.Column>
-          <Grid.Column floated='left'>
-            {filterField && (
-              <MultiDropdownList componentId="cardQuickFilter"
-                                 dataField={filterField}
-                                 defaultQuery={() => ({
-                                   query: default_query
-                                 })}
-                                 placeholder={filterField_placeholder}
-                                 react={{
-                                   and: ["cardQuickFilter_2", "cardFullTextFilter"]
-                                 }}/>
-            )}
-          </Grid.Column>
-          <Grid.Column floated='right'>
-            <Dropdown placeholder='Tri'
-                      search
-                      fluid
-                      selection
-                      labeled
-                      options={sortArrayOptions}
-                      onChange={(e, data) => {
-                        console.log(data.value)
-                        // @ts-ignore
-                        const fieldValue = data.value.toString().split('_')[0]
-                        // @ts-ignore
-                        const orderValue = data?.value.toString().split('_')[1]
-                        const sort = {
-                          field: fieldValue,
-                          order: orderValue
-                        }
-                        setSort(sort)
-                      }}
-            />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-      <ReactiveList
-        componentId="reactiveListCard"
-        size={size}
-        pagination={true}
-        showResultStats={false}
-        defaultQuery={() => ({
-          sort: [{[sort.field]: {order: sort.order}}],
-          //query: { match: { isTemplate: "n" } }
-          query: default_query
-        })}
-        includeFields={EsFields}
-        dataField={"_id"}
-        react={{
-          and: ["cardQuickFilter", "cardFullTextFilter", "cardQuickFilter_2"]
-        }}
-        render={({loading, error, data}) => {
-          if (loading) {
+      <div style={{margin: "1em"}}>
+        <Grid style={styleTools}>
+          <Grid.Row columns={4} style={{margin: "0.2em"}}>
+            <Grid.Column floated='left'>
+              {fullTextFilter.length > 0 ?
+                <DataSearch
+                  componentId="cardFullTextFilter"
+                  dataField={fullTextFilter}
+                  showClear={true}
+                  placeholder={search_placeholder}
+                  autosuggest={false}
+                  debounce={200}
+                /> : ""}
+            </Grid.Column>
+            <Grid.Column floated='left'>
+              {filterField_2 && (
+                <MultiDropdownList componentId="cardQuickFilter_2"
+                                   dataField={filterField_2}
+                                   defaultQuery={() => ({
+                                     query: default_query
+                                   })}
+                                   placeholder={filterField_2_placeholder}
+                                   react={{
+                                     and: ["cardQuickFilter", "cardFullTextFilter"]
+                                   }}/>
+              )}
+            </Grid.Column>
+            <Grid.Column floated='left'>
+              {filterField && (
+                <MultiDropdownList componentId="cardQuickFilter"
+                                   dataField={filterField}
+                                   defaultQuery={() => ({
+                                     query: default_query
+                                   })}
+                                   placeholder={filterField_placeholder}
+                                   react={{
+                                     and: ["cardQuickFilter_2", "cardFullTextFilter"]
+                                   }}/>
+              )}
+            </Grid.Column>
+            <Grid.Column floated='right'>
+              <Dropdown placeholder='Tri'
+                        search
+                        fluid
+                        selection
+                        labeled
+                        options={sortArrayOptions}
+                        onChange={(e, data) => {
+                          console.log(data.value)
+                          // @ts-ignore
+                          const fieldValue = data.value.toString().split('_')[0]
+                          // @ts-ignore
+                          const orderValue = data?.value.toString().split('_')[1]
+                          const sort = {
+                            field: fieldValue,
+                            order: orderValue
+                          }
+                          setSort(sort)
+                        }}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <ReactiveList
+          componentId="reactiveListCard"
+          size={size}
+          pagination={true}
+          showResultStats={false}
+          defaultQuery={() => ({
+            sort: [{[sort.field]: {order: sort.order}}],
+            //query: { match: { isTemplate: "n" } }
+            query: default_query
+          })}
+          includeFields={EsFields}
+          dataField={"_id"}
+          react={{
+            and: ["cardQuickFilter", "cardFullTextFilter", "cardQuickFilter_2"]
+          }}
+          render={({loading, error, data}) => {
+            if (loading) {
+              return (
+                <span>loading</span>
+              );
+            }
+            if (error) {
+              return (
+                <div>Something went wrong! Error details {JSON.stringify(error)}</div>
+              );
+            }
             return (
-              <span>loading</span>
+              <SearchResultCard
+                data={data}
+                template={cardTemplate}
+                landingPageUrlTemplate={landingPageUrlTemplate}
+                itemsPerRow={itemsPerRow}
+                marginX={marginX}
+                marginBottom={marginBottom}
+                linkMDT={linkMDT}
+                imageHeight={imageHeight}
+              />
             );
-          }
-          if (error) {
-            return (
-              <div>Something went wrong! Error details {JSON.stringify(error)}</div>
-            );
-          }
-          return (
-            <SearchResultCard
-              data={data}
-              template={cardTemplate}
-              landingPageUrlTemplate={landingPageUrlTemplate}
-              itemsPerRow={itemsPerRow}
-              marginX={marginX}
-              marginBottom={marginBottom}
-              linkMDT={linkMDT}
-              imageHeight={imageHeight}
-            />
-          );
-        }}
-      />
+          }}
+        />
       </div>
     </ReactiveBase>
   );
