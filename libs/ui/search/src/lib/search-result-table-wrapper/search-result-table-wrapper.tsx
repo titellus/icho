@@ -124,11 +124,36 @@ export function SearchResultTableWrapper({
           <Grid.Column width={4}>
             {searchFields && (<DataSearch
               componentId="tableFullTextFilter"
-              dataField={searchFields}
+              //dataField={searchFields}
               showClear={true}
               placeholder="Search ..."
               autosuggest={false}
               debounce={200}
+              customQuery={
+                function(value, props) {
+                  if (value[0]) {
+
+                    let analyser:{[index: string]:any} = {}
+                    // to limit query to specific fields: add dataField props, and analyser["query"] to select the search value, analyser["fields"]=props.dataField to specify the datafiels params and
+                    //let test = value
+                    //analyser["query"]= test
+                    //analyser["fields"]=props.dataField
+                    analyser["query"]='(any.\\*:('+value+') OR any.common:('+value+') OR resourceTitleObject.\\*:('+value+')^2 OR resourceTitleObject.\\*:\"'+value+'\"^6)'
+                    let query:{[index: string]:any} = {
+                      query:
+                        {
+                        }
+                    }
+                    query.query["query_string"]= analyser
+                    return {query}
+                  } else {
+                    return {}
+                  }
+                }
+              }
+              //"query":"any.\\\\*::(12345678) OR any.common:(12345678) OR resourceTitleObject.\\\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6"}}
+              //query: "(any.\\*:(12345678) OR any.common:(12345678) OR resourceTitleObject.\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6)"
+              // any.${searchLang}:(${any}) OR any.common:(${any}) OR resourceTitleObject.${searchLang}:(${any})^2 OR resourceTitleObject.\\*:\"${any}\"^6
               // defaultQuery={() => ({
               //   sort: [{
               //     [sortSelector.dataField]: {
