@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './routes/home';
 import { Admin } from './routes/admin';
 import { Browse } from './routes/browse';
+import { BrowseGraph } from './routes/browseGraph';
 import { Metadata } from './routes/metadata';
 import { Authenticate } from './routes/authenticate';
 
@@ -18,6 +19,7 @@ ReactDOM.render(
           <Route path="home" element={<Home />} />
           <Route path="admin" element={<Admin />} />
           <Route path="search" element={<Browse />} />
+          <Route path="searchGraph" element={<BrowseGraph />} />
           <Route path="metadata/:id" element={<Metadata />} />
           <Route path="authenticate" element={<Authenticate />} />
         </Route>

@@ -67,7 +67,7 @@ export function UiSearch({ filter = "" }) {
     console.log(r.data);
   });
 
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT;
+  const api = process.env.NX_CATALOGUE_API_ENDPOINT || 'http://localhost:4200/geonetwork';
 
   return (
     <ReactiveBase

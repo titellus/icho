@@ -31,6 +31,10 @@ export function App() {
                  {t('Search')}
               </Menu.Item>
 
+              <Menu.Item as={Link} to="searchGraph">
+                 {t('SearchGraph')}
+              </Menu.Item>
+
               <NavHearderRight />
             </Container>
           </Menu>
