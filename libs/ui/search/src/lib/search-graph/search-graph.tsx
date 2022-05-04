@@ -1,6 +1,13 @@
 import "./search-graph.module.scss";
-import { Container, Ref, Sticky } from "semantic-ui-react";
-import { DataSearch, ReactiveBase, ReactiveComponent, SelectedFilters, SingleList } from "@appbaseio/reactivesearch";
+import { Container, Grid, GridColumn, GridRow, Ref, Sticky } from "semantic-ui-react";
+import {
+  DataSearch,
+  MultiDropdownList,
+  ReactiveBase,
+  ReactiveComponent,
+  SelectedFilters,
+  SingleList
+} from "@appbaseio/reactivesearch";
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
@@ -75,6 +82,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const map = (value: number, x1: number, y1: number, x2: number, y2: number) =>
     (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 
+  function buildLegend() {
+    const categoryField = Object.keys(aggregations)[0];
+    return aggregations[categoryField].buckets.map((b: any) => {
+      return "agg-" + b.key;
+    });
+  }
+
   function buildCategories() {
     const categoryField = Object.keys(aggregations)[0];
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
@@ -139,6 +153,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     tooltip: {},
     animationDurationUpdate: 1500,
     animationEasingUpdate: "quinticInOut",
+    legend: {
+      data: buildLegend()
+    },
     series: [
       {
         type: "graph",
@@ -219,16 +236,28 @@ export function SearchGraph(props: SearchGraphProps) {
       <Ref innerRef={contextRef}>
         <Container>
           <Sticky context={contextRef}>
-            <DataSearch
-              componentId="searchbox"
-              queryFormat="and"
-              debounce={1000}
-              defaultQuery={() => {
-                return DefaultQuery.IS_RECORD;
-              }}
-              dataField={["resourceTitleObject.default"]}
-              placeholder="Search for datasets and maps..."
-            />
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={12}>
+                  <DataSearch
+                    componentId="searchbox"
+                    queryFormat="and"
+                    debounce={1000}
+                    defaultQuery={() => {
+                      return DefaultQuery.IS_RECORD;
+                    }}
+                    dataField={["resourceTitleObject.default"]}
+                    placeholder="Search for datasets and maps..."
+                  />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                  <MultiDropdownList
+                    componentId="resourceType"
+                    dataField="resourceType"
+                    placeholder="Types" />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
             <SelectedFilters />
           </Sticky>
         </Container>
@@ -238,7 +267,8 @@ export function SearchGraph(props: SearchGraphProps) {
         componentId="searchResultsGraph"
         react={{
           and: [
-            "searchbox"
+            "searchbox",
+            "resourceType"
           ]
         }}
         defaultQuery={() => ({
