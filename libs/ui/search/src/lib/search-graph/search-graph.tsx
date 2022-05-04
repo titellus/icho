@@ -103,7 +103,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         name: `${b.key} (${b.doc_count})`,
         category: "agg-" + b.key,
         label: {
-          fontStyle: "bold",
+          fontStyle: "bold"
         },
         // fixed: true,
         symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
@@ -113,9 +113,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         return {
           id: h.uuid,
           name: h.resourceTitleObject.default,
-          category: "record-" + h[categoryField][0],
+          category: "record-" + (h[categoryField] ? h[categoryField][0] : ""),
           label: {
-            overflow: 'truncate',
+            overflow: "truncate",
             width: recordSymbolSize
           }
         };
@@ -127,7 +127,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     const categoryField = Object.keys(aggregations)[0];
     return data.map((h: any) => {
         return [{
-          source: h[categoryField][0],
+          source: h[categoryField] ? h[categoryField][0] : "",
           target: h.uuid
         }];
       }
@@ -173,9 +173,14 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     ]
   };
   console.log("Chart options:", option);
-
+  const events = {
+    "click": function(params: any) {
+      console.log(params);
+    }
+  };
   return (
     <ReactECharts option={option}
+                  onEvents={events}
                   style={{ minHeight: "800px", height: "100%", width: "100%" }} />
   );
 }
@@ -220,7 +225,8 @@ export function SearchGraph(props: SearchGraphProps) {
                 field: "resourceType"
               }
             }
-          }
+          },
+          size: 30
         })}
         render={({ aggregations, setQuery, data }) => (
           <SearchResultsGraphWrapper aggregations={aggregations}
