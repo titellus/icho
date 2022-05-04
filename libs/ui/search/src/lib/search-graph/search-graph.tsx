@@ -134,7 +134,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     ).flat();
   }
 
-  const option: any = {
+  let graphData = buildData();
+  let option: any = {
     tooltip: {},
     animationDurationUpdate: 1500,
     animationEasingUpdate: "quinticInOut",
@@ -166,21 +167,38 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           fontSize: 20
         },
         categories: buildCategories(),
-        data: buildData(),
+        data: graphData,
         // links: [],
         links: buildLinks()
       }
     ]
   };
+  const eChartsRef = React.useRef(null as any);
+
+
   console.log("Chart options:", option);
   const events = {
     "click": function(params: any) {
       console.log(params);
+      graphData = [];
+      if (eChartsRef && eChartsRef.current) {
+        option.series[0].data.push({
+          id: 'test',
+          name: 'test',
+          category: "agg-test",
+          label: {
+            fontStyle: "bold"
+          },
+          symbolSize: 200
+        });
+        eChartsRef.current?.getEchartsInstance().setOption(option);
+      }
     }
   };
   return (
     <ReactECharts option={option}
                   onEvents={events}
+                  ref={eChartsRef}
                   style={{ minHeight: "800px", height: "100%", width: "100%" }} />
   );
 }
