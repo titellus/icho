@@ -98,14 +98,14 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     const categoryField = Object.keys(aggregations)[0];
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
-      console.log(b.doc_count, (maxSymbolSize - minSymbolSize) * b.doc_count / maxCount);
       return {
         id: b.key,
-        name: b.key,
+        name: `${b.key} (${b.doc_count})`,
         category: "agg-" + b.key,
         label: {
           fontStyle: "bold",
         },
+        // fixed: true,
         symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
       };
     }).concat(
