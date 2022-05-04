@@ -168,7 +168,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         },
         categories: buildCategories(),
         data: graphData,
-        // links: [],
         links: buildLinks()
       }
     ]
@@ -183,8 +182,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       graphData = [];
       if (eChartsRef && eChartsRef.current) {
         option.series[0].data.push({
-          id: 'test',
-          name: 'test',
+          name: "test",
           category: "agg-test",
           label: {
             fontStyle: "bold"
@@ -223,6 +221,8 @@ export function SearchGraph(props: SearchGraphProps) {
           <Sticky context={contextRef}>
             <DataSearch
               componentId="searchbox"
+              queryFormat="and"
+              debounce={1000}
               defaultQuery={() => {
                 return DefaultQuery.IS_RECORD;
               }}
@@ -236,6 +236,11 @@ export function SearchGraph(props: SearchGraphProps) {
 
       <ReactiveComponent
         componentId="searchResultsGraph"
+        react={{
+          and: [
+            "searchbox"
+          ]
+        }}
         defaultQuery={() => ({
           aggs: {
             resourceType: {
