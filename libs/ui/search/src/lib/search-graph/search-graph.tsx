@@ -1,5 +1,5 @@
 import "./search-graph.module.scss";
-import { Container, Grid, GridColumn, GridRow, Ref, Sticky } from "semantic-ui-react";
+import { Container, Grid, Ref, Sticky } from "semantic-ui-react";
 import {
   DataSearch,
   MultiDropdownList,
@@ -78,7 +78,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "#A0A0A0",
     "#000000"];
 
-  const minSymbolSize = 20, maxSymbolSize = 200, recordSymbolSize = 100;
+  const minSymbolSize = 20, maxSymbolSize = 150, recordSymbolSize = 8;
   const map = (value: number, x1: number, y1: number, x2: number, y2: number) =>
     (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 
@@ -95,11 +95,11 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       return [{
         name: "agg-" + b.key,
         itemStyle: {
-          color: colors[i % colors.length]
+          color: colors[i % colors.length],
+          opacity: .8
         }
       }, {
         name: "record-" + b.key,
-        symbol: "rect",
         symbolSize: recordSymbolSize,
         itemStyle: {
           color: colors[i % colors.length]
@@ -111,6 +111,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   function buildData() {
     const categoryField = Object.keys(aggregations)[0];
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
+
+    function getLabel(d: any) {
+      return d.name;
+      // + (data[d.dataIndex] ?
+      //   ` (${data[d.dataIndex][categoryField][0]})` : "");
+    }
+
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
       return {
         id: b.key,
@@ -130,7 +137,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           category: "record-" + (h[categoryField] ? h[categoryField][0] : ""),
           label: {
             overflow: "truncate",
-            width: recordSymbolSize
+            width: 200,
+            show: true,
+            position: "right",
+            formatter: getLabel
+          },
+          tooltip: {
+            formatter: getLabel
           }
         };
       })
@@ -161,7 +174,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         type: "graph",
         layout: "force",
         force: {
-          repulsion: 300
+          repulsion: 400,
+          layoutAnimation: false
         },
         roam: true,
         draggable: true,
