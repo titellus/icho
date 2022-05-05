@@ -82,6 +82,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "#FF1493",
     "#000000"];
 
+  const colorsByType: Record<string, string> = {
+    "series": colors[0],
+    "dataset": colors[1],
+    "service": colors[2],
+    "application": colors[3]
+  };
+
   const minSymbolSize = 20, maxSymbolSize = 150, recordSymbolSize = 8;
   const map = (value: number, x1: number, y1: number, x2: number, y2: number) =>
     (value - x1) * (y2 - x2) / (y1 - x1) + x2;
@@ -94,19 +101,23 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     });
   }
 
+  function getColor(key: string, i: number = 0): string {
+    return colorsByType[key] || colors[i % colors.length];
+  }
+
   function buildCategories() {
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
       return [{
         name: "agg-" + b.key,
         itemStyle: {
-          color: colors[i % colors.length],
+          color: getColor(b.key, i),
           opacity: .8
         }
       }, {
         name: "record-" + b.key,
         symbolSize: recordSymbolSize,
         itemStyle: {
-          color: colors[i % colors.length]
+          color: getColor(b.key, i)
         }
       }];
     }).flat();
@@ -221,32 +232,84 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     },
     "dblclick": function(params: any) {
       option.series[0].data
-        .filter((r: any) => r.id?.length > 0 && r.category.startsWith('record-'))
+        .filter((r: any) => r.id?.length > 0 && r.category.startsWith("record-"))
         .forEach((r: any) => {
-        retrieveAssociated(r.id);
-      });
+          retrieveAssociated(r.id);
+        });
     }
   };
 
   let model = {
     "categories": [
       { "name": "root", "keyword": {}, "base": "root" },
-      { "name": "parent", "keyword": {}, "base": "parent" },
-      { "name": "datasets", "keyword": {}, "base": "datasets" },
-      { "name": "associated", "keyword": {}, "base": "associated" },
-      { "name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters" },
-      { "name": "siblings", "keyword": {}, "base": "siblings" },
-      { "name": "services", "keyword": {}, "base": "services" },
-      { "name": "hassources", "keyword": {}, "base": "hassources" },
+      {
+        "name": "parent", "keyword": {}, "base": "parent", style: {
+          lineStyle: {
+            type: "solid",
+            width: 3,
+            color: getColor("series")
+          }
+        }
+      },
+      {
+        "name": "datasets", "keyword": {}, "base": "datasets", style: {
+          lineStyle: {
+            type: "solid",
+            color: getColor("datasets")
+          }
+        }
+      },
+      {
+        "name": "associated", "keyword": {}, "base": "associated", style: {
+          lineStyle: {
+            type: "dotted",
+            color: getColor("datasets")
+          }
+        }
+      },
+      {
+        "name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters", style: {
+          lineStyle: {
+            type: "dashed",
+            color: getColor("series")
+          }
+        }
+      },
+      {
+        "name": "siblings", "keyword": {}, "base": "siblings", style: {
+          lineStyle: {
+            type: "solid",
+            color: getColor("series")
+          }
+        }
+      },
+      {
+        "name": "services", "keyword": {}, "base": "services", style: {
+          lineStyle: {
+            type: "solid",
+            width: 3,
+            color: getColor("service")
+          }
+        }
+      },
+      {
+        "name": "hassources", "keyword": {}, "base": "hassources", style: {
+          lineStyle: {
+            type: "dotted",
+            color: getColor("datasets")
+          }
+        }
+      },
       { "name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats" }
     ]
   };
+
 
   function retrieveAssociated(uuid: string) {
     new RecordsApi().getAssociatedResources(uuid)
       .then((response: { data: any; }) => {
         if (eChartsRef && eChartsRef.current) {
-        let associated = response.data;
+          let associated = response.data;
           console.log(associated);
           for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
             if (associated && associated[value.name]) {
@@ -266,7 +329,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                 if (!linkExists) {
                   const link: GraphEdgeItemObject<any> = {
                     source: uuid,
-                    target: element._id
+                    target: element._id,
+                    ...value.style
                   };
                   option.series[0].links.push(link);
                   option.series[0].edges.push(link);
