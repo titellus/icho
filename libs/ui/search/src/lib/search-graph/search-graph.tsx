@@ -228,7 +228,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const eChartsRef = React.useRef(null as any);
   const events = {
     "click": function(params: any) {
-      retrieveAssociated(params.data.id);
+      if (params.data.category.startsWith("record-")) {
+        retrieveAssociated(params.data.id);
+      }
     },
     "dblclick": function(params: any) {
       option.series[0].data
