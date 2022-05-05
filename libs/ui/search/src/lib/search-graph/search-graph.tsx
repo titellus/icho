@@ -12,28 +12,14 @@ import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
 import { RecordsApi } from "@catalogue/api/geonetwork";
+import { GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
+import { GraphEdgeItemObject } from "echarts/types/src/util/types";
 
 
 /* eslint-disable-next-line */
 export interface SearchResultsGraphProps {
   aggregations: any;
   data: any;
-}
-
-export interface Node {
-  id: string;
-  name: string;
-  category: string;
-  label: {
-    normal: {
-      show: true
-    }
-  },
-}
-
-export interface Link {
-  source: string;
-  target: string;
 }
 
 class SearchResultsGraphWrapper extends React.Component <{
@@ -99,15 +85,15 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const map = (value: number, x1: number, y1: number, x2: number, y2: number) =>
     (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 
+  const categoryField = Object.keys(aggregations)[0];
+
   function buildLegend() {
-    const categoryField = Object.keys(aggregations)[0];
     return aggregations[categoryField].buckets.map((b: any) => {
       return "agg-" + b.key;
     });
   }
 
   function buildCategories() {
-    const categoryField = Object.keys(aggregations)[0];
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
       return [{
         name: "agg-" + b.key,
@@ -125,19 +111,36 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     }).flat();
   }
 
+  function getLabel(d: any) {
+    return d.name;
+  }
+
+  function getTooltip(d: any) {
+    var record = data.filter((r: any) => r.uuid === d.data.id).pop(),
+      identifiers = record?.resourceIdentifier.map((c: any) => c.code).join(", ");
+    return `<b>${d.name}</b><br />${identifiers}`;
+  }
+
+  function hitAsData(h: any): GraphNodeItemOption {
+    return {
+      id: h.uuid,
+      name: h.resourceTitleObject?.default,
+      category: "record-" + (h[categoryField] ? h[categoryField][0] : ""),
+      label: {
+        overflow: "truncate",
+        width: 200,
+        show: true,
+        position: "right",
+        formatter: getLabel
+      }
+      // tooltip: {
+      //   formatter: getTooltip
+      // }
+    };
+  }
+
   function buildData() {
-    const categoryField = Object.keys(aggregations)[0];
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
-
-    function getLabel(d: any) {
-      return d.name;
-    }
-
-    function getTooltip(d: any) {
-      var record = data.filter((r: any) => r.uuid === d.data.id).pop(),
-        identifiers = record?.resourceIdentifier.map((c: any) => c.code).join(", ");
-      return `<b>${d.name}</b><br />${identifiers}`;
-    }
 
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
       return {
@@ -152,27 +155,12 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       };
     }).concat(
       data.map((h: any) => {
-        return {
-          id: h.uuid,
-          name: h.resourceTitleObject.default,
-          category: "record-" + (h[categoryField] ? h[categoryField][0] : ""),
-          label: {
-            overflow: "truncate",
-            width: 200,
-            show: true,
-            position: "right",
-            formatter: getLabel
-          },
-          tooltip: {
-            formatter: getTooltip
-          }
-        };
+        return hitAsData(h);
       })
     );
   }
 
   function buildLinks() {
-    const categoryField = Object.keys(aggregations)[0];
     return data.map((h: any) => {
         return [{
           source: h[categoryField] ? h[categoryField][0] : "",
@@ -250,30 +238,22 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   };
 
   function retrieveAssociated(rootData: any) {
-    new RecordsApi().getAssociatedResources(rootData.data.id.split("_")[0])
+    new RecordsApi().getAssociatedResources(rootData.data.id)
       .then((response: { data: any; }) => {
         let associated = response.data;
         console.log(associated);
-        console.log(option.series[0].data);
         for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
           if (associated && associated[value.name]) {
             for (var element of associated[value.name]) {
-              const node: Node = {
-                id: element._id + "_" + value.name,
-                name: element._source.resourceTitleObject.default,
-                category: "record-" + element._source.resourceType[0],
-                label: {
-                  normal: {
-                    show: true
-                  }
-                }
-              };
-              const link: Link = {
+              const node = hitAsData(element._source);
+              const link: GraphEdgeItemObject<any> = {
                 source: rootData.data.id,
-                target: element._id + "_" + value.name
+                target: element._id
               };
               if (eChartsRef && eChartsRef.current) {
-                const nodeExists = option.series[0].data.some((data: { id: string; }) => data.id === element._id + "_" + value.name);
+                const nodeExists = option.series[0].data
+                  .some((data: { id: string; }) =>
+                    data.id === element._id);
                 if (!nodeExists) {
                   option.series[0].data.push(node);
                 }
