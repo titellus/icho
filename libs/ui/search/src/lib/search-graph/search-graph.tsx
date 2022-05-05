@@ -241,25 +241,32 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   function retrieveAssociated(rootData: any) {
     new RecordsApi().getAssociatedResources(rootData.data.id)
       .then((response: { data: any; }) => {
+        if (eChartsRef && eChartsRef.current) {
         let associated = response.data;
-        console.log(associated);
-        for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
-          if (associated && associated[value.name]) {
-            for (var element of associated[value.name]) {
-              const node = hitAsData(element._source);
-              const link: GraphEdgeItemObject<any> = {
-                source: rootData.data.id,
-                target: element._id
-              };
-              if (eChartsRef && eChartsRef.current) {
+          console.log(associated);
+          for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
+            if (associated && associated[value.name]) {
+              for (var element of associated[value.name]) {
+
                 const nodeExists = option.series[0].data
                   .some((data: { id: string; }) =>
                     data.id === element._id);
+                const linkExists = option.series[0].links
+                  .some((l: GraphEdgeItemObject<any>) =>
+                    l.source === rootData.data.id
+                    && l.target === element._id);
                 if (!nodeExists) {
-                  option.series[0].data.push(node);
+                  option.series[0].data.push(hitAsData(element._source));
                 }
-                option.series[0].links.push(link);
-                option.series[0].edges.push(link);
+
+                if (!linkExists) {
+                  const link: GraphEdgeItemObject<any> = {
+                    source: rootData.data.id,
+                    target: element._id
+                  };
+                  option.series[0].links.push(link);
+                  option.series[0].edges.push(link);
+                }
                 eChartsRef.current?.getEchartsInstance().setOption(option);
                 console.log(option.series[0].data);
               }
