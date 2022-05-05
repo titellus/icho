@@ -11,12 +11,29 @@ import {
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
+import {RecordsApi} from "@catalogue/api/geonetwork";
 
 
 /* eslint-disable-next-line */
 export interface SearchResultsGraphProps {
   aggregations: any;
   data: any;
+}
+
+export interface Node {
+  id: string;
+  name: string;
+  category: string;
+  label: {
+    normal: {
+      show: true
+    }
+  },
+}
+
+export interface Link {
+  source: string;
+  target: string;
 }
 
 class SearchResultsGraphWrapper extends React.Component <{
@@ -199,7 +216,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         },
         categories: buildCategories(),
         data: graphData,
-        links: buildLinks()
+        links: buildLinks(),
+        edges:buildLinks()
       }
     ]
   };
@@ -209,21 +227,62 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   console.log("Chart options:", option);
   const events = {
     "click": function(params: any) {
-      console.log(params);
-      graphData = [];
-      if (eChartsRef && eChartsRef.current) {
-        option.series[0].data.push({
-          name: "test",
-          category: "agg-test",
-          label: {
-            fontStyle: "bold"
-          },
-          symbolSize: 200
-        });
-        eChartsRef.current?.getEchartsInstance().setOption(option);
-      }
+      retrieveAssociated(params)
     }
   };
+
+  let model = {
+    "categories": [
+      {"name": "root", "keyword": {}, "base": "root"},
+      {"name": "parent", "keyword": {}, "base": "parent"},
+      {"name": "datasets", "keyword": {}, "base": "datasets"},
+      {"name": "associated", "keyword": {}, "base": "associated"},
+      {"name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters"},
+      {"name": "siblings", "keyword": {}, "base": "siblings"},
+      {"name": "services", "keyword": {}, "base": "services"},
+      {"name": "hassources", "keyword": {}, "base": "hassources"},
+      {"name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats"}
+    ]
+  }
+
+  function retrieveAssociated(rootData:any){
+    new RecordsApi().getAssociatedResources(rootData.data.id.split('_')[0])
+      .then((response: { data: any; }) => {
+        let associated = response.data
+        console.log(associated)
+        console.log(option.series[0].data)
+        for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
+          if (associated && associated[value.name]) {
+            for (var element of associated[value.name]) {
+              const node: Node = {
+                id: element._id + '_' +value.name,
+                name: element._source.resourceTitleObject.default,
+                category:'record-' + element._source.resourceType[0],
+                label: {
+                  normal: {
+                    show: true
+                  }
+                },
+              };
+              const link: Link = {
+                source: rootData.data.id,
+                target: element._id + '_' +value.name
+              };
+              if (eChartsRef && eChartsRef.current) {
+                const nodeExists = option.series[0].data.some((data: { id: string; }) => data.id === element._id + '_' +value.name);
+                if(!nodeExists) {
+                  option.series[0].data.push(node);
+                }
+                option.series[0].links.push(link);
+                option.series[0].edges.push(link);
+                eChartsRef.current?.getEchartsInstance().setOption(option);
+                console.log(option.series[0].data)
+            }
+          }
+        }
+      }});
+  }
+
   return (
     <ReactECharts option={option}
                   onEvents={events}
