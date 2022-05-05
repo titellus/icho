@@ -14,6 +14,7 @@ import ReactECharts from "echarts-for-react";
 import { RecordsApi } from "@catalogue/api/geonetwork";
 import { GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
 import { GraphEdgeItemObject } from "echarts/types/src/util/types";
+import axios from "axios";
 
 
 /* eslint-disable-next-line */
@@ -229,15 +230,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const events = {
     "click": function(params: any) {
       if (params.data?.category?.startsWith("record-")) {
-        retrieveAssociated(params.data.id);
+        retrieveAssociated([params.data.id]);
       }
     },
     "dblclick": function(params: any) {
-      option.series[0].data
+      retrieveAssociated(option.series[0].data
         .filter((r: any) => r.id?.length > 0 && r.category.startsWith("record-"))
-        .forEach((r: any) => {
-          retrieveAssociated(r.id);
-        });
+        .map((r: any) => r.id));
     }
   };
 
@@ -307,47 +306,57 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   };
 
 
-  function retrieveAssociated(uuid: string) {
-    new RecordsApi().getAssociatedResources(uuid)
-      .then((response: { data: any; }) => {
-        if (eChartsRef && eChartsRef.current) {
-          let associated = response.data;
-          console.log(associated);
-          for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
-            if (associated && associated[value.name]) {
-              for (var element of associated[value.name]) {
+  function retrieveAssociated(uuids: string[]) {
+    axios.all(uuids.map(uuid => new RecordsApi().getAssociatedResources(uuid)))
+      .then(
+        axios.spread((...responses) => {
+          let updated = false;
 
-                const nodeExists = option.series[0].data
-                  .some((data: { id: string; }) =>
-                    data.id === element._id);
-                const linkExists = option.series[0].links
-                  .some((l: GraphEdgeItemObject<any>) =>
-                    l.source === uuid
-                    && l.target === element._id);
-                if (!nodeExists) {
-                  option.series[0].data.push(hitAsData(element._source));
-                }
+          responses.map(response => {
+            const uuid = response.config
+              .url?.replace(/.*api\/records\/(.*)\/associated/, "$1");
 
-                if (!linkExists) {
-                  const link: GraphEdgeItemObject<any> = {
-                    source: uuid,
-                    target: element._id,
-                    label: {
-                      show: true,
-                      formatter: value.name,
-                      fontSize: 9
-                    },
-                    ...value.style
-                  };
-                  option.series[0].links.push(link);
-                  option.series[0].edges.push(link);
+            let associated = response.data;
+            for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
+              if (associated && associated[value.name]) {
+                for (var element of associated[value.name]) {
+
+                  const nodeExists = option.series[0].data
+                    .some((data: { id: string; }) =>
+                      data.id === element._id);
+                  const linkExists = option.series[0].links
+                    .some((l: GraphEdgeItemObject<any>) =>
+                      l.source === uuid
+                      && l.target === element._id);
+                  if (!nodeExists) {
+                    updated = true;
+                    option.series[0].data.push(hitAsData(element._source));
+                  }
+
+                  if (!linkExists) {
+                    const link: GraphEdgeItemObject<any> = {
+                      source: uuid,
+                      target: element._id,
+                      label: {
+                        show: true,
+                        formatter: value.name,
+                        fontSize: 9
+                      },
+                      ...value.style
+                    };
+                    option.series[0].links.push(link);
+                    option.series[0].edges.push(link);
+                  }
                 }
               }
             }
+          });
+          
+          if (updated && eChartsRef && eChartsRef.current) {
+            console.log("Set graph options");
+            eChartsRef.current?.getEchartsInstance().setOption(option);
           }
-          eChartsRef.current?.getEchartsInstance().setOption(option);
-        }
-      });
+        }));
   }
 
   return (
