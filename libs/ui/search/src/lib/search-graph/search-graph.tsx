@@ -11,7 +11,7 @@ import {
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
-import {RecordsApi} from "@catalogue/api/geonetwork";
+import { RecordsApi } from "@catalogue/api/geonetwork";
 
 
 /* eslint-disable-next-line */
@@ -221,7 +221,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         categories: buildCategories(),
         data: graphData,
         links: buildLinks(),
-        edges:buildLinks()
+        edges: buildLinks()
       }
     ]
   };
@@ -231,60 +231,61 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   console.log("Chart options:", option);
   const events = {
     "click": function(params: any) {
-      retrieveAssociated(params)
+      retrieveAssociated(params);
     }
   };
 
   let model = {
     "categories": [
-      {"name": "root", "keyword": {}, "base": "root"},
-      {"name": "parent", "keyword": {}, "base": "parent"},
-      {"name": "datasets", "keyword": {}, "base": "datasets"},
-      {"name": "associated", "keyword": {}, "base": "associated"},
-      {"name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters"},
-      {"name": "siblings", "keyword": {}, "base": "siblings"},
-      {"name": "services", "keyword": {}, "base": "services"},
-      {"name": "hassources", "keyword": {}, "base": "hassources"},
-      {"name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats"}
+      { "name": "root", "keyword": {}, "base": "root" },
+      { "name": "parent", "keyword": {}, "base": "parent" },
+      { "name": "datasets", "keyword": {}, "base": "datasets" },
+      { "name": "associated", "keyword": {}, "base": "associated" },
+      { "name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters" },
+      { "name": "siblings", "keyword": {}, "base": "siblings" },
+      { "name": "services", "keyword": {}, "base": "services" },
+      { "name": "hassources", "keyword": {}, "base": "hassources" },
+      { "name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats" }
     ]
-  }
+  };
 
-  function retrieveAssociated(rootData:any){
-    new RecordsApi().getAssociatedResources(rootData.data.id.split('_')[0])
+  function retrieveAssociated(rootData: any) {
+    new RecordsApi().getAssociatedResources(rootData.data.id.split("_")[0])
       .then((response: { data: any; }) => {
-        let associated = response.data
-        console.log(associated)
-        console.log(option.series[0].data)
+        let associated = response.data;
+        console.log(associated);
+        console.log(option.series[0].data);
         for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
           if (associated && associated[value.name]) {
             for (var element of associated[value.name]) {
               const node: Node = {
-                id: element._id + '_' +value.name,
+                id: element._id + "_" + value.name,
                 name: element._source.resourceTitleObject.default,
-                category:'record-' + element._source.resourceType[0],
+                category: "record-" + element._source.resourceType[0],
                 label: {
                   normal: {
                     show: true
                   }
-                },
+                }
               };
               const link: Link = {
                 source: rootData.data.id,
-                target: element._id + '_' +value.name
+                target: element._id + "_" + value.name
               };
               if (eChartsRef && eChartsRef.current) {
-                const nodeExists = option.series[0].data.some((data: { id: string; }) => data.id === element._id + '_' +value.name);
-                if(!nodeExists) {
+                const nodeExists = option.series[0].data.some((data: { id: string; }) => data.id === element._id + "_" + value.name);
+                if (!nodeExists) {
                   option.series[0].data.push(node);
                 }
                 option.series[0].links.push(link);
                 option.series[0].edges.push(link);
                 eChartsRef.current?.getEchartsInstance().setOption(option);
-                console.log(option.series[0].data)
+                console.log(option.series[0].data);
+              }
             }
           }
         }
-      }});
+      });
   }
 
   return (
