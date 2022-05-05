@@ -131,8 +131,12 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
     function getLabel(d: any) {
       return d.name;
-      // + (data[d.dataIndex] ?
-      //   ` (${data[d.dataIndex][categoryField][0]})` : "");
+    }
+
+    function getTooltip(d: any) {
+      var record = data.filter((r: any) => r.uuid === d.data.id).pop(),
+        identifiers = record?.resourceIdentifier.map((c: any) => c.code).join(", ");
+      return `<b>${d.name}</b><br />${identifiers}`;
     }
 
     return aggregations[categoryField].buckets.map((b: any, i: number) => {
@@ -160,7 +164,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
             formatter: getLabel
           },
           tooltip: {
-            formatter: getLabel
+            formatter: getTooltip
           }
         };
       })
