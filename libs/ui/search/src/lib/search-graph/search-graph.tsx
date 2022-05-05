@@ -228,7 +228,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const eChartsRef = React.useRef(null as any);
   const events = {
     "click": function(params: any) {
-      if (params.data.category.startsWith("record-")) {
+      if (params.data?.category?.startsWith("record-")) {
         retrieveAssociated(params.data.id);
       }
     },
@@ -332,6 +332,11 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   const link: GraphEdgeItemObject<any> = {
                     source: uuid,
                     target: element._id,
+                    label: {
+                      show: true,
+                      formatter: value.name,
+                      fontSize: 9
+                    },
                     ...value.style
                   };
                   option.series[0].links.push(link);
