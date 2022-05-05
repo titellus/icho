@@ -267,11 +267,10 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   option.series[0].links.push(link);
                   option.series[0].edges.push(link);
                 }
-                eChartsRef.current?.getEchartsInstance().setOption(option);
-                console.log(option.series[0].data);
               }
             }
           }
+          eChartsRef.current?.getEchartsInstance().setOption(option);
         }
       });
   }
