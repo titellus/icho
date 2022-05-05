@@ -215,12 +215,16 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     ]
   };
   const eChartsRef = React.useRef(null as any);
-
-
-  console.log("Chart options:", option);
   const events = {
     "click": function(params: any) {
-      retrieveAssociated(params);
+      retrieveAssociated(params.data.id);
+    },
+    "dblclick": function(params: any) {
+      option.series[0].data
+        .filter((r: any) => r.id?.length > 0 && r.category.startsWith('record-'))
+        .forEach((r: any) => {
+        retrieveAssociated(r.id);
+      });
     }
   };
 
@@ -238,8 +242,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     ]
   };
 
-  function retrieveAssociated(rootData: any) {
-    new RecordsApi().getAssociatedResources(rootData.data.id)
+  function retrieveAssociated(uuid: string) {
+    new RecordsApi().getAssociatedResources(uuid)
       .then((response: { data: any; }) => {
         if (eChartsRef && eChartsRef.current) {
         let associated = response.data;
@@ -253,7 +257,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                     data.id === element._id);
                 const linkExists = option.series[0].links
                   .some((l: GraphEdgeItemObject<any>) =>
-                    l.source === rootData.data.id
+                    l.source === uuid
                     && l.target === element._id);
                 if (!nodeExists) {
                   option.series[0].data.push(hitAsData(element._source));
@@ -261,7 +265,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
                 if (!linkExists) {
                   const link: GraphEdgeItemObject<any> = {
-                    source: rootData.data.id,
+                    source: uuid,
                     target: element._id
                   };
                   option.series[0].links.push(link);
