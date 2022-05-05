@@ -62,11 +62,18 @@ class SearchResultsGraphWrapper extends React.Component <{
   };
 };
 
+let aggregationsOnLoad: any = null;
+
 export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphProps) {
   if (aggregations == null) {
     return (<div />);
   }
   console.log("Build graph with : ", data, aggregations);
+
+  if (aggregationsOnLoad === null) {
+    console.log("Set aggregations for all search.");
+    aggregationsOnLoad = aggregations;
+  }
 
   const colors = [
     "#32CD32",
@@ -107,7 +114,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   }
 
   function buildCategories() {
-    return aggregations[categoryField].buckets.map((b: any, i: number) => {
+    return aggregationsOnLoad[categoryField].buckets.map((b: any, i: number) => {
       return [{
         name: "agg-" + b.key,
         itemStyle: {
@@ -155,7 +162,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   function buildData() {
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
 
-    return aggregations[categoryField].buckets.map((b: any, i: number) => {
+    return aggregationsOnLoad[categoryField].buckets.map((b: any, i: number) => {
       return {
         id: b.key,
         name: `${b.key} (${b.doc_count})`,
@@ -163,8 +170,10 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         label: {
           fontStyle: "bold"
         },
+        symbol: 'pin',
+        symbolSize: 30
         // fixed: true,
-        symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
+        // symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
       };
     }).concat(
       data.map((h: any) => {
@@ -208,12 +217,12 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           color: "source",
           curveness: 0.3
         },
-        // emphasis: {
-        //   focus: 'adjacency',
-        //   lineStyle: {
-        //     width: 10
-        //   }
-        // },
+        emphasis: {
+          focus: 'adjacency',
+          lineStyle: {
+            width: 10
+          }
+        },
         edgeSymbol: ["circle", "arrow"],
         edgeSymbolSize: [4, 10],
         edgeLabel: {
@@ -248,7 +257,18 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           lineStyle: {
             type: "solid",
             width: 3,
-            color: getColor("series")
+            color: getColor("series"),
+            curveness: 0
+          }
+        }
+      },
+      {
+        "name": "children", "keyword": {}, "base": "children", style: {
+          lineStyle: {
+            type: "solid",
+            width: 3,
+            color: getColor("series"),
+            curveness: 0
           }
         }
       },
@@ -256,7 +276,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         "name": "datasets", "keyword": {}, "base": "datasets", style: {
           lineStyle: {
             type: "solid",
-            color: getColor("datasets")
+            color: getColor("datasets"),
+            curveness: 0
           }
         }
       },
@@ -289,7 +310,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           lineStyle: {
             type: "solid",
             width: 3,
-            color: getColor("service")
+            color: getColor("service"),
+            curveness: 0
           }
         }
       },
@@ -317,7 +339,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
               .url?.replace(/.*api\/records\/(.*)\/associated/, "$1");
 
             let associated = response.data;
-            for (const { index, value } of model.categories.map((value: any, index: any) => ({ index, value }))) {
+            for (const { index, value } of model.categories
+              .map((value: any, index: any) => ({ index, value }))) {
               if (associated && associated[value.name]) {
                 for (var element of associated[value.name]) {
 
@@ -326,11 +349,18 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                       data.id === element._id);
                   const linkExists = option.series[0].links
                     .some((l: GraphEdgeItemObject<any>) =>
-                      l.source === uuid
-                      && l.target === element._id);
+                      (l.source === uuid
+                      && l.target === element._id)
+                      || l.target === uuid
+                      && l.source === element._id);
                   if (!nodeExists) {
                     updated = true;
-                    option.series[0].data.push(hitAsData(element._source));
+                    const source: any = element._source;
+                    option.series[0].data.push(hitAsData(source));
+                    option.series[0].links.push({
+                      source: source && source[categoryField] ? source[categoryField][0] : "",
+                      target: element._id
+                    });
                   }
 
                   if (!linkExists) {
@@ -351,7 +381,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
               }
             }
           });
-          
+
           if (updated && eChartsRef && eChartsRef.current) {
             console.log("Set graph options");
             eChartsRef.current?.getEchartsInstance().setOption(option);
