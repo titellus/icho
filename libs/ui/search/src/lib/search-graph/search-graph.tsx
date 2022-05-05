@@ -67,18 +67,19 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   }
   console.log("Build graph with : ", data, aggregations);
 
-  const colors = ["#B03060",
-    "#FE9A76",
-    "#FFD700",
+  const colors = [
     "#32CD32",
-    "#016936",
-    "#008080",
+    "#FFD700",
     "#0E6EB8",
-    "#EE82EE",
-    "#B413EC",
-    "#FF1493",
     "#A52A2A",
+    "#B413EC",
+    "#FE9A76",
+    "#016936",
+    "#B03060",
+    "#008080",
+    "#EE82EE",
     "#A0A0A0",
+    "#FF1493",
     "#000000"];
 
   const minSymbolSize = 20, maxSymbolSize = 150, recordSymbolSize = 8;
