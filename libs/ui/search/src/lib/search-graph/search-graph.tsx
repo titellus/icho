@@ -490,7 +490,7 @@ export function SearchGraph(props: SearchGraphProps) {
             resourceType: {
               terms: {
                 field: "resourceType",
-                includes: "series|dataset|service|application"
+                include: "series|dataset|service|application"
               }
             }
           },
