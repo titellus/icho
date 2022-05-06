@@ -11,11 +11,9 @@ import {
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
-import { RecordsApi, SearchApi } from "@catalogue/api/geonetwork";
+import { SearchApi } from "@catalogue/api/geonetwork";
 import { GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
 import { GraphEdgeItemObject } from "echarts/types/src/util/types";
-import axios from "axios";
-import { EChartsOption } from "echarts/types/dist/shared";
 
 
 /* eslint-disable-next-line */
@@ -171,7 +169,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         label: {
           fontStyle: "bold"
         },
-        symbol: 'pin',
+        symbol: "pin",
         symbolSize: 30
         // fixed: true,
         // symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
@@ -208,7 +206,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         layout: "force",
         force: {
           repulsion: 400,
-          initLayout: 'circular',
+          initLayout: "circular",
           layoutAnimation: false
         },
         roam: true,
@@ -221,7 +219,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           curveness: 0.3
         },
         emphasis: {
-          focus: 'adjacency',
+          focus: "adjacency",
           lineStyle: {
             width: 10
           }
@@ -340,11 +338,11 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
   function retrieveAssociated(uuids: string[]) {
     // @ts-ignore
-    new SearchApi().search('', model.categories.map(c => c.name), {
+    new SearchApi().search("", model.categories.map(c => c.name), {
       query: {
-        terms: { uuid: uuids },
+        terms: { uuid: uuids }
       },
-      _source: ['uuid'],
+      _source: ["uuid"],
       size: uuids.length
     }).then(r => {
       let updated = false;
@@ -399,11 +397,11 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           console.log("Set graph options");
           eChartsRef.current?.getEchartsInstance().setOption(option, {
             notMerge: false,
-            replaceMerge: 'series',
+            replaceMerge: "series",
             silent: true
           });
         }
-      })
+      });
     });
   }
 
