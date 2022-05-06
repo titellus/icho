@@ -11,10 +11,11 @@ import {
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
 import ReactECharts from "echarts-for-react";
-import { RecordsApi } from "@catalogue/api/geonetwork";
+import { RecordsApi, SearchApi } from "@catalogue/api/geonetwork";
 import { GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
 import { GraphEdgeItemObject } from "echarts/types/src/util/types";
 import axios from "axios";
+import { EChartsOption } from "echarts/types/dist/shared";
 
 
 /* eslint-disable-next-line */
@@ -193,6 +194,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   }
 
   let graphData = buildData();
+  // let option: EChartsOption = {
   let option: any = {
     tooltip: {},
     animationDurationUpdate: 1500,
@@ -206,6 +208,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         layout: "force",
         force: {
           repulsion: 400,
+          initLayout: 'circular',
           layoutAnimation: false
         },
         roam: true,
@@ -251,7 +254,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
   let model = {
     "categories": [
-      { "name": "root", "keyword": {}, "base": "root" },
       {
         "name": "parent", "keyword": {}, "base": "parent", style: {
           lineStyle: {
@@ -337,67 +339,72 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
 
   function retrieveAssociated(uuids: string[]) {
-    axios.all(uuids.map(uuid => new RecordsApi().getAssociatedResources(uuid)))
-      .then(
-        axios.spread((...responses) => {
-          let updated = false;
+    // @ts-ignore
+    new SearchApi().search('', model.categories.map(c => c.name), {
+      query: {
+        terms: { uuid: uuids },
+      },
+      _source: ['uuid'],
+      size: uuids.length
+    }).then(r => {
+      let updated = false;
 
-          responses.map(response => {
-            const uuid = response.config
-              .url?.replace(/.*api\/records\/(.*)\/associated/, "$1");
+      // @ts-ignore
+      r.data.hits.hits.map((record: any) => {
+        const uuid = record._id;
 
-            let associated = response.data;
-            for (const { index, value } of model.categories
-              .map((value: any, index: any) => ({ index, value }))) {
-              if (associated && associated[value.name]) {
-                for (var element of associated[value.name]) {
-                  const nodeExists = option.series[0].data
-                    .some((data: { id: string; }) =>
-                      data.id === element._id);
-                  const linkExists = option.series[0].links
-                    .some((l: GraphEdgeItemObject<any>) =>
-                      (l.source === uuid
-                      && l.target === element._id)
-                      || l.target === uuid
-                      && l.source === element._id);
-                  if (!nodeExists) {
-                    updated = true;
-                    const source: any = element._source;
-                    option.series[0].data.push(hitAsData(source));
-                    option.series[0].links.push({
-                      source: source && source[categoryField] ? source[categoryField][0] : "",
-                      target: element._id
-                    });
-                  }
+        let associated = record.related;
+        for (const { index, value } of model.categories
+          .map((value: any, index: any) => ({ index, value }))) {
+          if (associated && associated[value.name]) {
+            for (var element of associated[value.name]) {
+              const nodeExists = option.series[0].data
+                .some((data: { id: string; }) =>
+                  data.id === element._id);
+              const linkExists = option.series[0].links
+                .some((l: GraphEdgeItemObject<any>) =>
+                  (l.source === uuid
+                    && l.target === element._id)
+                  || l.target === uuid
+                  && l.source === element._id);
+              if (!nodeExists) {
+                updated = true;
+                const source: any = element._source;
+                option.series[0].data.push(hitAsData(source));
+                option.series[0].links.push({
+                  source: source && source[categoryField] ? source[categoryField][0] : "",
+                  target: element._id
+                });
+              }
 
-                  if (!linkExists) {
-                    const link: GraphEdgeItemObject<any> = {
-                      source: uuid,
-                      target: element._id,
-                      label: {
-                        show: true,
-                        formatter: value.name,
-                        fontSize: 9
-                      },
-                      ...value.style
-                    };
-                    option.series[0].links.push(link);
-                    option.series[0].edges.push(link);
-                  }
-                }
+              if (!linkExists) {
+                const link: GraphEdgeItemObject<any> = {
+                  source: uuid,
+                  target: element._id,
+                  label: {
+                    show: true,
+                    formatter: value.name,
+                    fontSize: 9
+                  },
+                  ...value.style
+                };
+                option.series[0].links.push(link);
+                option.series[0].edges.push(link);
               }
             }
-          });
-
-          if (updated && eChartsRef && eChartsRef.current) {
-            console.log("Set graph options");
-            eChartsRef.current?.getEchartsInstance().setOption(option, {
-              notMerge: false,
-              replaceMerge: 'series',
-              silent: true
-            });
           }
-        }));
+        }
+
+        if (updated && eChartsRef && eChartsRef.current) {
+          console.log("Set graph options");
+          eChartsRef.current?.getEchartsInstance().setOption(option, {
+            notMerge: false,
+            replaceMerge: 'series',
+            silent: true
+          });
+        }
+      })
+    });
   }
 
   return (
