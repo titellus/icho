@@ -384,7 +384,11 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
           if (updated && eChartsRef && eChartsRef.current) {
             console.log("Set graph options");
-            eChartsRef.current?.getEchartsInstance().setOption(option);
+            eChartsRef.current?.getEchartsInstance().setOption(option, {
+              notMerge: false,
+              replaceMerge: 'series',
+              silent: true
+            });
           }
         }));
   }
