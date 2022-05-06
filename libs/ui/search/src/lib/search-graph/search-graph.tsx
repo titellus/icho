@@ -175,7 +175,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     return aggregationsOnLoad[categoryField].buckets.map((b: any, i: number) => {
       return {
         id: b.key,
-        name: `${b.key} (${b.doc_count})`,
+        name: `${b.key}`,
         category: "agg-" + b.key,
         label: {
           fontStyle: "bold"
@@ -262,104 +262,98 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     }
   };
 
-  let model = {
-    "categories": [
-      {
-        "name": "parent", "keyword": {}, "base": "parent", style: {
-          value: minEdgeLength,
-          lineStyle: {
-            type: "solid",
-            width: 3,
-            color: getColor("series"),
-            curveness: 0
-          }
+  const parentConfig = {
+    style: {
+      value: minEdgeLength,
+      lineStyle: {
+        type: "solid",
+        width: 3,
+        color: getColor("series"),
+        curveness: 0
+      }
+    }
+  };
+  let associationTypes: Record<string, any> = {
+    parent: parentConfig,
+    partOfSeamlessDatabase: {
+      virtual: true,
+      ...parentConfig
+    },
+    children: {
+      style: {
+        value: maxEdgeLength,
+        lineStyle: {
+          type: "solid",
+          width: 3,
+          color: getColor("series"),
+          curveness: 0
         }
-      },
-      {
-        "name": "children", "keyword": {}, "base": "children", style: {
-          value: maxEdgeLength,
-          lineStyle: {
-            type: "solid",
-            width: 3,
-            color: getColor("series"),
-            curveness: 0
-          }
+      }
+    },
+    associated: {
+      style: {
+        // value: minEdgeLength,
+        lineStyle: {
+          type: "dotted",
+          color: getColor("datasets")
         }
-      },
-      {
-        "name": "datasets", "keyword": {}, "base": "datasets", style: {
-          value: maxEdgeLength,
-          lineStyle: {
-            type: "solid",
-            color: getColor("datasets"),
-            curveness: 0
-          }
+      }
+    },
+    brothersAndSisters: {
+      style: {
+        // value: minEdgeLength,
+        lineStyle: {
+          type: "dashed",
+          color: getColor("series")
         }
-      },
-      {
-        "name": "associated", "keyword": {}, "base": "associated", style: {
-          // value: minEdgeLength,
-          lineStyle: {
-            type: "dotted",
-            color: getColor("datasets")
-          }
+      }
+    },
+    siblings: {
+      style: {
+        // value: minEdgeLength,
+        lineStyle: {
+          type: "solid",
+          color: getColor("series")
         }
-      },
-      {
-        "name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters", style: {
-          // value: minEdgeLength,
-          lineStyle: {
-            type: "dashed",
-            color: getColor("series")
-          }
+      }
+    },
+    services: {
+      style: {
+        value: maxEdgeLength,
+        lineStyle: {
+          type: "solid",
+          width: 3,
+          color: getColor("service"),
+          curveness: 0
         }
-      },
-      {
-        "name": "siblings", "keyword": {}, "base": "siblings", style: {
-          // value: minEdgeLength,
-          lineStyle: {
-            type: "solid",
-            color: getColor("series")
-          }
+      }
+    },
+    datasets: {
+      style: {
+        value: maxEdgeLength / 2,
+        lineStyle: {
+          type: "dotted",
+          color: getColor("datasets")
         }
-      },
-      {
-        "name": "services", "keyword": {}, "base": "services", style: {
-          value: maxEdgeLength,
-          lineStyle: {
-            type: "solid",
-            width: 3,
-            color: getColor("service"),
-            curveness: 0
-          }
+      }
+    },
+    sources: {
+      style: {
+        value: maxEdgeLength / 2,
+        lineStyle: {
+          type: "dotted",
+          color: getColor("datasets")
         }
-      },
-      {
-        "name": "hassources", "keyword": {}, "base": "hassources", style: {
-          value: maxEdgeLength / 2,
-          lineStyle: {
-            type: "dotted",
-            color: getColor("datasets")
-          }
-        }
-      },
-      {
-        "name": "sources", "keyword": {}, "base": "sources", style: {
-          value: maxEdgeLength / 2,
-          lineStyle: {
-            type: "dotted",
-            color: getColor("datasets")
-          }
-        }
-      },
-      { "name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats" }
-    ]
+      }
+    },
+    hasfeaturecats: {}
   };
 
 
   function retrieveAssociated(uuids: string[]) {
     // @ts-ignore
-    new SearchApi().search("", model.categories.map(c => c.name), {
+    new SearchApi().search("", Object.keys(associationTypes)
+      .filter(t => !associationTypes[t].virtual), {
       query: {
         terms: { uuid: uuids }
       },
@@ -373,10 +367,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         const uuid = record._id;
 
         let associated = record.related;
-        for (const { index, value } of model.categories
-          .map((value: any, index: any) => ({ index, value }))) {
-          if (associated && associated[value.name]) {
-            for (var element of associated[value.name]) {
+        Object.keys(associationTypes).map((type: string) => {
+          if (associated && associated[type]) {
+            for (var element of associated[type]) {
               const nodeExists = option.series[0].data
                 .some((data: { id: string; }) =>
                   data.id === element._id);
@@ -390,7 +383,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                 updated = true;
                 const source: any = element._source;
                 option.series[0].data.push(hitAsData(source));
-                console.log("link to ", source[categoryField][0]);
+
                 const link: GraphEdgeItemOption = {
                   source: source && source[categoryField] ? source[categoryField][0] : "",
                   target: element._id,
@@ -400,21 +393,24 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
               }
 
               if (!linkExists) {
+                const linkType = element.properties?.associationType || type;
                 const link: GraphEdgeItemObject<any> = {
                   source: uuid,
                   target: element._id,
                   label: {
                     show: true,
-                    formatter: value.name,
+                    formatter: linkType,
                     fontSize: 9
                   },
-                  ...value.style
+                  ...associationTypes[linkType]
+                    ? associationTypes[linkType].style
+                    : associationTypes[type].style
                 };
                 option.series[0].edges.push(link);
               }
             }
           }
-        }
+        })
 
         if (updated && eChartsRef && eChartsRef.current) {
           console.log("Set graph options", option);
@@ -493,7 +489,8 @@ export function SearchGraph(props: SearchGraphProps) {
           aggs: {
             resourceType: {
               terms: {
-                field: "resourceType"
+                field: "resourceType",
+                includes: "series|dataset|service|application"
               }
             }
           },
