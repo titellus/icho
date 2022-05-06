@@ -323,6 +323,14 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           }
         }
       },
+      {
+        "name": "sources", "keyword": {}, "base": "sources", style: {
+          lineStyle: {
+            type: "dotted",
+            color: getColor("datasets")
+          }
+        }
+      },
       { "name": "hasfeaturecats", "keyword": {}, "base": "hasfeaturecats" }
     ]
   };
@@ -343,7 +351,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
               .map((value: any, index: any) => ({ index, value }))) {
               if (associated && associated[value.name]) {
                 for (var element of associated[value.name]) {
-
                   const nodeExists = option.series[0].data
                     .some((data: { id: string; }) =>
                       data.id === element._id);
