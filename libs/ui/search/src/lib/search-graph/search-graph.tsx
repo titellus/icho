@@ -97,8 +97,10 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "application": colors[3]
   };
 
+  const minEdgeLength = 20;
+  const maxEdgeLength = 400; // edge with larger value will be shorter
   const aggLineStyle = {
-    value: 2,
+    value: minEdgeLength,
     lineStyle: {
       color: greyColor,
       opacity: .2
@@ -171,7 +173,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
 
     return aggregationsOnLoad[categoryField].buckets.map((b: any, i: number) => {
-      console.log("Agg node ", b.key);
       return {
         id: b.key,
         name: `${b.key} (${b.doc_count})`,
@@ -215,8 +216,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         type: "graph",
         layout: "force",
         force: {
-          edgeLength: [20, 200],
-          repulsion: 400,
+          edgeLength: [minEdgeLength, maxEdgeLength],
+          repulsion: 200,
           initLayout: "circular",
           layoutAnimation: false
         },
@@ -265,6 +266,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "categories": [
       {
         "name": "parent", "keyword": {}, "base": "parent", style: {
+          value: minEdgeLength,
           lineStyle: {
             type: "solid",
             width: 3,
@@ -275,6 +277,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "children", "keyword": {}, "base": "children", style: {
+          value: maxEdgeLength,
           lineStyle: {
             type: "solid",
             width: 3,
@@ -285,6 +288,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "datasets", "keyword": {}, "base": "datasets", style: {
+          value: maxEdgeLength,
           lineStyle: {
             type: "solid",
             color: getColor("datasets"),
@@ -294,6 +298,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "associated", "keyword": {}, "base": "associated", style: {
+          // value: minEdgeLength,
           lineStyle: {
             type: "dotted",
             color: getColor("datasets")
@@ -302,6 +307,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "brothersAndSisters", "keyword": {}, "base": "brothersAndSisters", style: {
+          // value: minEdgeLength,
           lineStyle: {
             type: "dashed",
             color: getColor("series")
@@ -310,6 +316,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "siblings", "keyword": {}, "base": "siblings", style: {
+          // value: minEdgeLength,
           lineStyle: {
             type: "solid",
             color: getColor("series")
@@ -318,6 +325,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "services", "keyword": {}, "base": "services", style: {
+          value: maxEdgeLength,
           lineStyle: {
             type: "solid",
             width: 3,
@@ -328,6 +336,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "hassources", "keyword": {}, "base": "hassources", style: {
+          value: maxEdgeLength / 2,
           lineStyle: {
             type: "dotted",
             color: getColor("datasets")
@@ -336,6 +345,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       {
         "name": "sources", "keyword": {}, "base": "sources", style: {
+          value: maxEdgeLength / 2,
           lineStyle: {
             type: "dotted",
             color: getColor("datasets")
