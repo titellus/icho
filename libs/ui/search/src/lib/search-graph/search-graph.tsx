@@ -10,9 +10,9 @@ import {
 } from "@appbaseio/reactivesearch";
 import { DefaultQuery } from "@catalogue/utils/shared";
 import React, { createRef } from "react";
-import ReactECharts from "echarts-for-react";
+import ReactECharts, { EChartsOption } from "echarts-for-react";
 import { SearchApi } from "@catalogue/api/geonetwork";
-import { GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
+import { GraphEdgeItemOption, GraphNodeItemOption } from "echarts/types/src/chart/graph/GraphSeries";
 import { GraphEdgeItemObject } from "echarts/types/src/util/types";
 
 
@@ -74,6 +74,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     aggregationsOnLoad = aggregations;
   }
 
+  const greyColor = "#A0A0A0";
   const colors = [
     "#32CD32",
     "#FFD700",
@@ -85,7 +86,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "#B03060",
     "#008080",
     "#EE82EE",
-    "#A0A0A0",
+    greyColor,
     "#FF1493",
     "#000000"];
 
@@ -94,6 +95,14 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     "dataset": colors[1],
     "service": colors[2],
     "application": colors[3]
+  };
+
+  const aggLineStyle = {
+    value: 2,
+    lineStyle: {
+      color: greyColor,
+      opacity: .2
+    }
   };
 
   const minSymbolSize = 20, maxSymbolSize = 150, recordSymbolSize = 8;
@@ -162,6 +171,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     const maxCount = aggregations[categoryField].buckets[0]?.doc_count;
 
     return aggregationsOnLoad[categoryField].buckets.map((b: any, i: number) => {
+      console.log("Agg node ", b.key);
       return {
         id: b.key,
         name: `${b.key} (${b.doc_count})`,
@@ -185,15 +195,15 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     return data.map((h: any) => {
         return [{
           source: h[categoryField] ? h[categoryField][0] : "",
-          target: h.uuid
+          target: h.uuid,
+          ...aggLineStyle
         }];
       }
     ).flat();
   }
 
   let graphData = buildData();
-  // let option: EChartsOption = {
-  let option: any = {
+  let option: EChartsOption = {
     tooltip: {},
     animationDurationUpdate: 1500,
     animationEasingUpdate: "quinticInOut",
@@ -205,6 +215,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         type: "graph",
         layout: "force",
         force: {
+          edgeLength: [20, 200],
           repulsion: 400,
           initLayout: "circular",
           layoutAnimation: false
@@ -369,10 +380,13 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                 updated = true;
                 const source: any = element._source;
                 option.series[0].data.push(hitAsData(source));
-                option.series[0].links.push({
+                console.log("link to ", source[categoryField][0]);
+                const link: GraphEdgeItemOption = {
                   source: source && source[categoryField] ? source[categoryField][0] : "",
-                  target: element._id
-                });
+                  target: element._id,
+                  ...aggLineStyle
+                };
+                option.series[0].edges.push(link);
               }
 
               if (!linkExists) {
@@ -386,7 +400,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   },
                   ...value.style
                 };
-                option.series[0].links.push(link);
                 option.series[0].edges.push(link);
               }
             }
@@ -394,7 +407,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         }
 
         if (updated && eChartsRef && eChartsRef.current) {
-          console.log("Set graph options");
+          console.log("Set graph options", option);
           eChartsRef.current?.getEchartsInstance().setOption(option, {
             notMerge: false,
             replaceMerge: "series",
