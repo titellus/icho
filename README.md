@@ -27,7 +27,7 @@ change any of the source files.
 
 ```
 cd libs/ui/search/
-nx g @nrwl/react:component cat-search-filter-menu --export
+nx g @nrwl/react:component search-graph --export
 ```
 
 to generate a new component.
@@ -40,6 +40,8 @@ the `--prod` flag for a production build.
 For custom public path, update `.env` properties and then use:
 ```shell
 nx serve --baseHref=/browsing/
+
+NX_CATALOGUE_API_ENDPOINT=https://apps.org/geonetwork/srv NX_BASE_URL=/hub/ nx build catalogue --baseHref=/hub/
 ```
 
 

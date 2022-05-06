@@ -18,7 +18,7 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export const BASE_PATH = "http://localhost:8080/geonetwork/srv/api".replace(/\/+$/, "");
+export const BASE_PATH = process.env.NX_CATALOGUE_API_ENDPOINT + "/api".replace(/\/+$/, "");
 
 /**
  *

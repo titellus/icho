@@ -72,7 +72,7 @@ export function UiSearch({ filter = "" }) {
   return (
     <ReactiveBase
       app="records"
-      url={api + "/srv/api/search/"}
+      url={api + "/api/search/"}
       enableAppbase={false}
     >
       <Ref innerRef={contextRef}>

@@ -439,12 +439,12 @@ export interface SearchGraphProps {
 
 export function SearchGraph(props: SearchGraphProps) {
   const contextRef: any = createRef();
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT || "http://localhost:4200/geonetwork";
+  const api = process.env.NX_CATALOGUE_API_ENDPOINT || "http://localhost:4200/geonetwork/srv";
 
   return (
     <ReactiveBase
       app="records"
-      url={api + "/srv/api/search/"}
+      url={api + "/api/search/"}
       enableAppbase={false}
     >
       <Ref innerRef={contextRef}>
