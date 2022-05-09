@@ -70,6 +70,8 @@ class SearchResultsGraphWrapper extends React.Component <{
 
 let aggregationsOnLoad: any = null;
 
+
+
 export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphProps) {
   if (aggregations == null) {
     return (<div />);
@@ -158,7 +160,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     return `<b>${d.name}</b><br />${identifiers}`;
   }
 
-  function hitAsData(h: any): GraphNodeItemOption {
+  function hitAsData(h: any): any {
     return {
       id: h.uuid,
       name: h.resourceTitleObject?.default,
@@ -172,10 +174,10 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       },
       itemStyle: {
         opacity: 1
+      },
+      tooltip: {
+        formatter: '{b}'
       }
-      // tooltip: {
-      //   formatter: getTooltip
-      // }
     };
   }
 
@@ -186,12 +188,16 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       return {
         id: b.key,
         name: `${b.key}`,
+        value: b.doc_count.toLocaleString('fr'),
         category: "agg-" + b.key,
         label: {
           fontStyle: "bold"
         },
         symbol: "pin",
-        symbolSize: 30
+        symbolSize: 30,
+        tooltip: {
+          formatter: '<b>{b}</b>  ({c})'
+        }
         // fixed: true,
         // symbolSize: map(b.doc_count, 0, maxCount, minSymbolSize, maxSymbolSize)
       };
