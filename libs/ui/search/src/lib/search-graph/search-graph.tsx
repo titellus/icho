@@ -488,7 +488,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           <Form.Group inline>
             <label>Association types: </label>
               {modelCategories.map((category:any) => (
-                  <Checkbox label={category}
+                  <Checkbox style={{margin: "0.5em"}}
+                            label={category}
                             name={category}
                             onChange={checkboxChangeHandler}
                             key={category}
