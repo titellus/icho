@@ -1,5 +1,12 @@
 import "./search-graph.module.scss";
-import { Container, Grid, Ref, Sticky } from "semantic-ui-react";
+import {
+  Checkbox,
+  Container,
+  Grid,
+  Ref,
+  Sticky,
+  Form
+} from "semantic-ui-react";
 import {
   DataSearch,
   MultiDropdownList,
@@ -162,6 +169,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         show: true,
         position: "right",
         formatter: getLabel
+      },
+      itemStyle: {
+        opacity: 1
       }
       // tooltip: {
       //   formatter: getTooltip
@@ -262,6 +272,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     }
   };
 
+
+
   const parentConfig = {
     style: {
       value: minEdgeLength,
@@ -349,6 +361,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     hasfeaturecats: {}
   };
 
+  let modelCategories = Object.keys(associationTypes)
+  let hiddenCat: string[]=[]
 
   function retrieveAssociated(uuids: string[]) {
     // @ts-ignore
@@ -370,6 +384,9 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         Object.keys(associationTypes).map((type: string) => {
           if (associated && associated[type]) {
             for (var element of associated[type]) {
+              const hiddenCategoriesExists = hiddenCat
+                .some((hidden: string) =>
+                  hidden === type);
               const nodeExists = option.series[0].data
                 .some((data: { id: string; }) =>
                   data.id === element._id);
@@ -381,14 +398,22 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   && l.source === element._id);
               if (!nodeExists) {
                 updated = true;
-                const source: any = element._source;
-                option.series[0].data.push(hitAsData(source));
+                let source: any = hitAsData(element._source);
+                if (hiddenCategoriesExists) {
+                  // @ts-ignore
+                  source.itemStyle.opacity = 0
+                }
+                option.series[0].data.push(source);
 
                 const link: GraphEdgeItemOption = {
                   source: source && source[categoryField] ? source[categoryField][0] : "",
                   target: element._id,
                   ...aggLineStyle
                 };
+                if (hiddenCategoriesExists) {
+                  // @ts-ignore
+                  link.lineStyle["opacity"] = 0
+                }
                 option.series[0].edges.push(link);
               }
 
@@ -424,11 +449,59 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     });
   }
 
+  const checkboxChangeHandler = (e:any, items:any) => {
+    if (items.checked === false) {
+      hiddenCat.push(items.name)
+    }
+    if (items.checked === true) {
+      const catIndex = hiddenCat.indexOf(items.name)
+      hiddenCat.splice(catIndex, 1);
+    }
+    for (var i = 0; i < option.series[0].edges.length; i++)  {
+      if (option.series[0].edges[i].label && option.series[0].edges[i].label.formatter && option.series[0].edges[i].label.formatter === items.name){
+        if (items.checked === true) {
+          option.series[0].edges[i].lineStyle["opacity"] = 1
+          for (var j = 0; j < option.series[0].data.length; j++)  {
+            if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
+              option.series[0].data[j].itemStyle["opacity"] = 1
+            }
+          }
+        } else {
+          option.series[0].edges[i].lineStyle["opacity"] = 0
+          for (var j = 0; j < option.series[0].data.length; j++)  {
+            if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
+              option.series[0].data[j].itemStyle["opacity"] = 0
+            }
+          }
+        }
+      }
+      if (eChartsRef && eChartsRef.current) {;
+        eChartsRef.current?.getEchartsInstance().setOption(option);
+      }
+    }
+  };
+
   return (
-    <ReactECharts option={option}
-                  onEvents={events}
-                  ref={eChartsRef}
-                  style={{ minHeight: "800px", height: "100%", width: "100%" }} />
+    <>
+      <div style={{margin: "1em"}}>
+        <Form>
+          <Form.Group inline>
+            <label>Association types: </label>
+              {modelCategories.map((category:any) => (
+                  <Checkbox label={category}
+                            name={category}
+                            onChange={checkboxChangeHandler}
+                            key={category}
+                            defaultChecked/>
+              ))}
+          </Form.Group>
+        </Form>
+      </div>
+      <ReactECharts option={option}
+                    onEvents={events}
+                    ref={eChartsRef}
+                    style={{ minHeight: "800px", height: "100%", width: "100%" }} />
+    </>
   );
 }
 
