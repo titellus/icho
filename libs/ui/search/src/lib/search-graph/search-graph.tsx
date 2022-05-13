@@ -481,6 +481,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       const catIndex = hiddenCat.indexOf(items.name)
       hiddenCat.splice(catIndex, 1);
     }
+
     for (var i = 0; i < option.series[0].edges.length; i++)  {
       if (option.series[0].edges[i].label && option.series[0].edges[i].label.formatter && option.series[0].edges[i].label.formatter === items.name){
         if (items.checked === true) {
@@ -492,9 +493,19 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           }
         } else {
           option.series[0].edges[i].lineStyle["opacity"] = 0
-         for (var j = 0; j < option.series[0].data.length; j++)  {
-            if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
-              option.series[0].data[j].itemStyle["opacity"] = 0
+          let count = 0
+          option.series[0].edges.forEach((l: GraphEdgeItemObject<any>) => {
+            if ((l.source === option.series[0].edges[i].source
+              && l.target === option.series[0].edges[i].target) || (l.source === option.series[0].edges[i].target
+              && l.target === option.series[0].edges[i].source)) {
+              count += 1;
+            }
+          });
+          if (count === 1){
+            for (var j = 0; j < option.series[0].data.length; j++)  {
+              if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
+                option.series[0].data[j].itemStyle["opacity"] = 0
+              }
             }
           }
         }
