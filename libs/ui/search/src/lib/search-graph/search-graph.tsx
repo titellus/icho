@@ -474,16 +474,16 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           }
         } else {
           option.series[0].edges[i].lineStyle["opacity"] = 0
-          for (var j = 0; j < option.series[0].data.length; j++)  {
+         for (var j = 0; j < option.series[0].data.length; j++)  {
             if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
               option.series[0].data[j].itemStyle["opacity"] = 0
             }
           }
         }
       }
-      if (eChartsRef && eChartsRef.current) {;
-        eChartsRef.current?.getEchartsInstance().setOption(option);
-      }
+    }
+    if (eChartsRef && eChartsRef.current) {;
+      eChartsRef.current?.getEchartsInstance().setOption(option);
     }
   };
 
