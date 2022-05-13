@@ -269,7 +269,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
   const nodesStyleTracker = {
     position:"right",
     fontWeight : "bolder",
-    color: '#d6090c',
+    color: '#302f2f',
     backgroundColor: "#e0dcdc"
   }
   const events = {
@@ -425,13 +425,12 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   source.itemStyle.opacity = 0
                 }
                 option.series[0].data.push(source);
-
                 const link: GraphEdgeItemOption = {
                   source: source && source[categoryField] ? source[categoryField][0] : "",
                   target: element._id,
                   ...aggLineStyle
                 };
-                if (hiddenCategoriesExists) {
+                if (hiddenCategoriesExists && link.source != "") {
                   // @ts-ignore
                   link.lineStyle["opacity"] = 0
                 }
