@@ -265,10 +265,28 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     ]
   };
   const eChartsRef = React.useRef(null as any);
+  const nodesTracker: string[] =[]
+  const nodesStyleTracker = {
+    position:"right",
+    fontWeight : "bolder",
+    color: '#d6090c',
+    backgroundColor: "#e0dcdc"
+  }
   const events = {
     "click": function(params: any) {
       if (params.data?.category?.startsWith("record-")) {
+        // @ts-ignore
+        option.series[0].data = option.series[0].data.map((obj: { id: any; }) => {
+          if (obj.id === params.data.id) {
+            // @ts-ignore
+            return {
+              ...obj, label: nodesStyleTracker
+            };
+          }
+          return obj
+        })
         retrieveAssociated([params.data.id]);
+        nodesTracker.push(params.data.id)
       }
     },
     "dblclick": function(params: any) {
@@ -380,8 +398,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       _source: ["uuid"],
       size: uuids.length
     }).then(r => {
-      let updated = false;
-
       // @ts-ignore
       r.data.hits.hits.map((record: any) => {
         const uuid = record._id;
@@ -403,7 +419,6 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                   || l.target === uuid
                   && l.source === element._id);
               if (!nodeExists) {
-                updated = true;
                 let source: any = hitAsData(element._source);
                 if (hiddenCategoriesExists) {
                   // @ts-ignore
@@ -437,13 +452,17 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
                     ? associationTypes[linkType].style
                     : associationTypes[type].style
                 };
+                if (hiddenCategoriesExists) {
+                  // @ts-ignore
+                  link.lineStyle["opacity"] = 0
+                }
                 option.series[0].edges.push(link);
               }
             }
           }
         })
 
-        if (updated && eChartsRef && eChartsRef.current) {
+        if (eChartsRef && eChartsRef.current) {
           console.log("Set graph options", option);
           eChartsRef.current?.getEchartsInstance().setOption(option, {
             notMerge: false,
