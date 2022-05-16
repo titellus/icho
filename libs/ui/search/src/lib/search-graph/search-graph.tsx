@@ -305,7 +305,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         type: "solid",
         width: 3,
         color: getColor("series"),
-        curveness: 0
+        curveness: 0,
+        opacity:1
       }
     }
   };
@@ -322,7 +323,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           type: "solid",
           width: 3,
           color: getColor("series"),
-          curveness: 0
+          curveness: 0,
+          opacity:1
         }
       }
     },
@@ -331,7 +333,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         // value: minEdgeLength,
         lineStyle: {
           type: "dotted",
-          color: getColor("datasets")
+          color: getColor("datasets"),
+          opacity:1
         }
       }
     },
@@ -340,7 +343,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         // value: minEdgeLength,
         lineStyle: {
           type: "dashed",
-          color: getColor("series")
+          color: getColor("series"),
+          opacity:1
         }
       }
     },
@@ -349,7 +353,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         // value: minEdgeLength,
         lineStyle: {
           type: "solid",
-          color: getColor("series")
+          color: getColor("series"),
+          opacity:1
         }
       }
     },
@@ -360,7 +365,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
           type: "solid",
           width: 3,
           color: getColor("service"),
-          curveness: 0
+          curveness: 0,
+          opacity:1
         }
       }
     },
@@ -369,7 +375,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         value: maxEdgeLength / 2,
         lineStyle: {
           type: "dotted",
-          color: getColor("datasets")
+          color: getColor("datasets"),
+          opacity:1
         }
       }
     },
@@ -378,7 +385,8 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
         value: maxEdgeLength / 2,
         lineStyle: {
           type: "dotted",
-          color: getColor("datasets")
+          color: getColor("datasets"),
+          opacity:1
         }
       }
     },
@@ -480,38 +488,36 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
     if (items.checked === true) {
       const catIndex = hiddenCat.indexOf(items.name)
       hiddenCat.splice(catIndex, 1);
-    }
-
-    for (var i = 0; i < option.series[0].edges.length; i++)  {
-      if (option.series[0].edges[i].label && option.series[0].edges[i].label.formatter && option.series[0].edges[i].label.formatter === items.name){
-        if (items.checked === true) {
+      for (var i = 0; i < option.series[0].edges.length; i++) {
+        if (option.series[0].edges[i].label && option.series[0].edges[i].label.formatter && option.series[0].edges[i].label.formatter === items.name) {
           option.series[0].edges[i].lineStyle["opacity"] = 1
-          for (var j = 0; j < option.series[0].data.length; j++)  {
-            if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
+          for (var j = 0; j < option.series[0].data.length; j++) {
+            if (option.series[0].data[j].id === option.series[0].edges[i].target) {
               option.series[0].data[j].itemStyle["opacity"] = 1
-            }
-          }
-        } else {
-          option.series[0].edges[i].lineStyle["opacity"] = 0
-          let count = 0
-          option.series[0].edges.forEach((l: GraphEdgeItemObject<any>) => {
-            if ((l.source === option.series[0].edges[i].source
-              && l.target === option.series[0].edges[i].target) || (l.source === option.series[0].edges[i].target
-              && l.target === option.series[0].edges[i].source)) {
-              count += 1;
-            }
-          });
-          if (count === 1){
-            for (var j = 0; j < option.series[0].data.length; j++)  {
-              if ( option.series[0].data[j].id === option.series[0].edges[i].target ){
-                option.series[0].data[j].itemStyle["opacity"] = 0
-              }
             }
           }
         }
       }
+    } else {
+      let aliveNodes = []
+      for (var i = 0; i < option.series[0].edges.length; i++)  {
+        if (option.series[0].edges[i].label && option.series[0].edges[i].label.formatter && option.series[0].edges[i].label.formatter === items.name){
+          option.series[0].edges[i].lineStyle["opacity"] = 0
+        }
+        else {
+          aliveNodes.push(option.series[0].edges[i].target)
+          aliveNodes.push(option.series[0].edges[i].source)
+        }
+      }
+      console.log(aliveNodes)
+      for (var i = 0; i < option.series[0].data.length; i++)  {
+        if (aliveNodes.indexOf(option.series[0].data[i].id) === -1){
+          option.series[0].data[i].itemStyle["opacity"] = 0
+        }
+      }
     }
     if (eChartsRef && eChartsRef.current) {;
+      console.log("Set graph options after checkbox", option);
       eChartsRef.current?.getEchartsInstance().setOption(option);
     }
   };
