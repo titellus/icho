@@ -10,6 +10,7 @@ import { Browse } from './routes/browse';
 import { BrowseGraph } from './routes/browseGraph';
 import { Metadata } from './routes/metadata';
 import { Authenticate } from './routes/authenticate';
+import { MetadataGraph } from "./routes/metadataGraph";
 
 ReactDOM.render(
   <StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.render(
           <Route path="search" element={<Browse />} />
           <Route path="searchGraph" element={<BrowseGraph />} />
           <Route path="metadata/:id" element={<Metadata />} />
+          <Route path="metadata/graph/:id" element={<MetadataGraph />} />
           <Route path="authenticate" element={<Authenticate />} />
         </Route>
       </Routes>
