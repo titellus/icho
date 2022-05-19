@@ -491,7 +491,9 @@ export function MetadataResultGraph({uuid}: Props) {
           // @ts-ignore
           return (
             <div>
+{/*
               <ResultGraph data={data}></ResultGraph>
+*/}
             </div>
           );
         }}
