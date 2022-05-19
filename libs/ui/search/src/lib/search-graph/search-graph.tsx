@@ -5,7 +5,7 @@ import {
   Grid,
   Ref,
   Sticky,
-  Form
+  Form, SemanticWIDTHS
 } from "semantic-ui-react";
 import {
   DataSearch,
@@ -27,10 +27,12 @@ import { GraphEdgeItemObject } from "echarts/types/src/util/types";
 export interface SearchResultsGraphProps {
   aggregations: any;
   data: any;
+  filterAssociated:string
 }
 
 class SearchResultsGraphWrapper extends React.Component <{
   aggregations: any;
+  filterAssociated:string,
   data: any;
   setQuery?: any;
   dataField?: any;
@@ -60,6 +62,7 @@ class SearchResultsGraphWrapper extends React.Component <{
     if (true) {
       return (
         <SearchResultsGraph aggregations={this.props.aggregations}
+                            filterAssociated={this.props.filterAssociated}
                             data={this.props.data}></SearchResultsGraph>
       );
     } else {
@@ -72,7 +75,7 @@ let aggregationsOnLoad: any = null;
 
 
 
-export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphProps) {
+export function SearchResultsGraph({ data, aggregations, filterAssociated }: SearchResultsGraphProps) {
   if (aggregations == null) {
     return (<div />);
   }
@@ -521,10 +524,12 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
       eChartsRef.current?.getEchartsInstance().setOption(option);
     }
   };
+  console.log(filterAssociated)
 
   return (
     <>
-      <div style={{margin: "1em"}}>
+      {filterAssociated === "true" ?
+        <div style={{margin: "1em"}}>
         <Form>
           <Form.Group inline>
             <label>Association types: </label>
@@ -538,7 +543,7 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
               ))}
           </Form.Group>
         </Form>
-      </div>
+      </div>: ""}
       <ReactECharts option={option}
                     onEvents={events}
                     ref={eChartsRef}
@@ -549,12 +554,16 @@ export function SearchResultsGraph({ data, aggregations }: SearchResultsGraphPro
 
 
 /* eslint-disable-next-line */
-export interface SearchGraphProps {
-};
+interface Props {
+  catalogueUrl: string;
+  filterAssociated:string;
+}
 
-export function SearchGraph(props: SearchGraphProps) {
+
+export function SearchGraph({ catalogueUrl, filterAssociated }: Props){
   const contextRef: any = createRef();
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT || "http://localhost:4200/geonetwork/srv";
+  //const api = process.env.NX_CATALOGUE_API_ENDPOINT || "http://localhost:4200/geonetwork/srv";
+  const api = process.env.NX_CATALOGUE_API_ENDPOINT || catalogueUrl;
 
   return (
     <ReactiveBase
@@ -614,7 +623,9 @@ export function SearchGraph(props: SearchGraphProps) {
         render={({ aggregations, setQuery, data }) => (
           <SearchResultsGraphWrapper aggregations={aggregations}
                                      data={data}
-                                     setQuery={setQuery} />
+                                     setQuery={setQuery}
+                                     filterAssociated={filterAssociated}
+                            />
         )}
       />
     </ReactiveBase>
