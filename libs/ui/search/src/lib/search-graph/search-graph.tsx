@@ -562,9 +562,10 @@ interface Props {
 
 export function SearchGraph({ catalogueUrl, filterAssociated }: Props){
   const contextRef: any = createRef();
-  //const api = process.env.NX_CATALOGUE_API_ENDPOINT || "http://localhost:4200/geonetwork/srv";
-  const api = process.env.NX_CATALOGUE_API_ENDPOINT || catalogueUrl;
-
+  let api = process.env.NX_CATALOGUE_API_ENDPOINT;
+  if (catalogueUrl){
+    api = catalogueUrl;
+  }
   return (
     <ReactiveBase
       app="records"
