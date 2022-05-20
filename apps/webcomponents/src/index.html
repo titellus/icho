@@ -85,11 +85,36 @@
     <h1>Exemple tableau des données #700</h1>
 
     <catalogue-results-table
+      catalogueurl="https://metawal.wallonie.be/geonetwork/srv"
+      fields='
+	{"columnName":"Nom de la donnée","columnIndex":"resourceTitleObject","columnJsonPath":"$.langfre","columnWidth":"2"} |
+    {"columnName":"Nom de la donnée","columnIndex":"overview","columnJsonPath":"$[0].url","columnWidth":"2"} |
+    {"columnName":"Type","columnIndex":"resourceType","columnJsonPath":"$[0]","columnWidth":"1"} |
+    {"columnName":"BD","columnIndex":"mw-gp-localIdentifierCodespace","columnJsonPath":"","columnWidth":"1"} |
+    {"columnName":"Nom physique","columnIndex":"mw-gp-localIdentifier","columnJsonPath":"","columnWidth":"1"} |
+    {"columnName":"Statut","columnIndex":"cl_status","columnJsonPath":"$[0].langfre","columnWidth":"1"} |
+    {"columnName":"Note","columnIndex":"supplementalInformationObject","columnJsonPath":"$[0].langfre","columnWidth":"2"} |
+	{"columnName":"Modèle et légende","columnIndex":"related","columnJsonPath":"$.onlines[?(@.function==\"featureCatalogue\")].url.fre","columnIcon":"th","columnWidth":"2","columnFormatter":"a"} |
+	{"columnName":"Modèle et légende","columnIndex":"related","columnJsonPath":"$.onlines[?(@.function==\"legend\")].url.fre","columnIcon":"paint brush","columnWidth":"2"} |
+	{"columnName":"Consulter (applications et services)","columnIndex":"mw-gp-thematicMap","columnJsonPath":"$[*].url","columnIcon":"map","columnWidth":"2"} |
+    {"columnName":"Consulter (applications et services)","columnIndex":"mw-gp-allWebServices","columnJsonPath":"$[*].url","columnIcon":"world","columnWidth":"2"}|
+	{"columnName":"Crédits","columnIndex":"resourceCreditObject","columnJsonPath":"$[0].langfre"}
+	'
+      filter="+(resourceType:dataset or resourceType:series) -(th_infraSIG.default:Reporting INSPIRE) -(cl_status.key:obsolete) +(custodianOrgForResource:*SPW*)" filterfield="th_Themes_geoportail_wallon_hierarchy.default"
+      size="10"
+      sortby="mw-gp-localIdentifier"
+      sorttype="asc"
+      togglefilterfield="mw-gp-localIdentifierCodespace"
+      toggleismultiselect="true"
+      togglelabel='{"label": "GINET", "value": "BE.SPW.INFRASIG.GINET"} | {"label": "CARTON", "value": "BE.SPW.INFRASIG.CARTON"}'
+    >
+    </catalogue-results-table>
+    <!--catalogue-results-table
       catalogueurl="https://metawal4.test.wallonie.be/geonetwork/srv"
       fields='{"columnName":"Nom de la donnée","columnIndex":"resourceTitleObject","columnJsonPath":"$.langfre"} |
       {"columnName":"Nom de la donnée","columnIndex":"overview","columnJsonPath":"$[0].url"} |
       {"columnName":"Type","columnIndex":"resourceType","columnJsonPath":"$[0]","columnWidth":"1"} |
-      {"columnName":"Nom physique","columnIndex":"mw-gp-localIdentifier","columnJsonPath":""} |
+      {"columnName":"Nom physique","columnIndex":"mw-gp-localIdentifier","columnJsonPath":"","columnWidth":"4"} |
       {"columnName":"Statut","columnIndex":"cl_status","columnJsonPath":"$[0].langfre","columnWidth":"1"} |
       {"columnName":"Note","columnIndex":"supplementalInformationObject","columnJsonPath":"$[0].langfre"} |
       {"columnName":"Modèle et légende","columnIndex":"related","columnJsonPath":"$.onlines[?(@.function==\"featureCatalogue\")].url.fre","columnIcon":"th"} |
@@ -105,7 +130,7 @@
       togglefilterfield="mw-gp-localIdentifierCodespace"
       toggleismultiselect="true"
       togglelabel='{"label": "GINET", "value": "BE.SPW.INFRASIG.GINET"} | {"label": "CARTON", "value": "BE.SPW.INFRASIG.CARTON"}'>
-    </catalogue-results-table>
+    </catalogue-results-table-->
 
 
 <!--

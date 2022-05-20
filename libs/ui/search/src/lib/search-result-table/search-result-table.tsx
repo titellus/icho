@@ -1,5 +1,5 @@
 import styles from "./search-result-table.module.scss";
-import {Container, Icon, Label, Sticky, Table, SemanticWIDTHS} from "semantic-ui-react";
+import {Container, Icon, Label, Sticky, Table, SemanticWIDTHS, Popup} from "semantic-ui-react";
 import React, {createRef} from "react";
 import SearchResultTableSort, {SortOption} from "../search-result-table-sort/search-result-table-sort";
 import jp from "jsonpath";
@@ -112,7 +112,7 @@ export function SearchResultTable({ data,
                     {dataItem[fieldsItem.columnIndex] ? (
                         <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
                                   label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon}
-                                  iconValue={fieldsItem.columnIcon}/>
+                                  iconValue={fieldsItem.columnIcon} formatter={fieldsItem.columnFormatter}/>
                     ) : ""}
                     <br/>
                   </Container>
@@ -137,6 +137,7 @@ interface HtmlTypeProps {
   label?: undefined;
   iconValue?: undefined;
   ribon?: Object;
+  formatter?:string;
 }
 
 
@@ -146,7 +147,8 @@ function HtmlType({
                     value,
                     label,
                     ribon,
-                    iconValue
+                    iconValue,
+                    formatter
                   }: HtmlTypeProps) {
   let linkStyle;
   let icon;
@@ -189,8 +191,8 @@ function HtmlType({
       linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
-        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath)[i].toString()}> {icon}
-          {jp.query(value, jsonPath.replace('url', 'name'))[i]}
+        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath)[i].toString()}>
+          {formatter === "a" ? <>{icon} {jp.query(value, jsonPath.replace('url', 'name'))[i]}</> : <Popup content={jp.query(value, jsonPath.replace('url', 'name'))[i]} trigger={icon} />}
         </a><br/></React.Fragment>;
         if(linkStyle === ''){
           linkStyle = [linkStyle,elemlinkStyle]
@@ -205,7 +207,7 @@ function HtmlType({
       linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
-        elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath+'.eng')[i].toString()}> {icon}  {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</a><br/></React.Fragment>;
+        elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath+'.eng')[i].toString()}> {formatter === "a" ? <>{icon} {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</> : <Popup content={jp.query(value, jsonPath.replace('url', 'title.eng'))[i]} trigger={icon} />}</a><br/></React.Fragment>;
         if(linkStyle === ''){
           linkStyle = [linkStyle,elemlinkStyle]
         } else {
@@ -219,8 +221,8 @@ function HtmlType({
                          src={jp.query(value, jsonPath).toString()}
                          className={styles.image}/>
       } else {
-        linkStyle = <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}> {icon}
-          {jp.query(value, jsonPath)}
+        linkStyle = <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
+          {formatter === "a" ? <>{icon} {jp.query(value, jsonPath)}</> : <Popup content={jp.query(value, jsonPath)} trigger={icon} />}
         </a>;
       }
     }
