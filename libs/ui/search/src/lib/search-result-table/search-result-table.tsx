@@ -179,7 +179,7 @@ function HtmlType({
       if (value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
         linkStyle =<React.Fragment><a href={value.toString()} style={{wordBreak: "break-all"}}> {icon} {value}</a><br/></React.Fragment>;
       } else {
-        linkStyle =<React.Fragment><span> {icon} {value}</span><br/></React.Fragment>;
+        linkStyle =<React.Fragment><span style={{wordBreak: "break-all"}}> {icon} {value}</span><br/></React.Fragment>;
       }
     }
   }
