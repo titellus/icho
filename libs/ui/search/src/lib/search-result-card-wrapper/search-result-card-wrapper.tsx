@@ -2,7 +2,7 @@ import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
 //import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import {DataSearch, MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {Dropdown, Grid, SemanticWIDTHS} from "semantic-ui-react";
+import {Dropdown, Grid, Pagination, SemanticWIDTHS} from "semantic-ui-react";
 
 import SearchResultTable from "../search-result-table/search-result-table";
 
@@ -239,6 +239,36 @@ export function SearchResultCardWrapper({
           dataField={"_id"}
           react={{
             and: ["cardQuickFilter", "cardFullTextFilter", "cardQuickFilter_2"]
+          }}
+          renderPagination={({ pages, totalPages, currentPage, setPage, fragmentName }) => {
+            const onChange = (e: any, pageInfo: any) => {
+              setPage(pageInfo.activePage)
+            };
+            return  <>
+            {!isNaN(totalPages) ?
+              <Grid columns={3}>
+                <Grid.Row >
+                  <Grid.Column >
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Pagination defaultActivePage={1}
+                                onPageChange={onChange}
+                                prevItem={{
+                                  'aria-label': 'Précédent',
+                                  content: 'Préc',
+                                }}
+                                nextItem={{
+                                  'aria-label': 'Suivant',
+                                  content: 'Suiv',
+                                }}
+                                totalPages={totalPages-1} />
+                  </Grid.Column>
+                  <Grid.Column>
+                  </Grid.Column>
+                  </Grid.Row >
+              </Grid>
+                    :''}
+            </>
           }}
           render={({loading, error, data}) => {
             if (loading) {
