@@ -191,9 +191,15 @@ function HtmlType({
       linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
-        elemlinkStyle = <React.Fragment> <a href={jp.query(value, jsonPath)[i].toString()}>
-          {formatter === "a" ? <>{icon} {jp.query(value, jsonPath.replace('url', 'name'))[i]}</> : <Popup content={jp.query(value, jsonPath.replace('url', 'name'))[i]} trigger={icon} />}
-        </a><br/></React.Fragment>;
+        elemlinkStyle = <React.Fragment>
+          {jp.query(value, jsonPath)[i].toString() ?
+            <><a href={jp.query(value, jsonPath)[i].toString()}>
+              {formatter === "withtext" ?
+                <>{icon} {jp.query(value, jsonPath.replace('url', 'name'))[i]}</> :
+                <Popup content={jp.query(value, jsonPath.replace('url', 'name'))[i]} trigger={icon} />
+              }
+            </a><br/></> : ''}
+        </React.Fragment>;
         if(linkStyle === ''){
           linkStyle = [linkStyle,elemlinkStyle]
         } else {
@@ -207,7 +213,15 @@ function HtmlType({
       linkStyle ='';
       for (let i in jp.query(value, jsonPath)){
         let elemlinkStyle =null;
-        elemlinkStyle = <React.Fragment><a href={jp.query(value, jsonPath+'.eng')[i].toString()}> {formatter === "a" ? <>{icon} {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</> : <Popup content={jp.query(value, jsonPath.replace('url', 'title.eng'))[i]} trigger={icon} />}</a><br/></React.Fragment>;
+        elemlinkStyle = <React.Fragment>
+          {jp.query(value, jsonPath+'.eng')[i] ?
+            <><a href={jp.query(value, jsonPath+'.eng')[i].toString()}>
+              {formatter === "withtext" ?
+                <>{icon} {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</> :
+                <Popup content={jp.query(value, jsonPath.replace('url', 'title.eng'))[i]} trigger={icon} />
+              }
+            </a><br/></>:''}
+          </React.Fragment>;
         if(linkStyle === ''){
           linkStyle = [linkStyle,elemlinkStyle]
         } else {
@@ -221,12 +235,38 @@ function HtmlType({
                          src={jp.query(value, jsonPath).toString()}
                          className={styles.image}/>
       } else {
-        linkStyle = <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
-          {formatter === "a" ? <>{icon} {jp.query(value, jsonPath)}</> : <Popup content={jp.query(value, jsonPath)} trigger={icon} />}
-        </a>;
+        linkStyle = <React.Fragment>
+          {jp.query(value, jsonPath).toString() ?
+          <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
+          {formatter === "withtext" ? <>{icon} {jp.query(value, jsonPath)}</> : <Popup content={jp.query(value, jsonPath)} trigger={icon} />}
+          </a> : ''}
+        </React.Fragment>;
       }
     }
-  } else {
+  } else if (jsonPath.endsWith('url.fre') || jsonPath.endsWith('url.eng') ) {
+    if (jp.query(value, jsonPath.replace('url', 'title')).length > 0) {
+      linkStyle ='';
+      for (let i in jp.query(value, jsonPath)){
+        let elemlinkStyle =null;
+        elemlinkStyle = <React.Fragment>
+          {jp.query(value, jsonPath)[i].toString() ?
+            <><a href={jp.query(value, jsonPath)[i].toString()}>
+              {formatter === "withtext" ?
+                <>{icon} {jp.query(value, jsonPath.replace('url', 'title'))[i]}</> :
+                <Popup content={jp.query(value, jsonPath.replace('url', 'title'))[i]} trigger={icon} />
+              }
+            </a><br/></> : ''}
+        </React.Fragment>;
+        if(linkStyle === ''){
+          linkStyle = [linkStyle,elemlinkStyle]
+        } else {
+          linkStyle = [linkStyle,<br/>,elemlinkStyle]
+        }
+      }
+      linkStyle = <React.Fragment>{linkStyle}</React.Fragment>;
+    }
+  }
+  else {
     if (jp.query(value, jsonPath).toString() != '') {
       linkStyle ='';
       if (jp.query(value, jsonPath).toString().match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
