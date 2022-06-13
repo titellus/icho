@@ -22,6 +22,7 @@ export function SearchResultsCardWc({
   itemsperrow = undefined,
   marginx = undefined,
   marginbottom = undefined,
+  margincardbottom = undefined,
   margintoolsbottom = undefined,
   linkmdt = "false",
   imageheight= undefined
@@ -73,6 +74,7 @@ export function SearchResultsCardWc({
       itemsPerRow={itemsperrow}
       marginX={marginx}
       marginBottom={marginbottom}
+      marginCardBottom={margincardbottom}
       marginToolsBottom={margintoolsbottom}
       linkMDT={linkmdt}
       imageHeight={imageheight}
@@ -97,6 +99,7 @@ SearchResultsCardWc.propTypes = {
   itemsperrow: undefined,
   marginx:PropTypes.number,
   marginbottom:PropTypes.number,
+  margincardbottom:PropTypes.number,
   margintoolsbottom:PropTypes.number,
   linkmdt:PropTypes.string,
   imageheight:PropTypes.number

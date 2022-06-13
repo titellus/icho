@@ -29,6 +29,7 @@ interface Props {
   itemsPerRow?: SemanticWIDTHS;
   marginX?: number;
   marginBottom?: number;
+  marginCardBottom?: number;
   marginToolsBottom?: number;
   landingPageUrlTemplate: string;
   linkMDT: string;
@@ -53,6 +54,7 @@ export function SearchResultCardWrapper({
                                           itemsPerRow,
                                           marginX,
                                           marginBottom,
+                                          marginCardBottom,
                                           marginToolsBottom,
                                           landingPageUrlTemplate,
                                           linkMDT,
@@ -286,6 +288,7 @@ export function SearchResultCardWrapper({
                 itemsPerRow={itemsPerRow}
                 marginX={marginX}
                 marginBottom={marginBottom}
+                marginCardBottom={marginCardBottom}
                 linkMDT={linkMDT}
                 imageHeight={imageHeight}
               />

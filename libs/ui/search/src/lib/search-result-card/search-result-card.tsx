@@ -44,6 +44,7 @@ interface Props {
   itemsPerRow: SemanticWIDTHS | undefined;
   marginX: number | undefined;
   marginBottom: number | undefined;
+  marginCardBottom: number | undefined;
   linkMDT: string;
   imageHeight: number | undefined;
 }
@@ -57,7 +58,7 @@ export function SearchResultCard({
                                    data,
                                    template,
                                    landingPageUrlTemplate,
-                                   itemsPerRow, marginX, marginBottom, linkMDT,imageHeight
+                                   itemsPerRow, marginX, marginBottom, marginCardBottom, linkMDT,imageHeight
                                  }: Props) {
   let style: any;
   let imgStyle: any;
@@ -66,7 +67,13 @@ export function SearchResultCard({
     let spacing = 2 * marginX + "em";
     // @ts-ignore
     let elem = 'calc(' + (100 / itemsPerRow) + '% - ' + spacing + ')'
-    style = {marginLeft: margin, marginRight: margin, width: elem}
+    if (marginCardBottom) {
+      style = {marginLeft: margin, marginRight: margin, width: elem, marginBottom:marginCardBottom + "em"}
+    } else {
+      style = {marginLeft: margin, marginRight: margin, width: elem}
+    }
+  } else if (marginCardBottom) {
+    style = {marginBottom:marginCardBottom + "em"}
   }
   if (imageHeight) {
     imgStyle = {maxHeight: imageHeight + "px", minHeight: imageHeight + "px", objectFit:"contain"}
