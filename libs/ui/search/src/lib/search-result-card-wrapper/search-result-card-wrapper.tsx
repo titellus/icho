@@ -2,7 +2,7 @@ import './search-result-card-wrapper.module.scss';
 import React, {useState} from "react";
 //import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import {DataSearch, MultiDropdownList, ReactiveBase, ReactiveList} from "@appbaseio/reactivesearch";
-import {Dropdown, Grid, Pagination, SemanticWIDTHS} from "semantic-ui-react";
+import {Dropdown, Grid, Icon, Pagination, SemanticWIDTHS} from "semantic-ui-react";
 
 import SearchResultTable from "../search-result-table/search-result-table";
 
@@ -253,14 +253,11 @@ export function SearchResultCardWrapper({
                   <Grid.Column>
                     <Pagination defaultActivePage={1}
                                 onPageChange={onChange}
-                                prevItem={{
-                                  'aria-label': 'Précédent',
-                                  content: 'Préc',
-                                }}
-                                nextItem={{
-                                  'aria-label': 'Suivant',
-                                  content: 'Suiv',
-                                }}
+                                ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                                firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                                lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                                prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                                nextItem={{ content: <Icon name='angle right' />, icon: true }}
                                 totalPages={totalPages-1} />
                   </Grid.Column>
                   <Grid.Column>
