@@ -252,7 +252,7 @@ export function SearchResultCardWrapper({
                 <Grid.Row >
                   <Grid.Column >
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column textAlign='center'>
                     <Pagination defaultActivePage={1}
                                 onPageChange={onChange}
                                 ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
@@ -264,7 +264,7 @@ export function SearchResultCardWrapper({
                   </Grid.Column>
                   <Grid.Column>
                   </Grid.Column>
-                  </Grid.Row >
+                </Grid.Row >
               </Grid>
                     :''}
             </>
