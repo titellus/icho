@@ -59,11 +59,11 @@ export function MetadataResult({uuid}: Props) {
                         <p>
                           {res.resourceAbstractObject?.default}
                         </p>
-                        <AssociatedResources id={res.id || ''} types='onlines'/>
+{/*                        <AssociatedResources id={res.id || ''} types='onlines'/>
                         <AssociatedResources id={res.id || ''} types='parent,children,brothersAndSisters,services,datasets'/>
                         <AssociatedResources id={res.id || ''} types='fcats,related'/>
                         <AssociatedResources id={res.id || ''} types='sources'/>
-                        <AssociatedResources id={res.id || ''} types='hassources'/>
+                        <AssociatedResources id={res.id || ''} types='hassources'/>*/}
                       </Grid.Column>
                       <Grid.Column width={4}>
                         <Image src={
