@@ -156,6 +156,7 @@ function HtmlType({
   let icon;
   let result;
 
+  /* TODO improve manage of the value (object and string) - console.log(typeof value, value) */
 
   if (iconValue) {
     if (typeof iconValue === "string") {
@@ -359,16 +360,19 @@ function HtmlType({
     }
   } else {
     if (label && linkStyle !='') {
-      console.log('typeof label')
-      console.log(typeof label)
       if (typeof label === "string") {
         result = <React.Fragment><Label color={label}>{linkStyle}</Label><br/></React.Fragment>
       }
       else {
         for (const [key, labelColor] of Object.entries(label)) {
-          if (jp.query(value, jsonPath).toString() === key) {
+          if (typeof value === 'string' && value === key) {
             // @ts-ignore
             result = <React.Fragment><Label color={labelColor.toString()}>{linkStyle}</Label><br/></React.Fragment>
+          } else  if (typeof value === 'object'){
+            if (jp.query(value, jsonPath).toString() === key) {
+              // @ts-ignore
+              result = <React.Fragment><Label color={labelColor.toString()}>{linkStyle}</Label><br/></React.Fragment>
+            }
           }
         }
       }
