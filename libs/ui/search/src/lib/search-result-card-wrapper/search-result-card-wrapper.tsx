@@ -244,7 +244,7 @@ export function SearchResultCardWrapper({
           }}
           renderPagination={({ pages, totalPages, currentPage, setPage, fragmentName }) => {
             const onChange = (e: any, pageInfo: any) => {
-              setPage(pageInfo.activePage)
+              setPage(pageInfo.activePage-1)
             };
             return  <>
             {!isNaN(totalPages) ?
@@ -260,7 +260,7 @@ export function SearchResultCardWrapper({
                                 lastItem={{ content: <Icon name='angle double right' />, icon: true }}
                                 prevItem={{ content: <Icon name='angle left' />, icon: true }}
                                 nextItem={{ content: <Icon name='angle right' />, icon: true }}
-                                totalPages={totalPages-1} />
+                                totalPages={totalPages} />
                   </Grid.Column>
                   <Grid.Column>
                   </Grid.Column>
