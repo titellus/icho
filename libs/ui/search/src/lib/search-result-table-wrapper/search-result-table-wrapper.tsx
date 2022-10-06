@@ -2,7 +2,7 @@ import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/s
 import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters, ToggleButton } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
 import SearchResultTable from "../search-result-table/search-result-table";
-import { Grid, Placeholder, Table, TableCell,SemanticWIDTHS } from "semantic-ui-react";
+import { Grid, Placeholder,Icon, Pagination, Table, TableCell,SemanticWIDTHS } from "semantic-ui-react";
 
 /* eslint-disable-next-line */
 export interface ResultTableProps {
@@ -191,7 +191,8 @@ export function SearchResultTableWrapper({
                               }
                             }*/
               />
-            )}
+            )
+            }
           </Grid.Column>
           <Grid.Column>
             {filterField && (
@@ -225,6 +226,33 @@ export function SearchResultTableWrapper({
         react={{
           and: ["tableFullTextFilter", "tableQuickFilter","tableToggleFilter"]
         }}
+        renderPagination={({ pages, totalPages, currentPage, setPage, fragmentName }) => {
+          const onChange = (e: any, pageInfo: any) => {
+            setPage(pageInfo.activePage-1)
+          };
+          return  <>
+            {!isNaN(totalPages) ?
+              <Grid columns={3}>
+                <Grid.Row >
+                  <Grid.Column >
+                  </Grid.Column>
+                  <Grid.Column textAlign='center'>
+                    <Pagination defaultActivePage={1}
+                                onPageChange={onChange}
+                                ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                                firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                                lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                                prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                                nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                                totalPages={totalPages} />
+                  </Grid.Column>
+                  <Grid.Column>
+                  </Grid.Column>
+                </Grid.Row >
+              </Grid>
+              :''}
+          </>
+        }}
         render={({ loading, error, data }) => {
           if (loading) {
             return (
@@ -251,6 +279,7 @@ export function SearchResultTableWrapper({
       </div>
     </ReactiveBase>
   );
+
 }
 
 export default SearchResultTableWrapper;
