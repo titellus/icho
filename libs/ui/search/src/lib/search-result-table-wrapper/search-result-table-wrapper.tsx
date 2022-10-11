@@ -1,3 +1,4 @@
+import './search-result-table-wrapper.scss';
 import {DEFAULT_SORT, SortOption, SortOrder} from "../search-result-table-sort/search-result-table-sort";
 import { DataSearch, MultiDropdownList, ReactiveBase, ReactiveList, SelectedFilters, ToggleButton } from "@appbaseio/reactivesearch";
 import React, { useState } from "react";
@@ -26,6 +27,7 @@ interface Props {
   toggleFilterField?: string;
   toggleIsMultiSelect?: boolean;
   toggleLabel?: Array<any>;
+  toggleButtonStyle?:string;
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   includedFields: Array<string>;
@@ -82,6 +84,7 @@ export function SearchResultTableWrapper({
                                            toggleFilterField,
                                            toggleIsMultiSelect,
                                            toggleLabel,
+                                           toggleButtonStyle,
                                            includedFields,
                                            searchFields,
                                            fields,
@@ -101,6 +104,24 @@ export function SearchResultTableWrapper({
     field: sortBy || "_score",
     order: sortType ||SortOrder.asc
   };
+
+  if (toggleButtonStyle){
+    let style_tb = JSON.parse(toggleButtonStyle)
+    if (style_tb.bg) {
+      document.documentElement.style.setProperty('--table-togglebutton_bg', style_tb.bg)
+    }
+    if (style_tb.bg_active) {
+      document.documentElement.style.setProperty('--table-togglebutton_bg_active', style_tb.bg_active)
+    }
+    if (style_tb.text_color) {
+      document.documentElement.style.setProperty('--table-togglebutton_text_color', style_tb.text_color)
+    }
+    if (style_tb.text_color_active) {
+      document.documentElement.style.setProperty('--table-togglebutton_text_color_active', style_tb.text_color_active)
+    }
+  }
+
+
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
@@ -170,6 +191,9 @@ export function SearchResultTableWrapper({
               <ToggleButton componentId="tableToggleFilter"
                             dataField={toggleFilterField}
                             multiSelect={toggleIsMultiSelect}
+                            innerClass={{
+                              button: 'toggle-button'
+                            }}
                             data={toggleLabel}
                             /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888*/
 /*                           customQuery={

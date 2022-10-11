@@ -1,0 +1,17 @@
+
+.toggle-button {
+  font-weight: bold;
+  background-color: var(--table-togglebutton_bg) !important;
+  color: var(--table-togglebutton_text_color) !important;
+}
+
+.toggle-button.active {
+  background-color: var(--table-togglebutton_bg_active) !important;
+  color: var(--table-togglebutton_text_color_active) !important;
+}
+
+.toggle-button:focus {
+  outline:none !important;
+  border: 0px ;
+  box-shadow: none !important;
+}

@@ -2,3 +2,9 @@
 body {
   margin: 1em !important;
 }
+:root {
+  --table-togglebutton_bg :  #3B82F6FF;
+  --table-togglebutton_text_color : white;
+  --table-togglebutton_bg_active : #1D4ED8FF;
+  --table-togglebutton_text_color_active : white;
+}

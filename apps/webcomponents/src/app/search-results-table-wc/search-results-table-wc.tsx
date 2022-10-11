@@ -9,6 +9,7 @@ export function SearchResultsTableWc({
                                        togglefilterfield="",
                                        toggleismultiselect = "false",
                                        togglelabel = "",
+                                       togglebuttonstyle="",
                                        searchfields='',
                                        fields="",
                                        catalogueurl="",
@@ -50,6 +51,7 @@ export function SearchResultsTableWc({
         toggleFilterField={togglefilterfield}
         toggleIsMultiSelect={(toggleismultiselect === 'true')}
         toggleLabel= {togglelabelArray}
+        toggleButtonStyle={togglebuttonstyle}
         landingPageLink={'resourceTitleObject'}
         landingPageUrlTemplate ={landingPageUrlTemplate}
         includedFields={indexArray}
@@ -70,6 +72,7 @@ SearchResultsTableWc.propTypes = {
   togglefilterfield: PropTypes.string,
   toggleismultiselect: PropTypes.string,
   togglelabel: PropTypes.string,
+  togglebuttonstyle: PropTypes.string,
   searchfields: PropTypes.string,
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
