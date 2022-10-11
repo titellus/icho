@@ -61,7 +61,6 @@ export function SearchResultTable({ data,
   //Remove duplicated columnName
   //columnNameArray = [...new Set(columnNameArray)];
 
-  console.log(data)
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
@@ -111,7 +110,7 @@ export function SearchResultTable({ data,
                   <Container {...attributes} fluid={true}>
                     {dataItem[fieldsItem.columnIndex] ? (
                         <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
-                                  label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon} iconColor={fieldsItem.columnIconColor} valueCondition={fieldsItem.columnValue}
+                                  label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon} iconColor={fieldsItem.columnIconColor} popup={fieldsItem.columnPopup} valueCondition={fieldsItem.columnValue}
                                   iconValue={fieldsItem.columnIcon} formatter={fieldsItem.columnFormatter}/>
                     ) : ""}
                     <br/>
@@ -138,6 +137,7 @@ interface HtmlTypeProps {
   iconValue?: undefined;
   ribon?: Object;
   iconColor?:undefined;
+  popup?:undefined;
   valueCondition?:undefined;
   formatter?:string;
 }
@@ -149,6 +149,7 @@ function HtmlType({
                     ribon,
                     iconValue,
                     iconColor,
+                    popup,
                     valueCondition,
                     formatter
                   }: HtmlTypeProps) {
@@ -212,7 +213,7 @@ function HtmlType({
           elemlinkStyle = <React.Fragment><span> {icon}
             {formatter === "withouttext" ?
               "":
-              <><ResultValue data={elem} valueCondition={valueCondition}/> </>
+              <><ResultValue data={elem} valueCondition={valueCondition} popup={popup}/> </>
             }</span><br/></React.Fragment>;
         }
         if(linkStyle===''){
@@ -227,7 +228,7 @@ function HtmlType({
       if (value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
         linkStyle =<React.Fragment><a href={value.toString()} style={{wordBreak: "break-all"}}> {icon} {formatter === "withouttext" ? "":<>{value}</>}</a><br/></React.Fragment>;
       } else {
-        linkStyle =<React.Fragment><span style={{wordBreak: "break-all"}}> {icon} {formatter === "withouttext" ? "":<><ResultValue data={value} valueCondition={valueCondition}/> </>}</span><br/></React.Fragment>;
+        linkStyle =<React.Fragment><span style={{wordBreak: "break-all"}}> {icon} {formatter === "withouttext" ? "":<><ResultValue data={value} valueCondition={valueCondition} popup={popup}/> </>}</span><br/></React.Fragment>;
       }
     }
   }
@@ -241,7 +242,10 @@ function HtmlType({
           {jp.query(value, jsonPath)[i].toString() ?
             <><a href={jp.query(value, jsonPath)[i].toString()}>
               {formatter === "withouttext" ?
-                <Popup content={jp.query(value, jsonPath.replace('url', 'name'))[i]} trigger={icon} />:
+                <React.Fragment>
+                  {popup === "true" ?<Popup content={jp.query(value, jsonPath.replace('url', 'name'))[i]} trigger={icon} />:<>{icon}</>}
+                </React.Fragment>
+                :
                 <>{icon} {jp.query(value, jsonPath.replace('url', 'name'))[i]}</>
               }
             </a><br/></> : ''}
@@ -263,7 +267,10 @@ function HtmlType({
           {jp.query(value, jsonPath+'.eng')[i] ?
             <><a href={jp.query(value, jsonPath+'.eng')[i].toString()}>
               {formatter === "withouttext" ?
-                <Popup content={jp.query(value, jsonPath.replace('url', 'title.eng'))[i]} trigger={icon} />:
+                <React.Fragment>
+                  {popup === "true" ?<Popup content={jp.query(value, jsonPath.replace('url', 'title.eng'))[i]} trigger={icon} />:<>{icon}</>}
+                </React.Fragment>
+                :
                 <>{icon} {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</>
               }
             </a><br/></>:''}
@@ -284,7 +291,11 @@ function HtmlType({
         linkStyle = <React.Fragment>
           {jp.query(value, jsonPath).toString() ?
           <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
-          {formatter === "withouttext" ?  <Popup content={jp.query(value, jsonPath)} trigger={icon} /> : <>{icon} {jp.query(value, jsonPath)}</>}
+          {formatter === "withouttext" ?
+            <React.Fragment>
+              {popup === "true" ? <Popup content={jp.query(value, jsonPath)} trigger={icon} />:<>{icon}</>}
+            </React.Fragment>
+            : <>{icon} {jp.query(value, jsonPath)}</>}
           </a> : ''}
         </React.Fragment>;
       }
@@ -298,7 +309,10 @@ function HtmlType({
           {jp.query(value, jsonPath)[i].toString() ?
             <><a href={jp.query(value, jsonPath)[i].toString()}>
               {formatter === "withouttext" ?
-                <Popup content={jp.query(value, jsonPath.replace('url', 'title'))[i]} trigger={icon} />:
+                <React.Fragment>
+                  {popup === "true" ? <Popup content={jp.query(value, jsonPath.replace('url', 'title'))[i]} trigger={icon} />:<>{icon}</>}
+                </React.Fragment>
+                :
                 <>{icon} {jp.query(value, jsonPath.replace('url', 'title'))[i]}</>
               }
             </a><br/></> : ''}
@@ -332,8 +346,11 @@ function HtmlType({
           let elemlinkStyle =null;
           elemlinkStyle = <React.Fragment><span>{
             formatter === "withouttext" ?
-              <Popup content={jp.query(value, jsonPath)[i]} trigger={icon} />:
-              <>{icon} <ResultValue data={jp.query(value, jsonPath)[i]} valueCondition={valueCondition}/></>
+              <React.Fragment>
+                {popup === "true" ? <Popup content={jp.query(value, jsonPath)[i]} trigger={icon} />:<>{icon}</>}
+              </React.Fragment>
+              :
+              <>{icon} <ResultValue data={jp.query(value, jsonPath)[i]} valueCondition={valueCondition} popup={popup}/></>
           }</span><br/></React.Fragment>;
           if(linkStyle === ''){
             linkStyle = [linkStyle,elemlinkStyle]
@@ -391,22 +408,32 @@ function HtmlType({
 interface ResultValueProps {
   data: string;
   valueCondition?:undefined;
+  popup?:undefined;
 
 }
 
 function ResultValue({
                     data,
                     valueCondition,
+                    popup
                   }: ResultValueProps) {
   let displayedResult;
   if (valueCondition && typeof valueCondition === "string") {
-    displayedResult = <Popup
-      trigger={<span>{valueCondition}</span>} content={data}/>
+    if (popup === "true") {
+      displayedResult = <Popup
+        trigger={<span>{valueCondition}</span>} content={data}/>
+    } else {
+      displayedResult = <>{data}</>
+    }
   } else if (valueCondition && typeof valueCondition != "string"){
     for (const [key, value ] of Object.entries(valueCondition)) {
       if (data.toString() === key) {
-        // @ts-ignore
-        displayedResult = <Popup trigger={<span>{value}</span>} content={data}/>
+        if (popup === "true") {
+          // @ts-ignore
+          displayedResult = <Popup trigger={<span>{value}</span>} content={data}/>
+        } else {
+          displayedResult = <>{value}</>
+        }
       }
     }
   } else {
