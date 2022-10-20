@@ -64,7 +64,7 @@ export function SearchResultTable({ data,
 
   let ref: React.RefObject<HTMLInputElement> = createRef();
   return (
-    <Table ref={ref.current} >
+    <Table ref={ref.current} fixed>
       {/*<Sticky context={ref.current} as={'thead'}>*/}
       {/*</Sticky>*/}
       <Table.Header>
