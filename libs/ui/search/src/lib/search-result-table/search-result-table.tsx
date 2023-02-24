@@ -109,9 +109,9 @@ export function SearchResultTable({ data,
                 {fieldsItem.columnName === tableCellInfo.columnName? (
                   <Container {...attributes} fluid={true}>
                     {dataItem[fieldsItem.columnIndex] ? (
-                        <HtmlType value={dataItem[fieldsItem.columnIndex]} jsonPath={fieldsItem.columnJsonPath}
-                                  label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon} iconColor={fieldsItem.columnIconColor} popup={fieldsItem.columnPopup} valueCondition={fieldsItem.columnValue}
-                                  iconValue={fieldsItem.columnIcon} formatter={fieldsItem.columnFormatter}/>
+                      <HtmlType value={dataItem[fieldsItem.columnIndex]} indexName={fieldsItem.columnIndex} jsonPath={fieldsItem.columnJsonPath} landingPageUrlTemplate={landingPageUrlTemplate}
+                                label={fieldsItem.columnLabel} ribon={fieldsItem.columnRibon} iconColor={fieldsItem.columnIconColor} popup={fieldsItem.columnPopup} valueCondition={fieldsItem.columnValue}
+                                iconValue={fieldsItem.columnIcon} formatter={fieldsItem.columnFormatter}/>
                     ) : ""}
                     <br/>
                   </Container>
@@ -140,6 +140,8 @@ interface HtmlTypeProps {
   popup?:undefined;
   valueCondition?:undefined;
   formatter?:string;
+  landingPageUrlTemplate?:string;
+  indexName?:string;
 }
 
 function HtmlType({
@@ -151,13 +153,17 @@ function HtmlType({
                     iconColor,
                     popup,
                     valueCondition,
-                    formatter
+                    formatter,
+                    landingPageUrlTemplate,
+                    indexName
                   }: HtmlTypeProps) {
   let linkStyle;
   let icon;
   let result;
+  let related_link;
 
   /* TODO improve manage of the value (object and string) - console.log(typeof value, value) */
+
 
   if (iconValue) {
     if (typeof iconValue === "string") {
@@ -224,7 +230,7 @@ function HtmlType({
       }
       linkStyle = <React.Fragment>{linkStyle}</React.Fragment>
     }
-  if (typeof value === "string") {
+    if (typeof value === "string") {
       if (value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
         linkStyle =<React.Fragment><a href={value.toString()} style={{wordBreak: "break-all"}}> {icon} {formatter === "withouttext" ? "":<>{value}</>}</a><br/></React.Fragment>;
       } else {
@@ -274,7 +280,7 @@ function HtmlType({
                 <>{icon} {jp.query(value, jsonPath.replace('url', 'title.eng'))[i]}</>
               }
             </a><br/></>:''}
-          </React.Fragment>;
+        </React.Fragment>;
         if(linkStyle === ''){
           linkStyle = [linkStyle,elemlinkStyle]
         } else {
@@ -290,13 +296,13 @@ function HtmlType({
       } else {
         linkStyle = <React.Fragment>
           {jp.query(value, jsonPath).toString() ?
-          <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
-          {formatter === "withouttext" ?
-            <React.Fragment>
-              {popup === "true" ? <Popup content={jp.query(value, jsonPath)} trigger={icon} />:<>{icon}</>}
-            </React.Fragment>
-            : <>{icon} {jp.query(value, jsonPath)}</>}
-          </a> : ''}
+            <a href={jp.query(value, jsonPath).toString()} style={{wordBreak: "break-all"}}>
+              {formatter === "withouttext" ?
+                <React.Fragment>
+                  {popup === "true" ? <Popup content={jp.query(value, jsonPath)} trigger={icon} />:<>{icon}</>}
+                </React.Fragment>
+                : <>{icon} {jp.query(value, jsonPath)}</>}
+            </a> : ''}
         </React.Fragment>;
       }
     }
@@ -344,13 +350,26 @@ function HtmlType({
       } else {
         for (let i in jp.query(value, jsonPath)){
           let elemlinkStyle =null;
+          // @ts-ignore
           elemlinkStyle = <React.Fragment><span>{
             formatter === "withouttext" ?
               <React.Fragment>
-                {popup === "true" ? <Popup content={jp.query(value, jsonPath)[i]} trigger={icon} />:<>{icon}</>}
+                {popup === "true" ? <Popup content={jp.query(value, jsonPath)[i]} trigger={icon} /> :<>{icon}</>}
+                <> <RelatedLink value={value}
+                                i ={i}
+                                indexName={indexName}
+                                jsonPath={jsonPath}
+                                landingPageUrlTemplate={landingPageUrlTemplate}/></>
               </React.Fragment>
               :
-              <>{icon} <ResultValue data={jp.query(value, jsonPath)[i]} valueCondition={valueCondition} popup={popup}/></>
+              <React.Fragment>
+                <>{icon} <ResultValue data={jp.query(value, jsonPath)[i]} valueCondition={valueCondition} popup={popup}/></>
+                <> <RelatedLink value={value}
+                                indexName={indexName}
+                                i ={i}
+                                jsonPath={jsonPath}
+                                landingPageUrlTemplate={landingPageUrlTemplate}/></>
+              </React.Fragment>
           }</span><br/></React.Fragment>;
           if(linkStyle === ''){
             linkStyle = [linkStyle,elemlinkStyle]
@@ -413,10 +432,10 @@ interface ResultValueProps {
 }
 
 function ResultValue({
-                    data,
-                    valueCondition,
-                    popup
-                  }: ResultValueProps) {
+                       data,
+                       valueCondition,
+                       popup
+                     }: ResultValueProps) {
   let displayedResult;
   if (valueCondition && typeof valueCondition === "string") {
     if (popup === "true") {
@@ -443,6 +462,39 @@ function ResultValue({
     <span>
       {displayedResult}
     </span>
+  );
+}
+
+interface RelatedLinkProps {
+  jsonPath: string;
+  value: Object;
+  i: string;
+  landingPageUrlTemplate?:string;
+  indexName?:string;
+}
+
+function RelatedLink({
+                       jsonPath,
+                       value,
+                       i,
+                       landingPageUrlTemplate,
+                       indexName
+                     }: RelatedLinkProps) {
+  let related_link =<></>
+  if (indexName === 'related' && landingPageUrlTemplate) {
+    let regex = "^([^.]*.){2}[^.]*"
+    let related_uuid_path = jsonPath.match(regex)![0] + ".uuid"
+    if (jp.query(value, jsonPath).length != 0) {
+      // @ts-ignore
+      let related_uuid = jp.query(value, related_uuid_path)[i].toString()
+      related_link = <a href={landingPageUrlTemplate.replace("{uuid}", related_uuid).toString()}
+                        style={{wordBreak: "break-all"}}><Icon name="linkify"/></a>
+    }
+  }
+  return (
+    <>
+      {related_link}
+    </>
   );
 }
 
