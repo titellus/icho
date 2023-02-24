@@ -96,7 +96,7 @@ export function SearchResultTableWrapper({
                                            landingPageLink
                                          }: Props) {
   let default_query: Record<string, unknown>;
-   if (filter) {
+  if (filter) {
     default_query = {
       query_string: { query: filter }
     };
@@ -132,175 +132,174 @@ export function SearchResultTableWrapper({
     <ReactiveBase
       app="records"
       url={catalogueUrl}
-       transformRequest={(props) => ({
-          ...props,
-         url: props.url + 'relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services&relatedType=onlines&relatedType=datasets'
-       })}
+      transformRequest={(props) => ({
+        ...props,
+        url: props.url + 'relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services&relatedType=onlines&relatedType=datasets'
+      })}
 
       //url='https://metawal4.test.wallonie.be/geonetwork/srv/api/search/records/_search?bucket=e101&relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services'
       enableAppbase={false}
     >
       <div style={{margin:"1em"}}>
-      <Grid divided>
-        <Grid.Row columns={3}>
-          <Grid.Column width={4}>
-            {searchFields && (<DataSearch
-              componentId="tableFullTextFilter"
-              //dataField={searchFields}
-              showClear={true}
-              placeholder="Search ..."
-              autosuggest={false}
-              debounce={200}
-              customQuery={
-                function(value, props) {
-                  if (value[0]) {
-
-                    let analyser:{[index: string]:any} = {}
-                    // to limit query to specific fields: add dataField props, and analyser["query"] to select the search value, analyser["fields"]=props.dataField to specify the datafiels params and
-                    //let test = value
-                    //analyser["query"]= test
-                    //analyser["fields"]=props.dataField
-                    analyser["query"]='(any.\\*:('+value+') OR any.common:('+value+') OR resourceTitleObject.\\*:('+value+')^2 OR resourceTitleObject.\\*:\"'+value+'\"^6)'
-                    let query:{[index: string]:any} = {
-                      query:
-                        {
-                        }
+        <Grid divided>
+          <Grid.Row columns={3}>
+            <Grid.Column width={4}>
+              {searchFields && (<DataSearch
+                componentId="tableFullTextFilter"
+                //dataField={searchFields}
+                showClear={true}
+                placeholder="Search ..."
+                autosuggest={false}
+                debounce={200}
+                customQuery={
+                  function(value, props) {
+                    if (value[0]) {
+                      let value_escapeReservedCharacters = value.replace(
+                        /(\+|-|&&|\|\||!|\{|\}|\[|\]|\^|\~|\?|:|\\{1}|\(|\)|\/)/g,
+                        "\\$1"
+                      );
+                      let analyser:{[index: string]:any} = {}
+                      analyser["query"]='(any.\\*:('+value_escapeReservedCharacters+') OR any.common:('+value_escapeReservedCharacters+') OR resourceTitleObject.\\*:('+value_escapeReservedCharacters+')^2 OR resourceTitleObject.\\*:\"'+value_escapeReservedCharacters+'\"^6)'
+                      let query:{[index: string]:any} = {
+                        query:
+                          {
+                          }
+                      }
+                      query.query["query_string"]= analyser
+                      return {query}
+                    } else {
+                      return {}
                     }
-                    query.query["query_string"]= analyser
-                    return {query}
-                  } else {
-                    return {}
                   }
                 }
+                //"query":"any.\\\\*::(12345678) OR any.common:(12345678) OR resourceTitleObject.\\\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6"}}
+                //query: "(any.\\*:(12345678) OR any.common:(12345678) OR resourceTitleObject.\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6)"
+                // any.${searchLang}:(${any}) OR any.common:(${any}) OR resourceTitleObject.${searchLang}:(${any})^2 OR resourceTitleObject.\\*:\"${any}\"^6
+                // defaultQuery={() => ({
+                //   sort: [{
+                //     [sortSelector.dataField]: {
+                //       order: sortSelector.sortBy
+                //     }
+                //   }],
+                //   //query: { match: { isTemplate: "n" } }
+                //   // query: default_query
+                // })}
+              />)}
+            </Grid.Column>
+            <Grid.Column>
+              {toggleFilterField && (
+                <ToggleButton componentId="tableToggleFilter"
+                              dataField={toggleFilterField}
+                              multiSelect={toggleIsMultiSelect}
+                              innerClass={{
+                                button: 'toggle-button'
+                              }}
+                              data={toggleLabel}
+                  /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888*/
+                  /*                           customQuery={
+                                                function(value, props) {
+                                                  if (value[0]) {
+                                                    let test = props.dataField+":("+ value[0].value +")"
+                                                    let analyser:{[index: string]:any} = {}
+                                                    analyser["query"]= test
+                                                    let query:{[index: string]:any} = {
+                                                      query:
+                                                        {
+                                                        }
+                                                   }
+                                                    query.query["query_string"]= analyser
+                                                    return {query}
+                                                  } else {
+                                                    return {}
+                                                  }
+                                                }
+                                              }*/
+                />
+              )
               }
-              //"query":"any.\\\\*::(12345678) OR any.common:(12345678) OR resourceTitleObject.\\\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6"}}
-              //query: "(any.\\*:(12345678) OR any.common:(12345678) OR resourceTitleObject.\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6)"
-              // any.${searchLang}:(${any}) OR any.common:(${any}) OR resourceTitleObject.${searchLang}:(${any})^2 OR resourceTitleObject.\\*:\"${any}\"^6
-              // defaultQuery={() => ({
-              //   sort: [{
-              //     [sortSelector.dataField]: {
-              //       order: sortSelector.sortBy
-              //     }
-              //   }],
-              //   //query: { match: { isTemplate: "n" } }
-              //   // query: default_query
-              // })}
-            />)}
-          </Grid.Column>
-          <Grid.Column>
-            {toggleFilterField && (
-              <ToggleButton componentId="tableToggleFilter"
-                            dataField={toggleFilterField}
-                            multiSelect={toggleIsMultiSelect}
-                            innerClass={{
-                              button: 'toggle-button'
-                            }}
-                            data={toggleLabel}
-                            /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888*/
-/*                           customQuery={
-                              function(value, props) {
-                                if (value[0]) {
-                                  let test = props.dataField+":("+ value[0].value +")"
-                                  let analyser:{[index: string]:any} = {}
-                                  analyser["query"]= test
-                                  let query:{[index: string]:any} = {
-                                    query:
-                                      {
-                                      }
-                                 }
-                                  query.query["query_string"]= analyser
-                                  return {query}
-                                } else {
-                                  return {}
-                                }
-                              }
-                            }*/
-              />
-            )
-            }
-          </Grid.Column>
-          <Grid.Column>
-            {filterField && (
-              <MultiDropdownList componentId="tableQuickFilter"
-                                 dataField={filterField}
-                                 defaultQuery={() => ({
-                                   query: default_query
-                                 })}
-                                 placeholder="Focus on" />
-            )}
-            {/*<CSVLink data={newData}>
+            </Grid.Column>
+            <Grid.Column>
+              {filterField && (
+                <MultiDropdownList componentId="tableQuickFilter"
+                                   dataField={filterField}
+                                   defaultQuery={() => ({
+                                     query: default_query
+                                   })}
+                                   placeholder="Focus on" />
+              )}
+              {/*<CSVLink data={newData}>
               <Button icon>
                 <Icon name="download" />
               </Button>
             </CSVLink>*/}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-      <ReactiveList
-        componentId="tableOfRecord"
-        size={size}
-        pagination={true}
-        showResultStats={true}
-        defaultQuery={() => ({
-          sort: [{ [sort.field]: { order: sort.order } }],
-          //query: { match: { isTemplate: "n" } }
-          query: default_query
-        })}
-        includeFields={includedFields}
-        dataField={"_id"}
-        react={{
-          and: ["tableFullTextFilter", "tableQuickFilter","tableToggleFilter"]
-        }}
-        renderPagination={({ pages, totalPages, currentPage, setPage, fragmentName }) => {
-          const onChange = (e: any, pageInfo: any) => {
-            setPage(pageInfo.activePage-1)
-          };
-          return  <>
-            {!isNaN(totalPages) ?
-              <Grid columns={3}>
-                <Grid.Row >
-                  <Grid.Column >
-                  </Grid.Column>
-                  <Grid.Column textAlign='center'>
-                    <Pagination defaultActivePage={1}
-                                onPageChange={onChange}
-                                ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
-                                firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-                                lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-                                prevItem={{ content: <Icon name='angle left' />, icon: true }}
-                                nextItem={{ content: <Icon name='angle right' />, icon: true }}
-                                totalPages={totalPages} />
-                  </Grid.Column>
-                  <Grid.Column>
-                  </Grid.Column>
-                </Grid.Row >
-              </Grid>
-              :''}
-          </>
-        }}
-        render={({ loading, error, data }) => {
-          if (loading) {
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <ReactiveList
+          componentId="tableOfRecord"
+          size={size}
+          pagination={true}
+          showResultStats={true}
+          defaultQuery={() => ({
+            sort: [{ [sort.field]: { order: sort.order } }],
+            //query: { match: { isTemplate: "n" } }
+            query: default_query
+          })}
+          includeFields={includedFields}
+          dataField={"_id"}
+          react={{
+            and: ["tableFullTextFilter", "tableQuickFilter","tableToggleFilter"]
+          }}
+          renderPagination={({ pages, totalPages, currentPage, setPage, fragmentName }) => {
+            const onChange = (e: any, pageInfo: any) => {
+              setPage(pageInfo.activePage-1)
+            };
+            return  <>
+              {!isNaN(totalPages) ?
+                <Grid columns={3}>
+                  <Grid.Row >
+                    <Grid.Column >
+                    </Grid.Column>
+                    <Grid.Column textAlign='center'>
+                      <Pagination defaultActivePage={1}
+                                  onPageChange={onChange}
+                                  ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                                  totalPages={totalPages} />
+                    </Grid.Column>
+                    <Grid.Column>
+                    </Grid.Column>
+                  </Grid.Row >
+                </Grid>
+                :''}
+            </>
+          }}
+          render={({ loading, error, data }) => {
+            if (loading) {
+              return (
+                <TablePlaceholder cols={includedFields} rows={3} />
+              );
+            }
+            if (error) {
+              return (
+                <div>Something went wrong! Error details {JSON.stringify(error)}</div>
+              );
+            }
             return (
-              <TablePlaceholder cols={includedFields} rows={3} />
+              <SearchResultTable
+                data={data}
+                fields={fields}
+                landingPageUrlTemplate={landingPageUrlTemplate}
+                landingPageLink={landingPageLink}
+                handleSetSort={setSort}
+                currentSort={sort}
+              />
             );
-          }
-          if (error) {
-            return (
-              <div>Something went wrong! Error details {JSON.stringify(error)}</div>
-            );
-          }
-          return (
-            <SearchResultTable
-              data={data}
-              fields={fields}
-              landingPageUrlTemplate={landingPageUrlTemplate}
-              landingPageLink={landingPageLink}
-              handleSetSort={setSort}
-              currentSort={sort}
-            />
-          );
-        }}
-      />
+          }}
+        />
       </div>
     </ReactiveBase>
   );
