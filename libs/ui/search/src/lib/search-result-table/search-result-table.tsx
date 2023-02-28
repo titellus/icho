@@ -482,11 +482,15 @@ function RelatedLink({
                      }: RelatedLinkProps) {
   let related_link =<></>
   if (indexName === 'related' && landingPageUrlTemplate) {
-    let regex = "^([^.]*.){2}[^.]*"
-    let related_uuid_path = jsonPath.match(regex)![0] + ".uuid"
+    let regex = "^([^.]*.)[^\\\\.\\\\[]*"
+    let related_uuid_path = jsonPath.match(regex)![0] + "[*]._id"
     if (jp.query(value, jsonPath).length != 0) {
-      // @ts-ignore
-      let related_uuid = jp.query(value, related_uuid_path)[i].toString()
+      let related_uuid
+      if (i === '0'){
+        related_uuid = jp.query(value, related_uuid_path).toString()
+      } else {
+        related_uuid = jp.query(value, related_uuid_path)[parseInt(i)].toString()
+      }
       related_link = <a href={landingPageUrlTemplate.replace("{uuid}", related_uuid).toString()}
                         style={{wordBreak: "break-all"}}><Icon name="linkify"/></a>
     }
