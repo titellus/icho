@@ -134,7 +134,7 @@ export function SearchResultTableWrapper({
       url={catalogueUrl}
       transformRequest={(props) => ({
         ...props,
-        url: props.url + 'relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services&relatedType=onlines&relatedType=datasets'
+        url: props.url + 'relatedType=parent&relatedType=children&relatedType=sources&relatedType=hassources&relatedType=brothersAndSisters&relatedType=services&relatedType=datasets&relatedType=siblings&relatedType=associated&relatedType=fcats&relatedType=hasfeaturecats&relatedType=related'
       })}
 
       //url='https://metawal4.test.wallonie.be/geonetwork/srv/api/search/records/_search?bucket=e101&relatedType=children&relatedType=parent&relatedType=brothersAndSisters&relatedType=siblings&relatedType=associated&relatedType=services'
