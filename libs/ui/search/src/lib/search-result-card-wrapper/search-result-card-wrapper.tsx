@@ -168,15 +168,49 @@ export function SearchResultCardWrapper({
         <Grid style={styleTools}>
           <Grid.Row columns={4} style={{margin: "0.2em"}}>
             <Grid.Column floated='left'>
-              {fullTextFilter.length > 0 ?
-                <DataSearch
-                  componentId="cardFullTextFilter"
-                  dataField={fullTextFilter}
-                  showClear={true}
-                  placeholder={search_placeholder}
-                  autosuggest={false}
-                  debounce={200}
-                /> : ""}
+              {fullTextFilter && fullTextFilter.length > 0 ? <DataSearch
+                componentId="tableFullTextFilter"
+                //dataField={fulltextfilter}
+                showClear={true}
+                placeholder={search_placeholder}
+                autosuggest={false}
+                debounce={200}
+                customQuery={
+                  function (value, props) {
+                    if (value[0]) {
+                      let value_escapeReservedCharacters = value.replace(
+                        /(\+|-|&&|\|\||!|\{|\}|\[|\]|\^|\~|\?|:|\\{1}|\(|\)|\/)/g,
+                        "\\$1"
+                      );
+                      let analyser: { [index: string]: any } = {}
+                      if (fullTextFilter.length > 0 && fullTextFilter[0] != 'mw_default_query') {
+                        let subquery = ''
+                        for (var j = 0; j < fullTextFilter.length; j++) {
+                          console.log(j)
+                          console.log(subquery)
+                          if (j == 0) {
+                            subquery = '(' + fullTextFilter[j] + ':(' + value_escapeReservedCharacters + ')^2' + ' OR ' + fullTextFilter[j] + ':\"' + value_escapeReservedCharacters + '\"^6'
+                          } else if (j > 0 && j < (fullTextFilter.length - 1)) {
+                          } else if (j == (fullTextFilter.length - 1)) {
+                            subquery = subquery + ' OR ' + fullTextFilter[j] + ':(' + value_escapeReservedCharacters + ')^2' + ' OR ' + fullTextFilter[j] + ':\"' + value_escapeReservedCharacters + '\"^6' + ')'
+                          }
+                        }
+                        analyser["query"] = subquery
+                      } else {
+                        analyser["query"] = '(any.langfre:(' + value_escapeReservedCharacters + ') OR any.common:(' + value_escapeReservedCharacters + ') OR resourceTitleObject.langfre:(' + value_escapeReservedCharacters + ')^2 OR resourceTitleObject.\\*:\"' + value_escapeReservedCharacters + '\"^6)'
+                      }
+                      analyser["default_operator"] = 'AND'
+                      let query: { [index: string]: any } = {
+                        query: {}
+                      }
+                      query.query["query_string"] = analyser
+                      return {query}
+                    } else {
+                      return {}
+                    }
+                  }
+                }
+              />:""}
             </Grid.Column>
             <Grid.Column floated='left'>
               {filterField_2 && (

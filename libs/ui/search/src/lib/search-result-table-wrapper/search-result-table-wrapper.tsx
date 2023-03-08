@@ -24,6 +24,7 @@ export interface FieldDescription {
 interface Props {
   catalogueUrl: string;
   filter?: string;
+  search_placeholder?: string;
   filterField?: string;
   toggleFilterField?: string;
   toggleIsMultiSelect?: boolean;
@@ -32,7 +33,7 @@ interface Props {
   landingPageUrlTemplate?: string;
   landingPageLink?: string;
   includedFields: Array<string>;
-  searchFields?: Array<string>;
+  fullTextFilter?: Array<string>;
   fields:Array<FieldDescription>;
   size?: number;
   sortBy?:string;
@@ -81,13 +82,14 @@ function TablePlaceholder({ cols, rows = 1 }: SearchResultTablePlaceholderProps)
 export function SearchResultTableWrapper({
                                            catalogueUrl,
                                            filter,
+                                           search_placeholder,
                                            filterField,
                                            toggleFilterField,
                                            toggleIsMultiSelect,
                                            toggleLabel,
                                            toggleButtonStyle,
                                            includedFields,
-                                           searchFields,
+                                           fullTextFilter,
                                            fields,
                                            size,
                                            sortType,
@@ -126,7 +128,6 @@ export function SearchResultTableWrapper({
 
   const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
 
-  console.log(searchFields)
 
   return (
     <ReactiveBase
@@ -144,48 +145,50 @@ export function SearchResultTableWrapper({
         <Grid divided>
           <Grid.Row columns={3}>
             <Grid.Column width={4}>
-              {searchFields && (<DataSearch
+              {fullTextFilter && fullTextFilter.length > 0 ? <DataSearch
                 componentId="tableFullTextFilter"
-                //dataField={searchFields}
+                //dataField={fulltextfilter}
                 showClear={true}
-                placeholder="Search ..."
+                placeholder={search_placeholder}
                 autosuggest={false}
                 debounce={200}
                 customQuery={
-                  function(value, props) {
+                  function (value, props) {
                     if (value[0]) {
                       let value_escapeReservedCharacters = value.replace(
                         /(\+|-|&&|\|\||!|\{|\}|\[|\]|\^|\~|\?|:|\\{1}|\(|\)|\/)/g,
                         "\\$1"
                       );
-                      let analyser:{[index: string]:any} = {}
-                      analyser["query"]='(any.\\*:('+value_escapeReservedCharacters+') OR any.common:('+value_escapeReservedCharacters+') OR resourceTitleObject.\\*:('+value_escapeReservedCharacters+')^2 OR resourceTitleObject.\\*:\"'+value_escapeReservedCharacters+'\"^6)'
-                      let query:{[index: string]:any} = {
-                        query:
-                          {
+                      let analyser: { [index: string]: any } = {}
+                      if (fullTextFilter.length > 0 && fullTextFilter[0] != 'mw_default_query') {
+                        let subquery = ''
+                        for (var j = 0; j < fullTextFilter.length; j++) {
+                          console.log(j)
+                          console.log(subquery)
+                          if (j == 0) {
+                            subquery = '(' + fullTextFilter[j] + ':(' + value_escapeReservedCharacters + ')^2' + ' OR ' + fullTextFilter[j] + ':\"' + value_escapeReservedCharacters + '\"^6'
+                          } else if (j > 0 && j < (fullTextFilter.length - 1)) {
+                          } else if (j == (fullTextFilter.length - 1)) {
+                            subquery = subquery + ' OR ' + fullTextFilter[j] + ':(' + value_escapeReservedCharacters + ')^2' + ' OR ' + fullTextFilter[j] + ':\"' + value_escapeReservedCharacters + '\"^6' + ')'
                           }
+                        }
+                        analyser["query"] = subquery
+                      } else {
+                        analyser["query"] = '(any.langfre:(' + value_escapeReservedCharacters + ') OR any.common:(' + value_escapeReservedCharacters + ') OR resourceTitleObject.langfre:(' + value_escapeReservedCharacters + ')^2 OR resourceTitleObject.\\*:\"' + value_escapeReservedCharacters + '\"^6)'
                       }
-                      query.query["query_string"]= analyser
+                      analyser["default_operator"] = 'AND'
+                      let query: { [index: string]: any } = {
+                        query: {}
+                      }
+                      query.query["query_string"] = analyser
                       return {query}
                     } else {
                       return {}
                     }
                   }
                 }
-                //"query":"any.\\\\*::(12345678) OR any.common:(12345678) OR resourceTitleObject.\\\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6"}}
-                //query: "(any.\\*:(12345678) OR any.common:(12345678) OR resourceTitleObject.\\*:(12345678)^2 OR resourceTitleObject.\\*:\"12345678\"^6)"
-                // any.${searchLang}:(${any}) OR any.common:(${any}) OR resourceTitleObject.${searchLang}:(${any})^2 OR resourceTitleObject.\\*:\"${any}\"^6
-                // defaultQuery={() => ({
-                //   sort: [{
-                //     [sortSelector.dataField]: {
-                //       order: sortSelector.sortBy
-                //     }
-                //   }],
-                //   //query: { match: { isTemplate: "n" } }
-                //   // query: default_query
-                // })}
-              />)}
-            </Grid.Column>
+              />:""}
+                </Grid.Column>
             <Grid.Column>
               {toggleFilterField && (
                 <ToggleButton componentId="tableToggleFilter"

@@ -5,12 +5,13 @@ import PropTypes from "prop-types";
 export function SearchResultsTableWc({
                                        size = "10",
                                        filter = "",
+                                       search_placeholder="",
                                        filterfield = "",
                                        togglefilterfield="",
                                        toggleismultiselect = "false",
                                        togglelabel = "",
                                        togglebuttonstyle="",
-                                       searchfields='',
+                                       fulltextfilter= "",
                                        fields="",
                                        catalogueurl="",
                                        sortby="",
@@ -42,11 +43,18 @@ export function SearchResultsTableWc({
     landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
     //}
   }
+  let textFilter: string[];
+  if (fulltextfilter && fulltextfilter !='') {
+    textFilter = fulltextfilter.replace(/\s+/g,"").split(",")
+  } else {
+    textFilter = []
+  }
 
     return (
       <SearchResultTableWrapper
         catalogueUrl={url}
         filter={filter}
+        search_placeholder={search_placeholder}
         filterField={filterfield}
         toggleFilterField={togglefilterfield}
         toggleIsMultiSelect={(toggleismultiselect === 'true')}
@@ -55,7 +63,7 @@ export function SearchResultsTableWc({
         landingPageLink={'resourceTitleObject'}
         landingPageUrlTemplate ={landingPageUrlTemplate}
         includedFields={indexArray}
-        searchFields={searchfields.replace(/\s+/g,"").split(",")}
+        fullTextFilter={textFilter}
         fields={fieldsArray}
         size={parseInt(size)}
         sortBy={sortby}
@@ -68,12 +76,13 @@ export function SearchResultsTableWc({
 SearchResultsTableWc.propTypes = {
   size: PropTypes.string,
   filter: PropTypes.string,
+  search_placeholder: PropTypes.string,
   filterfield: PropTypes.string,
   togglefilterfield: PropTypes.string,
   toggleismultiselect: PropTypes.string,
   togglelabel: PropTypes.string,
   togglebuttonstyle: PropTypes.string,
-  searchfields: PropTypes.string,
+  fulltextfilter: PropTypes.string,
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
   sortby:PropTypes.string,
