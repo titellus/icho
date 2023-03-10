@@ -169,8 +169,7 @@ export function SearchResultCardWrapper({
           <Grid.Row columns={4} style={{margin: "0.2em"}}>
             <Grid.Column floated='left'>
               {fullTextFilter && fullTextFilter.length > 0 ? <DataSearch
-                componentId="tableFullTextFilter"
-                //dataField={fulltextfilter}
+                componentId="cardFullTextFilter"
                 showClear={true}
                 placeholder={search_placeholder}
                 autosuggest={false}
@@ -186,8 +185,6 @@ export function SearchResultCardWrapper({
                       if (fullTextFilter.length > 0 && fullTextFilter[0] != 'mw_default_query') {
                         let subquery = ''
                         for (var j = 0; j < fullTextFilter.length; j++) {
-                          console.log(j)
-                          console.log(subquery)
                           if (j == 0) {
                             subquery = '(' + fullTextFilter[j] + ':(' + value_escapeReservedCharacters + ')^2' + ' OR ' + fullTextFilter[j] + ':\"' + value_escapeReservedCharacters + '\"^6'
                           } else if (j > 0 && j < (fullTextFilter.length - 1)) {
