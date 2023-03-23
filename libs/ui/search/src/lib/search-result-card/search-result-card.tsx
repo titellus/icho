@@ -84,7 +84,7 @@ export function SearchResultCard({
         {data.map((dataItem: any) => {
           return (
             <Card style={style} key={dataItem._id}>
-              <div className={"image"}>
+              <div className={"image"} style={{ textAlign:"center"}}>
                 {dataItem[template.linkIndex] ?
                   (
                     <a style={{color: "white"}} target="_blank"
