@@ -145,7 +145,7 @@ export function SearchResultCard({
                   ) : ""}
                   <span className="right floated">
                   {linkMDT === "true" ? (
-                      <button style={{border:"none",background:"white"}}>
+                      <button style={{border:"none",background:"white",paddingLeft:0}}>
                         <a target="_blank" href={landingPageUrlTemplate.replace("{uuid}", dataItem["_id"])}>
                           <Icon name="info circle"/>Plus d'infos
                         </a>
