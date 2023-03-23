@@ -35,6 +35,9 @@ export interface templateCard {
   linkHook: string;
   additionalInfoIndex: string;
   additionalInfoJsonPath: string;
+  contactInfoIndex: string;
+  contactInfoJsonPath: string;
+  contactInfoHook:string;
 }
 
 interface Props {
@@ -158,6 +161,22 @@ export function SearchResultCard({
                           (<button className="ui circular disabled icon button"><i aria-hidden="true" className="lock icon"></i></button>) : ('')
                       )
                   ) : ""}
+                    {dataItem[template.contactInfoIndex] ? (
+                      <React.Fragment>
+                        <br/>
+                        <Icon name="mail"/>
+                        {template.contactInfoJsonPath === "" ?
+                          (<a href={'mailto:' + dataItem[template.contactInfoIndex]}> {template.contactInfoHook ?
+                          (<span>{template.contactInfoHook}</span>) : (<span>{template.contactInfoJsonPath === '' ?
+                          dataItem[template.contactInfoIndex] : jp.query(dataItem[template.contactInfoIndex], template.contactInfoJsonPath).toString()}</span>)
+                        }</a>) :
+                            (<a href={'mailto:' + jp.query(dataItem[template.contactInfoIndex], template.contactInfoJsonPath).toString()}> {template.contactInfoHook ?
+                          (<span>{template.contactInfoHook}</span>) : (<span>{template.contactInfoJsonPath === '' ?
+                          dataItem[template.contactInfoIndex] : jp.query(dataItem[template.contactInfoIndex], template.contactInfoJsonPath).toString()}</span>)
+                        }</a>)}
+
+                      </React.Fragment>
+                    ) : ""}
                     </span>
 
                 </span>
