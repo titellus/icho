@@ -25,6 +25,7 @@ export function SearchResultsCardWc({
   margincardbottom = undefined,
   margintoolsbottom = undefined,
   linkmdt = "false",
+  linkmdthook = undefined,
   imageheight= undefined
 }) {
 
@@ -77,6 +78,7 @@ export function SearchResultsCardWc({
       marginCardBottom={margincardbottom}
       marginToolsBottom={margintoolsbottom}
       linkMDT={linkmdt}
+      linkMDTHook={linkmdthook}
       imageHeight={imageheight}
     />
   );
@@ -102,6 +104,7 @@ SearchResultsCardWc.propTypes = {
   margincardbottom:PropTypes.number,
   margintoolsbottom:PropTypes.number,
   linkmdt:PropTypes.string,
+  linkmdthook:PropTypes.string,
   imageheight:PropTypes.number
 };
 

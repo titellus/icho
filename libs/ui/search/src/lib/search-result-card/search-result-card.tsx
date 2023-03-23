@@ -49,6 +49,7 @@ interface Props {
   marginBottom: number | undefined;
   marginCardBottom: number | undefined;
   linkMDT: string;
+  linkMDTHook: string | undefined;
   imageHeight: number | undefined;
 }
 
@@ -61,7 +62,7 @@ export function SearchResultCard({
                                    data,
                                    template,
                                    landingPageUrlTemplate,
-                                   itemsPerRow, marginX, marginBottom, marginCardBottom, linkMDT,imageHeight
+                                   itemsPerRow, marginX, marginBottom, marginCardBottom, linkMDT,linkMDTHook, imageHeight
                                  }: Props) {
   let style: any;
   let imgStyle: any;
@@ -147,7 +148,7 @@ export function SearchResultCard({
                   {linkMDT === "true" ? (
                       <button style={{border:"none",background:"white",paddingLeft:0}}>
                         <a target="_blank" href={landingPageUrlTemplate.replace("{uuid}", dataItem["_id"])}>
-                          <Icon name="info circle"/>Plus d'infos
+                          <Icon name="info circle"/>{linkMDTHook ? (linkMDTHook):""}
                         </a>
                       </button>) : ''}
                   {dataItem[template.additionalInfoIndex] ? (

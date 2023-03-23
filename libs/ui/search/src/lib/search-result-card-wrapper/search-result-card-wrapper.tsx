@@ -33,6 +33,7 @@ interface Props {
   marginToolsBottom?: number;
   landingPageUrlTemplate: string;
   linkMDT: string;
+  linkMDTHook?: string;
   imageHeight?: number;
 }
 
@@ -58,6 +59,7 @@ export function SearchResultCardWrapper({
                                           marginToolsBottom,
                                           landingPageUrlTemplate,
                                           linkMDT,
+                                          linkMDTHook,
                                           imageHeight
                                         }: Props) {
   let default_query: Record<string, unknown>;
@@ -321,6 +323,7 @@ export function SearchResultCardWrapper({
                 marginBottom={marginBottom}
                 marginCardBottom={marginCardBottom}
                 linkMDT={linkMDT}
+                linkMDTHook={linkMDTHook}
                 imageHeight={imageHeight}
               />
             );
