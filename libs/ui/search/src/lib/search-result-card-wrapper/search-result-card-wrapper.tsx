@@ -238,7 +238,7 @@ export function SearchResultCardWrapper({
               )}
             </Grid.Column>
             <Grid.Column floated='right'>
-              <Dropdown placeholder='Tri'
+              {sortArrayOptions.length > 0 && (<Dropdown placeholder='Tri'
                         search
                         fluid
                         selection
@@ -256,7 +256,7 @@ export function SearchResultCardWrapper({
                           }
                           setSort(sort)
                         }}
-              />
+              />)}
             </Grid.Column>
           </Grid.Row>
         </Grid>
