@@ -281,24 +281,26 @@ export function SearchResultCardWrapper({
             };
             return  <>
             {!isNaN(totalPages) ?
-              <Grid columns={3}>
-                <Grid.Row >
-                  <Grid.Column >
-                  </Grid.Column>
-                  <Grid.Column textAlign='center'>
-                    <Pagination defaultActivePage={1}
-                                onPageChange={onChange}
-                                ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
-                                firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-                                lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-                                prevItem={{ content: <Icon name='angle left' />, icon: true }}
-                                nextItem={{ content: <Icon name='angle right' />, icon: true }}
-                                totalPages={totalPages} />
-                  </Grid.Column>
-                  <Grid.Column>
-                  </Grid.Column>
-                </Grid.Row >
-              </Grid>
+              <React.Fragment>{totalPages > 1 ? (
+                <Grid columns={3}>
+                  <Grid.Row >
+                    <Grid.Column >
+                    </Grid.Column>
+                    <Grid.Column textAlign='center'>
+                      <Pagination defaultActivePage={1}
+                                  onPageChange={onChange}
+                                  ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                                  totalPages={totalPages} />
+                    </Grid.Column>
+                    <Grid.Column>
+                    </Grid.Column>
+                  </Grid.Row >
+                </Grid>
+              ):''}</React.Fragment>
                     :''}
             </>
           }}
