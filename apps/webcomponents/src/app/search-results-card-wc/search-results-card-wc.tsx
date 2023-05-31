@@ -52,7 +52,7 @@ export function SearchResultsCardWc({
   console.log(url)
   let textFilter: string[];
   if (fulltextfilter && fulltextfilter !='') {
-    textFilter = fulltextfilter.split(',')
+    textFilter = fulltextfilter.replace(/\s+/g,"").split(",")
   } else {
     textFilter = []
   }
