@@ -42,6 +42,13 @@ export function SearchResultTableSort({
         ? (currentSort.order === SortOrder.asc ? SortOrder.desc : DEFAULT_SORT_ORDER)
         : DEFAULT_SORT_ORDER;
 
+    //Reset sorting to default
+    if(currentSort.order === SortOrder.desc && order === SortOrder.asc){
+        field = DEFAULT_SORT.field;
+        order = DEFAULT_SORT.order;
+        console.log("resset f sorting to default: "+field.toString()+' '+order.toString())
+      }
+
     onChange({
       field: field,
       order: order
