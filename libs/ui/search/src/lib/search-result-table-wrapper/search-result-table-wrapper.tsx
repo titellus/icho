@@ -133,6 +133,7 @@ export function SearchResultTableWrapper({
     <ReactiveBase
       app="records"
       url={catalogueUrl}
+      headers={{"Content-Type": 'application/json'}}
       transformRequest={(props) => ({
         ...props,
         url: props.url + 'relatedType=parent&relatedType=children&relatedType=sources&relatedType=hassources&relatedType=brothersAndSisters&relatedType=services&relatedType=datasets&relatedType=siblings&relatedType=associated&relatedType=fcats&relatedType=hasfeaturecats&relatedType=related'

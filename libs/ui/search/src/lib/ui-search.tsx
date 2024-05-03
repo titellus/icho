@@ -73,6 +73,7 @@ export function UiSearch({ filter = "" }) {
     <ReactiveBase
       app="records"
       url={api + "/api/search/"}
+      headers={{"Content-Type": 'application/json'}}
       enableAppbase={false}
     >
       <Ref innerRef={contextRef}>

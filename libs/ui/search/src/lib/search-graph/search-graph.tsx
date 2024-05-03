@@ -570,6 +570,7 @@ export function SearchGraph({ catalogueUrl, filterAssociated }: Props){
     <ReactiveBase
       app="records"
       url={api + "/api/search/"}
+      headers={{"Content-Type": 'application/json'}}
       enableAppbase={false}
     >
       <Ref innerRef={contextRef}>

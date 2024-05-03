@@ -465,6 +465,7 @@ export function MetadataResultGraph({uuid}: Props) {
     <ReactiveBase
       app="records"
       url={api + '/api/search/'}
+      headers={{"Content-Type": 'application/json'}}
       enableAppbase={false}
     >
       <ReactiveList
