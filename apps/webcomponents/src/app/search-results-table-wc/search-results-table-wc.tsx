@@ -14,6 +14,7 @@ export function SearchResultsTableWc({
                                        fulltextfilter= "",
                                        fields="",
                                        catalogueurl="",
+                                       landingpageurl="",
                                        sortby="",
                                        sorttype=""
                                      }) {
@@ -36,12 +37,14 @@ export function SearchResultsTableWc({
     columnNameArray.push(element.columnName)
   }
   let url = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/search/"
-  let landingPageUrlTemplate = process.env.NX_CATALOGUE_API_ENDPOINT + "/api/records/{uuid}"
+  let landingPageUrlTemplate= process.env.NX_CATALOGUE_API_ENDPOINT + "/api/records/{uuid}"
   if (catalogueurl && catalogueurl != ''){
     url = catalogueurl + "/api/search/"
-    //if (catalogueUrllandingPageUrlTemplate && landingPageUrlTemplate != '') {
-    landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
-    //}
+    if (landingpageurl && landingpageurl != '') {
+      landingPageUrlTemplate = landingpageurl
+    }else{
+      landingPageUrlTemplate = catalogueurl + "/api/records/{uuid}"
+    }
   }
   let textFilter: string[];
   if (fulltextfilter && fulltextfilter !='') {
@@ -85,6 +88,7 @@ SearchResultsTableWc.propTypes = {
   fulltextfilter: PropTypes.string,
   fields: PropTypes.string,
   catalogueurl:PropTypes.string,
+  landingpageurl:PropTypes.string,
   sortby:PropTypes.string,
   sorttype:PropTypes.string
 };
