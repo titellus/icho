@@ -200,33 +200,41 @@ export function SearchResultTableWrapper({
                                              customQuery={
                                                 function(value, props) {
                                                   console.log("tooglebutton value:",value);
-                                                  if (value[0]) {
-                                                    let test = props.dataField+":(";
-                                                    let rawValue = value[0].value;
-                                                    let filterValues =  rawValue.includes(',') ? rawValue.split(',') : [rawValue];
-                                                    let numberOfValues = filterValues.length;
-                                                    console.log("number of values: ",numberOfValues)
-                                                    for(let index=0; index < numberOfValues; index++){
-                                                      test = test + "\"" +filterValues[index] + "\"";
-                                                      if(index < numberOfValues -1){
-                                                        test = test + " OR ";
+                                                  let customQuery = null;
+                                                  let queryString = "";
+                                                  for(let filterIndex = 0; filterIndex < value.length; filterIndex++) {
+                                                      queryString = queryString + props.dataField + ":(";
+                                                      let rawValue = value[filterIndex].value;
+                                                      let filterValues = rawValue.includes(',') ? rawValue.split(',') : [rawValue];
+                                                      let numberOfValues = filterValues.length;
+                                                      console.log("number of values: ", numberOfValues)
+                                                      for (let index = 0; index < numberOfValues; index++) {
+                                                        queryString = queryString + "\"" + filterValues[index] + "\"";
+                                                        if (index < numberOfValues - 1) {
+                                                          queryString = queryString + " OR ";
+                                                        }
                                                       }
-                                                    }
-                                                    test = test + ")";
+                                                      queryString = queryString + ")";
 
-                                                    let analyser:{[index: string]:any} = {}
-                                                    analyser["query"]= test
-                                                    let query:{[index: string]:any} = {
-                                                      query: {}
-                                                   }
-                                                    query.query["query_string"]= analyser
-                                                    console.log("query:",query);
-                                                    return {query}
-                                                  } else {
-                                                    return {}
+                                                      if (filterIndex < value.length - 1) {
+                                                        queryString = queryString + " OR ";
+                                                      }
                                                   }
+                                                    if(queryString !== ""){
+                                                      let analyser: { [index: string]: any } = {}
+                                                      analyser["query"] = queryString
+                                                      let query: { [index: string]: any } = {
+                                                        query: {}
+                                                      }
+                                                      query.query["query_string"] = analyser
+                                                      console.log("query:", query);
+                                                      customQuery= {query};
+
+                                                    }
+                                                  return customQuery;
+
                                                 }
-                                              }
+                                             }
                 />
               )
               }
