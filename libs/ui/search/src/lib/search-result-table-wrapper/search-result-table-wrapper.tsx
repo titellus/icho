@@ -197,24 +197,36 @@ export function SearchResultTableWrapper({
                               }}
                               data={toggleLabel}
                   /*TODO see https://github.com/appbaseio/reactivesearch/issues/1888*/
-                  /*                           customQuery={
+                                             customQuery={
                                                 function(value, props) {
+                                                  console.log("tooglebutton value:",value);
                                                   if (value[0]) {
-                                                    let test = props.dataField+":("+ value[0].value +")"
+                                                    let test = props.dataField+":(";
+                                                    let rawValue = value[0].value;
+                                                    let filterValues =  rawValue.includes(',') ? rawValue.split(',') : [rawValue];
+                                                    let numberOfValues = filterValues.length;
+                                                    console.log("number of values: ",numberOfValues)
+                                                    for(let index=0; index < numberOfValues; index++){
+                                                      test = test + "\"" +filterValues[index] + "\"";
+                                                      if(index < numberOfValues -1){
+                                                        test = test + " OR ";
+                                                      }
+                                                    }
+                                                    test = test + ")";
+
                                                     let analyser:{[index: string]:any} = {}
                                                     analyser["query"]= test
                                                     let query:{[index: string]:any} = {
-                                                      query:
-                                                        {
-                                                        }
+                                                      query: {}
                                                    }
                                                     query.query["query_string"]= analyser
+                                                    console.log("query:",query);
                                                     return {query}
                                                   } else {
                                                     return {}
                                                   }
                                                 }
-                                              }*/
+                                              }
                 />
               )
               }
